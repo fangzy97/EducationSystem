@@ -26,6 +26,12 @@ public class OKHttpUnit {
         return instance;
     }
 
+    private void _setInstance() {
+        if (instance != null) {
+            instance = null;
+        }
+    }
+
     //同步的Get请求
     //return response
     private Response _getSync(String url) throws IOException {
@@ -105,5 +111,9 @@ public class OKHttpUnit {
 
     public static void postAsync(String url, RequestBody body, Headers headers, Callback callback) {
         getInstance()._postAsync(url, body, headers, callback);
+    }
+
+    public static void setInstance() {
+        getInstance()._setInstance();
     }
 }

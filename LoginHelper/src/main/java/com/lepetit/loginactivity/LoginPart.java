@@ -22,6 +22,7 @@ public class LoginPart {
     private String lt;
 
     public void getLt() {
+        OKHttpUnit.setInstance();
         _getLt();
     }
 
