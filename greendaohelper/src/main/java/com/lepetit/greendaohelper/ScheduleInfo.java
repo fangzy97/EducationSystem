@@ -9,6 +9,8 @@ import org.greenrobot.greendao.annotation.Generated;
 public class ScheduleInfo {
     @Id
     private Long id;
+    @Property(nameInDb = "Day")
+    private String day;
     @Property(nameInDb = "Course")
     private String course;
     @Property(nameInDb = "Teacher")
@@ -19,10 +21,11 @@ public class ScheduleInfo {
     private String time;
     @Property(nameInDb = "Classroom")
     private String classroom;
-    @Generated(hash = 557441994)
-    public ScheduleInfo(Long id, String course, String teacher, String week,
-            String time, String classroom) {
+    @Generated(hash = 220125685)
+    public ScheduleInfo(Long id, String day, String course, String teacher,
+            String week, String time, String classroom) {
         this.id = id;
+        this.day = day;
         this.course = course;
         this.teacher = teacher;
         this.week = week;
@@ -37,6 +40,12 @@ public class ScheduleInfo {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+    public String getDay() {
+        return this.day;
+    }
+    public void setDay(String day) {
+        this.day = day;
     }
     public String getCourse() {
         return this.course;
@@ -68,4 +77,5 @@ public class ScheduleInfo {
     public void setClassroom(String classroom) {
         this.classroom = classroom;
     }
+
 }

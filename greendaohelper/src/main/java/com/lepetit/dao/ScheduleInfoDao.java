@@ -25,11 +25,12 @@ public class ScheduleInfoDao extends AbstractDao<ScheduleInfo, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Course = new Property(1, String.class, "course", false, "Course");
-        public final static Property Teacher = new Property(2, String.class, "teacher", false, "Teacher");
-        public final static Property Week = new Property(3, String.class, "week", false, "Week");
-        public final static Property Time = new Property(4, String.class, "time", false, "Time");
-        public final static Property Classroom = new Property(5, String.class, "classroom", false, "Classroom");
+        public final static Property Day = new Property(1, String.class, "day", false, "Day");
+        public final static Property Course = new Property(2, String.class, "course", false, "Course");
+        public final static Property Teacher = new Property(3, String.class, "teacher", false, "Teacher");
+        public final static Property Week = new Property(4, String.class, "week", false, "Week");
+        public final static Property Time = new Property(5, String.class, "time", false, "Time");
+        public final static Property Classroom = new Property(6, String.class, "classroom", false, "Classroom");
     }
 
 
@@ -46,11 +47,12 @@ public class ScheduleInfoDao extends AbstractDao<ScheduleInfo, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"SCHEDULE_INFO\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"Course\" TEXT," + // 1: course
-                "\"Teacher\" TEXT," + // 2: teacher
-                "\"Week\" TEXT," + // 3: week
-                "\"Time\" TEXT," + // 4: time
-                "\"Classroom\" TEXT);"); // 5: classroom
+                "\"Day\" TEXT," + // 1: day
+                "\"Course\" TEXT," + // 2: course
+                "\"Teacher\" TEXT," + // 3: teacher
+                "\"Week\" TEXT," + // 4: week
+                "\"Time\" TEXT," + // 5: time
+                "\"Classroom\" TEXT);"); // 6: classroom
     }
 
     /** Drops the underlying database table. */
@@ -68,29 +70,34 @@ public class ScheduleInfoDao extends AbstractDao<ScheduleInfo, Long> {
             stmt.bindLong(1, id);
         }
  
+        String day = entity.getDay();
+        if (day != null) {
+            stmt.bindString(2, day);
+        }
+ 
         String course = entity.getCourse();
         if (course != null) {
-            stmt.bindString(2, course);
+            stmt.bindString(3, course);
         }
  
         String teacher = entity.getTeacher();
         if (teacher != null) {
-            stmt.bindString(3, teacher);
+            stmt.bindString(4, teacher);
         }
  
         String week = entity.getWeek();
         if (week != null) {
-            stmt.bindString(4, week);
+            stmt.bindString(5, week);
         }
  
         String time = entity.getTime();
         if (time != null) {
-            stmt.bindString(5, time);
+            stmt.bindString(6, time);
         }
  
         String classroom = entity.getClassroom();
         if (classroom != null) {
-            stmt.bindString(6, classroom);
+            stmt.bindString(7, classroom);
         }
     }
 
@@ -103,29 +110,34 @@ public class ScheduleInfoDao extends AbstractDao<ScheduleInfo, Long> {
             stmt.bindLong(1, id);
         }
  
+        String day = entity.getDay();
+        if (day != null) {
+            stmt.bindString(2, day);
+        }
+ 
         String course = entity.getCourse();
         if (course != null) {
-            stmt.bindString(2, course);
+            stmt.bindString(3, course);
         }
  
         String teacher = entity.getTeacher();
         if (teacher != null) {
-            stmt.bindString(3, teacher);
+            stmt.bindString(4, teacher);
         }
  
         String week = entity.getWeek();
         if (week != null) {
-            stmt.bindString(4, week);
+            stmt.bindString(5, week);
         }
  
         String time = entity.getTime();
         if (time != null) {
-            stmt.bindString(5, time);
+            stmt.bindString(6, time);
         }
  
         String classroom = entity.getClassroom();
         if (classroom != null) {
-            stmt.bindString(6, classroom);
+            stmt.bindString(7, classroom);
         }
     }
 
@@ -138,11 +150,12 @@ public class ScheduleInfoDao extends AbstractDao<ScheduleInfo, Long> {
     public ScheduleInfo readEntity(Cursor cursor, int offset) {
         ScheduleInfo entity = new ScheduleInfo( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // course
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // teacher
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // week
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // time
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // classroom
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // day
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // course
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // teacher
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // week
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // time
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // classroom
         );
         return entity;
     }
@@ -150,11 +163,12 @@ public class ScheduleInfoDao extends AbstractDao<ScheduleInfo, Long> {
     @Override
     public void readEntity(Cursor cursor, ScheduleInfo entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setCourse(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setTeacher(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setWeek(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setTime(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setClassroom(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setDay(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setCourse(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setTeacher(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setWeek(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setTime(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setClassroom(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
      }
     
     @Override

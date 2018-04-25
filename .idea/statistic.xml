@@ -23,6 +23,8 @@
         <option value="$PROJECT_DIR$/LoginHelper/src/androidTest" />
         <option value="$PROJECT_DIR$/LoginHelper/src/test" />
         <option value="$PROJECT_DIR$/LoginHelper/src/main/res" />
+        <option value="$PROJECT_DIR$/ScheduleHelper/build" />
+        <option value="$PROJECT_DIR$/ScheduleHelper/libs" />
       </list>
     </option>
   </component>

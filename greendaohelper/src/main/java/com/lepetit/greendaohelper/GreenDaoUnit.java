@@ -30,8 +30,8 @@ public class GreenDaoUnit {
         return instance;
     }
 
-    private void _insert(String course, String teacher, String week, String time, String classroom) {
-        ScheduleInfo info = new ScheduleInfo(null, course, teacher, week, time, classroom);
+    private void _insert(String day ,String course, String teacher, String week, String time, String classroom) {
+        ScheduleInfo info = new ScheduleInfo(null, day, course, teacher, week, time, classroom);
         mDao.insert(info);
     }
 
@@ -46,8 +46,8 @@ public class GreenDaoUnit {
         getInstance()._initialize(context);
     }
 
-    public static void insert(String course, String teacher, String week, String time, String classroom) {
-        getInstance()._insert(course, teacher, week, time, classroom);
+    public static void insert(String day, String course, String teacher, String week, String time, String classroom) {
+        getInstance()._insert(day, course, teacher, week, time, classroom);
     }
 
     public static List<ScheduleInfo> search() {

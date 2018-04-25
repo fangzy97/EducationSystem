@@ -1,1 +1,1 @@
-include ':app', ':OKHttpHelper', ':LoginHelper', ':greendaohelper'
+include ':app', ':OKHttpHelper', ':LoginHelper', ':greendaohelper', ':ScheduleHelper'

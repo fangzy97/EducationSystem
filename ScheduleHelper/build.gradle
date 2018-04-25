@@ -1,0 +1,11 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'org.jsoup:jsoup:1.11.3'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation project(':OKHttpHelper')
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"

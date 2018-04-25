@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.greendaohelper.ScheduleInfo;
 import com.lepetit.loginactivity.StoreInfo;
+import com.lepetit.schedulehelper.Schedule;
 
 import java.util.List;
 
@@ -34,6 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.scheduleButton)
     void writeSchedule() {
-        GreenDaoUnit.insert("Math", "Jack", "1-8", "1-2", "1-302");
+        Schedule.getSchedule();
     }
 }
