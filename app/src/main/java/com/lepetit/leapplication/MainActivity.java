@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //初始化数据库
-        GreenDaoUnit.initialize(this);
+        GreenDaoUnit.initialize(getApplicationContext());
         //转到登录界面
         goToLoginActivity();
     }
