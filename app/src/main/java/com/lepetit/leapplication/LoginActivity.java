@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.loginactivity.LoginPart;
 import com.lepetit.eventmessage.GetLtEvent;
+import com.lepetit.loginactivity.StoreInfo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        StoreInfo.setPreferences(getApplicationContext());
     }
 
     @OnClick(R.id.loginButton)
@@ -71,10 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void storeInfo() {
-        SharedPreferences.Editor editor = getSharedPreferences("UserInfo", MODE_PRIVATE).edit();
-        editor.putString("UserName", userName.getText().toString());
-        editor.putString("Password", password.getText().toString());
-        editor.apply();
+        StoreInfo.storeInfo(userName.getText().toString(), password.getText().toString());
     }
 
     @Override
