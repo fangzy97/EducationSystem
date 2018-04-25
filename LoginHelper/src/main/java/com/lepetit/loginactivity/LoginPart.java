@@ -2,6 +2,8 @@ package com.lepetit.loginactivity;
 
 import android.util.Log;
 
+import com.lepetit.eventmessage.GetLtEvent;
+import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.okhttphelper.OKHttpUnit;
 import com.lepetit.stringHelper.StringCollection;
 

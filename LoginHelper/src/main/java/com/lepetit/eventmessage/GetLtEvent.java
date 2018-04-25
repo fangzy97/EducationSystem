@@ -1,4 +1,4 @@
-package com.lepetit.loginactivity;
+package com.lepetit.eventmessage;
 
 public class GetLtEvent {
     private boolean isSuccessful;

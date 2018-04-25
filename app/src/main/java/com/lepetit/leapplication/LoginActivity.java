@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.lepetit.loginactivity.LoginEvent;
+import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.loginactivity.LoginPart;
-import com.lepetit.loginactivity.GetLtEvent;
+import com.lepetit.eventmessage.GetLtEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,7 +20,6 @@ import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity {
 
-    //用户名或密码输入错误后无法再次登录
     //错误三次后会产生验证码
 
     @BindView(R.id.userName)
