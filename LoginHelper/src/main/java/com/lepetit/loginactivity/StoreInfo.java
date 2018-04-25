@@ -43,7 +43,7 @@ public class StoreInfo {
         getInstance()._storeInfo(userName, password);
     }
 
-    public static void getInfo(String key) {
-        getInstance()._getInfo(key);
+    public static String getInfo(String key) {
+        return getInstance()._getInfo(key);
     }
 }

@@ -23,13 +23,13 @@ import butterknife.OnClick;
 public class LoginActivity extends AppCompatActivity {
 
     //错误三次后会产生验证码
+    private String user;
+    private String pass;
 
     @BindView(R.id.userName)
     EditText userName;
     @BindView(R.id.password)
     EditText password;
-
-    private LoginPart loginPart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,10 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         //注册EventBus
         EventBus.getDefault().register(this);
+        //初始化SharedPreference
+        StoreInfo.setPreferences(getApplicationContext());
+        //初始化检查
+        doSomeCheck();
     }
 
     @Override
@@ -48,25 +52,24 @@ public class LoginActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        setResult(RESULT_CANCELED);
-        finish();
-    }
-
     //点击按钮开始登录
     @OnClick(R.id.loginButton)
     void onLogin() {
-        loginPart = new LoginPart();
-        loginPart.getLt();      //获取隐藏值
+        user = userName.getText().toString();
+        pass = password.getText().toString();
+        if (isLegal(user, pass)) {
+            LoginPart.getLt();      //获取隐藏值
+        }
+        else {
+            getToast("用户名或密码不能为空");
+        }
     }
 
     //接收获取隐藏值成功的事件
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onGetLtEvent(GetLtEvent event) {
         if (event.isSuccessful()) {
-            loginPart.postData(userName.getText().toString(), password.getText().toString());
+            LoginPart.postData(user, pass);
         }
         else {
             getToast("网络好像发生了点问题");
@@ -77,20 +80,33 @@ public class LoginActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event) {
         if (event.isLoginSuccessful()) {
-            sendInfoBack();
-            finish();
+            StoreInfo.storeInfo(user, pass);
+            goToMainActivity();
         }
         else {
             getToast("用户名或密码错误");
         }
     }
 
-    //将用户名和密码传回MainActivity以储存
-    private void sendInfoBack() {
-        Intent intent = new Intent();
-        intent.putExtra("userName", userName.getText().toString());
-        intent.putExtra("password", password.getText().toString());
-        setResult(RESULT_OK, intent);
+    private boolean isLegal(String un, String pw) {
+        return !(un.equals("") || pw.equals(""));
+    }
+
+    //若SharedPreference中已经储存了相关数据，则直接登录
+    private void doSomeCheck() {
+        String un = StoreInfo.getInfo("UserName");
+        String pw = StoreInfo.getInfo("Password");
+        if (isLegal(un, pw)) {
+            user = un;
+            pass = pw;
+            LoginPart.getLt();
+        }
+    }
+
+    private void goToMainActivity() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     //生成Toast

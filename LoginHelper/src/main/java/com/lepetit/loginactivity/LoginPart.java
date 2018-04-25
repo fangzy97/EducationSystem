@@ -13,6 +13,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.util.jar.Attributes;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -22,15 +23,25 @@ import okhttp3.Response;
 
 public class LoginPart {
     private String lt;
+    private static LoginPart instance;
 
-    public void getLt() {
+    public static void getLt() {
         OKHttpUnit.setInstance();
-        _getLt();
+        getInstance()._getLt();
     }
 
-    public void postData(String userName, String password) {
-        _postData(userName, password);
+    public static void postData(String userName, String password) {
+        getInstance()._postData(userName, password);
     }
+
+    private static LoginPart getInstance() {
+        if (instance == null) {
+            instance = new LoginPart();
+        }
+        return instance;
+    }
+
+    private LoginPart() {}
 
     private void sendLtEvent() {
         if (lt != null) {
@@ -41,8 +52,8 @@ public class LoginPart {
         }
     }
 
-    private String getHiddenValue(Response response) throws IOException {
-        Document document = Jsoup.parse(response.body().string());
+    private String getHiddenValue(String html) throws IOException {
+        Document document = Jsoup.parse(html);
         Element element = document.select("input[type=hidden]").first();
         return element.attr("value");
     }
@@ -71,13 +82,14 @@ public class LoginPart {
         OKHttpUnit.getAsync(StringCollection.loginUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("LoginActivity", e.getMessage());
+                lt = null;
                 System.out.println(e.getMessage());
+                sendLtEvent();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                lt = getHiddenValue(response);
+                lt = getHiddenValue(response.body().string());
                 sendLtEvent();
                 System.out.println("lt = " + lt);
             }
@@ -91,17 +103,18 @@ public class LoginPart {
             public void onFailure(Call call, IOException e) {
                 System.out.println("Login Error");
                 System.out.println(e.getMessage());
+                sendLoginEvent(false);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                sendLoginEvent(isLoginSuccessful(response));
+                sendLoginEvent(isLoginSuccessful(response.body().string()));
             }
         });
     }
 
-    private boolean isLoginSuccessful(Response response) throws IOException {
-        Document document = Jsoup.parse(response.body().string());
+    private boolean isLoginSuccessful(String html) throws IOException {
+        Document document = Jsoup.parse(html);
         System.out.println(document);
         Element element = document.getElementById("username");
         if (element == null) {
