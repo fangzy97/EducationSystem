@@ -3,4 +3,5 @@
     <string name="userName">用户名</string>
     <string name="password">密码</string>
     <string name="loginButton">登录</string>
+    <string name="logout">注销</string>
 </resources>

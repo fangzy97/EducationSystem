@@ -40,9 +40,11 @@ public class LoginActivity extends AppCompatActivity {
         //注册EventBus
         EventBus.getDefault().register(this);
         //初始化SharedPreference
-        StoreInfo.setPreferences(getApplicationContext());
-        //初始化检查
-        doSomeCheck();
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
     }
 
     @Override
@@ -80,33 +82,23 @@ public class LoginActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event) {
         if (event.isLoginSuccessful()) {
-            StoreInfo.storeInfo(user, pass);
-            goToMainActivity();
+            sendInfoBack();
+            finish();
         }
         else {
             getToast("用户名或密码错误");
         }
     }
 
+    private void sendInfoBack() {
+        Intent intent = new Intent();
+        intent.putExtra("UserName", user);
+        intent.putExtra("Password", pass);
+        setResult(RESULT_OK, intent);
+    }
+
     private boolean isLegal(String un, String pw) {
         return !(un.equals("") || pw.equals(""));
-    }
-
-    //若SharedPreference中已经储存了相关数据，则直接登录
-    private void doSomeCheck() {
-        String un = StoreInfo.getInfo("UserName");
-        String pw = StoreInfo.getInfo("Password");
-        if (isLegal(un, pw)) {
-            user = un;
-            pass = pw;
-            LoginPart.getLt();
-        }
-    }
-
-    private void goToMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     //生成Toast

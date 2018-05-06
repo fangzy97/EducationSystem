@@ -33,6 +33,12 @@ public class StoreInfo {
         return preferences.getString(key, "");
     }
 
+    private void _clearInfo() {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();
+    }
+
     //------------------------------------------------------------------------------
     //可调用的外部方法
     public static void setPreferences(Context context) {
@@ -45,5 +51,9 @@ public class StoreInfo {
 
     public static String getInfo(String key) {
         return getInstance()._getInfo(key);
+    }
+
+    public static void clearInfo() {
+        getInstance()._clearInfo();
     }
 }
