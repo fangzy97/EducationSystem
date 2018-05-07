@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     //错误三次后会产生验证码
     private String user;
     private String pass;
+    private LoadingDialog dialog;
 
     @BindView(R.id.userName)
     EditText userName;
@@ -39,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         //注册EventBus
         EventBus.getDefault().register(this);
-        //初始化SharedPreference
+        dialog = new LoadingDialog();
     }
 
     @Override
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         pass = password.getText().toString();
         if (isLegal(user, pass)) {
             LoginPart.getLt();      //获取隐藏值
+            getFragmentManager().beginTransaction().add(dialog, "Loading").commit();
         }
         else {
             getToast("用户名或密码不能为空");
@@ -81,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
     //接受登录成功的事件
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event) {
+        removeDialog();
         if (event.isLoginSuccessful()) {
             sendInfoBack();
             finish();
@@ -106,5 +109,9 @@ public class LoginActivity extends AppCompatActivity {
         LoginActivity.this.runOnUiThread(() -> {
             Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
         });
+    }
+
+    private void removeDialog() {
+        getFragmentManager().beginTransaction().remove(dialog).commit();
     }
 }
