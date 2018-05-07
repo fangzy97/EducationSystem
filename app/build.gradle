@@ -35,4 +35,5 @@ dependencies {
     implementation project(':greendaohelper')
     implementation project(':LoginHelper')
     implementation project(':ScheduleHelper')
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
 }

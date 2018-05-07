@@ -4,4 +4,5 @@
     <string name="password">密码</string>
     <string name="loginButton">登录</string>
     <string name="logout">注销</string>
+    <string name="getSchedule">获取课表</string>
 </resources>

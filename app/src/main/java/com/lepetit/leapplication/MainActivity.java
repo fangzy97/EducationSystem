@@ -3,25 +3,17 @@ package com.lepetit.leapplication;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lepetit.eventmessage.GetLtEvent;
 import com.lepetit.eventmessage.LoginEvent;
-import com.lepetit.greendaohelper.GreenDaoUnit;
-import com.lepetit.greendaohelper.ScheduleInfo;
 import com.lepetit.loginactivity.LoginPart;
 import com.lepetit.loginactivity.StoreInfo;
-import com.lepetit.schedulehelper.Schedule;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -36,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        //初始化数据库
-        GreenDaoUnit.initialize(getApplicationContext());
         //初始化SharedPreference
         StoreInfo.setPreferences(getApplicationContext());
         //检查SharedPreference是否为空，若为空则调用登录界面，否则直接用对应的用户名和密码登录
@@ -46,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.scheduleButton)
     void writeSchedule() {
-        Schedule.getSchedule();
+        Intent intent = new Intent(MainActivity.this, ScheduleActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.logoutButton)

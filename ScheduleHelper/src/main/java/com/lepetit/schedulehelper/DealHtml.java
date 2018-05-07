@@ -1,11 +1,16 @@
 package com.lepetit.schedulehelper;
 
+import com.lepetit.eventmessage.ScheduleEvent;
+
+import org.greenrobot.eventbus.EventBus;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DealHtml {
     private String info;
@@ -27,6 +32,7 @@ public class DealHtml {
     private void _analyze(String html) throws IOException {
         Document document = Jsoup.parse(html);
         Elements elements = document.select("input[name=jx0415zbdiv_2]");
+        List<String> list = new ArrayList<>();
         for (int i = 0; i < elements.size(); i++) {
             Element element = document.getElementById(elements.get(i).attr("value"));
             if (element.children().size() > 0) {
@@ -40,6 +46,7 @@ public class DealHtml {
                     String week = getWeek(weekAndTime);
                     String time = getTime(weekAndTime);
                     String classroom = divideString();
+                    EventBus.getDefault().post(new ScheduleEvent(day, course, teacher, week, time, classroom));
                     System.out.println(day + " " + course + " " + teacher + " " + week + " " + time + " " + classroom);
                 }
             }

@@ -1,6 +1,9 @@
 package com.lepetit.schedulehelper;
 
+import com.lepetit.eventmessage.FinishEvent;
 import com.lepetit.okhttphelper.OKHttpUnit;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 
@@ -27,6 +30,7 @@ public class Schedule {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 DealHtml.analyze(response.body().string());
+                EventBus.getDefault().post(new FinishEvent());
             }
 
             @Override
