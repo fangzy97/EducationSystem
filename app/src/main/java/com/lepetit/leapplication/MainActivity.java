@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         //初始化数据库
-        //GreenDaoUnit.initialize(getApplicationContext());
+        GreenDaoUnit.initialize(getApplicationContext());
         //初始化SharedPreference
         StoreInfo.setPreferences(getApplicationContext());
         //检查SharedPreference是否为空，若为空则调用登录界面，否则直接用对应的用户名和密码登录
