@@ -46,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         setResult(RESULT_CANCELED);
+        finish();
     }
 
     @Override
