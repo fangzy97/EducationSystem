@@ -25,7 +25,7 @@
             android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".ScheduleActivity"
+        <activity android:name="com.lepetit.schedule.ScheduleActivity"
             android:screenOrientation="portrait">
 
         </activity>
