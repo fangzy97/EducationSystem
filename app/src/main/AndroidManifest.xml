@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name="com.lepetit.login.LoginActivity"
             android:screenOrientation="portrait">
 
         </activity>

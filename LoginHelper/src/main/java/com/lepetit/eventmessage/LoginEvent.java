@@ -1,13 +1,13 @@
 package com.lepetit.eventmessage;
 
 public class LoginEvent {
-    private boolean isLoginSuccessful;
+    private int loginState;
 
-    public LoginEvent(boolean isLoginSuccessful) {
-        this.isLoginSuccessful = isLoginSuccessful;
+    public LoginEvent(int loginState) {
+        this.loginState = loginState;
     }
 
-    public boolean isLoginSuccessful() {
-        return isLoginSuccessful;
+    public int getLoginState() {
+        return loginState;
     }
 }

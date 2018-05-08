@@ -103,7 +103,7 @@ public class LoginPart {
             public void onFailure(Call call, IOException e) {
                 System.out.println("Login Error");
                 System.out.println(e.getMessage());
-                sendLoginEvent(false);
+                EventBus.getDefault().post(new LoginEvent(-1));
             }
 
             @Override
@@ -117,18 +117,15 @@ public class LoginPart {
         Document document = Jsoup.parse(html);
         System.out.println(document);
         Element element = document.getElementById("username");
-        if (element == null) {
-            return true;
-        }
-        return false;
+        return element == null;
     }
 
     private void sendLoginEvent(Boolean isSuccessful) {
         if (isSuccessful) {
-            EventBus.getDefault().post(new LoginEvent(true));
+            EventBus.getDefault().post(new LoginEvent(1));
         }
         else {
-            EventBus.getDefault().post(new LoginEvent(false));
+            EventBus.getDefault().post(new LoginEvent(0));
         }
     }
 }

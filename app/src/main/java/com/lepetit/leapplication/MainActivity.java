@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.lepetit.eventmessage.GetLtEvent;
 import com.lepetit.eventmessage.LoginEvent;
+import com.lepetit.login.LoginActivity;
 import com.lepetit.loginactivity.LoginPart;
 import com.lepetit.loginactivity.StoreInfo;
 import com.lepetit.schedule.ScheduleActivity;
@@ -73,11 +74,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event) {
-        if (!event.isLoginSuccessful()) {
-            getToast("暂时无法登录到教务处");
+        int state = event.getLoginState();
+        if (state == 1) {
+            EventBus.getDefault().unregister(this);
         }
         else {
-            EventBus.getDefault().unregister(this);
+            getToast("暂时无法连接到教务处");
         }
     }
 

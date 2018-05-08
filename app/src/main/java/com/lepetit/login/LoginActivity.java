@@ -1,16 +1,15 @@
-package com.lepetit.leapplication;
+package com.lepetit.login;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.lepetit.eventmessage.LoginEvent;
+import com.lepetit.leapplication.R;
 import com.lepetit.loginactivity.LoginPart;
 import com.lepetit.eventmessage.GetLtEvent;
-import com.lepetit.loginactivity.StoreInfo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -85,12 +84,16 @@ public class LoginActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event) {
         removeDialog();
-        if (event.isLoginSuccessful()) {
+        int state = event.getLoginState();
+        if (state == 1) {
             sendInfoBack();
             finish();
         }
-        else {
+        else if (state == 0){
             getToast("用户名或密码错误");
+        }
+        else {
+            getToast("没有连接到校园网");
         }
     }
 
