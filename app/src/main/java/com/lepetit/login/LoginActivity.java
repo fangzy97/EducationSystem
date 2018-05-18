@@ -7,7 +7,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.lepetit.eventmessage.LoginEvent;
+import com.lepetit.leapplication.MainActivity;
 import com.lepetit.leapplication.R;
+import com.lepetit.loadingdialog.LoadingDialog;
+import com.lepetit.loadingdialog.LoadingDialogHelper;
 import com.lepetit.loginactivity.LoginPart;
 import com.lepetit.eventmessage.GetLtEvent;
 
@@ -24,7 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     //错误三次后会产生验证码
     private String user;
     private String pass;
-    private LoadingDialog dialog;
 
     @BindView(R.id.userName)
     EditText userName;
@@ -39,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         //注册EventBus
         EventBus.getDefault().register(this);
-        dialog = new LoadingDialog();
     }
 
     @Override
@@ -62,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         pass = password.getText().toString();
         if (isLegal(user, pass)) {
             LoginPart.getLt();      //获取隐藏值
-            getFragmentManager().beginTransaction().add(dialog, "Loading").commit();
+            LoadingDialogHelper.add(this);
         }
         else {
             getToast("用户名或密码不能为空");
@@ -83,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
     //接受登录成功的事件
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event) {
-        removeDialog();
+        LoadingDialogHelper.remove(this);
         int state = event.getLoginState();
         if (state == 1) {
             sendInfoBack();
@@ -111,11 +112,7 @@ public class LoginActivity extends AppCompatActivity {
     //生成Toast
     private void getToast(String message) {
         LoginActivity.this.runOnUiThread(() -> {
-            Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
         });
-    }
-
-    private void removeDialog() {
-        getFragmentManager().beginTransaction().remove(dialog).commit();
     }
 }

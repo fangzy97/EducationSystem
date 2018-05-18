@@ -3,12 +3,15 @@ package com.lepetit.schedule;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
+import android.widget.TextView;
 
 import com.lepetit.eventmessage.FinishEvent;
 import com.lepetit.eventmessage.ScheduleEvent;
 import com.lepetit.greendaohelper.ScheduleData;
 import com.lepetit.greendaohelper.ScheduleInfo;
 import com.lepetit.leapplication.R;
+import com.lepetit.loadingdialog.LoadingDialog;
+import com.lepetit.loadingdialog.LoadingDialogHelper;
 import com.lepetit.schedulehelper.Schedule;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,11 +43,14 @@ public class ScheduleActivity extends AppCompatActivity {
     }
 
     private void doSomeCheck() {
+        LoadingDialogHelper.add(this);
         scheduleInfos =  ScheduleData.search();
         if (scheduleInfos.isEmpty()) {
             Schedule.getSchedule();
         } else {
             printSchedule();
+            setFragment();
+            LoadingDialogHelper.remove(this);
         }
     }
 
@@ -56,15 +62,17 @@ public class ScheduleActivity extends AppCompatActivity {
     }
 
     //接收课表处理完毕的广播
-    @Subscribe(threadMode = ThreadMode.POSTING)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void getScheduleFinish(FinishEvent event) {
         scheduleInfos = ScheduleData.search();
         printSchedule();
+        setFragment();
+        LoadingDialogHelper.remove(this);
     }
 
     //打印课表
     private void printSchedule() {
-        SetSchedule setSchedule = new SetSchedule(getApplicationContext(), gridLayout);
+        SetSchedule setSchedule = new SetSchedule(this, gridLayout);
         for (ScheduleInfo info : scheduleInfos) {
             String course = info.getCourse();
             String classroom = info.getClassroom();
@@ -74,6 +82,25 @@ public class ScheduleActivity extends AppCompatActivity {
             int rowEnd = Integer.parseInt(time.substring(time.length() - 3, time.length() - 1));
             int rowSize = rowEnd - rowStart + 1;
             setSchedule.addToScreen(course, classroom, rowStart, rowSize, day);
+        }
+    }
+
+    private void setFragment() {
+        for (int i = 0; i < scheduleInfos.size(); i++) {
+            ScheduleInfo info = scheduleInfos.get(i);
+            TextView textView = (TextView) gridLayout.getChildAt(21 + i);
+            textView.setOnClickListener((v) -> {
+                ScheduleFragment fragment = new ScheduleFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("course", info.getCourse());
+                bundle.putString("teacher", info.getTeacher());
+                bundle.putString("time", info.getWeek() + " " + info.getTime());
+                bundle.putString("classroom", info.getClassroom());
+
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().add(fragment, "1").commit();
+            });
         }
     }
 }

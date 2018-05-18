@@ -1,4 +1,4 @@
-package com.lepetit.login;
+package com.lepetit.loadingdialog;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
