@@ -1,7 +1,6 @@
 package com.lepetit.schedule;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.GridLayout;
 import android.view.Gravity;
@@ -14,9 +13,9 @@ public class SetSchedule {
     private GridLayout gridLayout;
     private Activity activity;
 
-    public SetSchedule(Activity activity, GridLayout gridLayout) {
-        this.activity = activity;
+    SetSchedule(GridLayout gridLayout, Activity activity) {
         this.gridLayout = gridLayout;
+        this.activity = activity;
     }
 
     public void addToScreen(String course, String classroom, int rowStart, int rowSize, int columnStart) {
@@ -26,13 +25,13 @@ public class SetSchedule {
     //将控件添加到gridLayout中
     private void _addToScreen(String course, String classroom, int rowStart, int rowSize, int columnStart) {
         String text = course + "\n" + classroom;
-        TextView textView =  setTextView(text);
+        TextView textView =  setTextView(text, activity);
         GridLayout.LayoutParams layoutParams = setLayoutParams(rowStart, rowSize, columnStart);
         gridLayout.addView(textView, layoutParams);
     }
 
     //设置textView中的内容
-    private TextView setTextView(String text) {
+    private TextView setTextView(String text, Activity activity) {
         TextView textView = new TextView(activity);
         textView.setText(text);
         textView.setGravity(Gravity.CENTER_HORIZONTAL);

@@ -72,7 +72,7 @@ public class ScheduleActivity extends AppCompatActivity {
 
     //打印课表
     private void printSchedule() {
-        SetSchedule setSchedule = new SetSchedule(this, gridLayout);
+        SetSchedule setSchedule = new SetSchedule(gridLayout, this);
         for (ScheduleInfo info : scheduleInfos) {
             String course = info.getCourse();
             String classroom = info.getClassroom();
@@ -88,7 +88,7 @@ public class ScheduleActivity extends AppCompatActivity {
     private void setFragment() {
         for (int i = 0; i < scheduleInfos.size(); i++) {
             ScheduleInfo info = scheduleInfos.get(i);
-            TextView textView = (TextView) gridLayout.getChildAt(21 + i);
+            TextView textView = (TextView) gridLayout.getChildAt(56 + i);
             textView.setOnClickListener((v) -> {
                 ScheduleFragment fragment = new ScheduleFragment();
 
