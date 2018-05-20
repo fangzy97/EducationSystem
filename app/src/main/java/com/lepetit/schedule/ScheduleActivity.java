@@ -3,14 +3,11 @@ package com.lepetit.schedule;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
-import android.widget.TextView;
 
-import com.lepetit.eventmessage.FinishEvent;
 import com.lepetit.eventmessage.ScheduleEvent;
 import com.lepetit.greendaohelper.ScheduleData;
 import com.lepetit.greendaohelper.ScheduleInfo;
 import com.lepetit.leapplication.R;
-import com.lepetit.loadingdialog.LoadingDialog;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
 import com.lepetit.schedulehelper.Schedule;
 
@@ -39,17 +36,24 @@ public class ScheduleActivity extends AppCompatActivity {
         //初始化数据库
         ScheduleData.initDB(getApplicationContext(), "Schedule.db");
         //检查数据库是否有数据
-        doSomeCheck();
+        EventBus.getDefault().post(new FinishEvent(true));
     }
 
-    private void doSomeCheck() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onFinishEvent(FinishEvent event) throws InterruptedException {
         LoadingDialogHelper.add(this);
+        Thread.sleep(500);
         scheduleInfos =  ScheduleData.search();
         if (scheduleInfos.isEmpty()) {
             Schedule.getSchedule();
         } else {
-            printSchedule();
-            setFragment();
+            addSchedule();
             LoadingDialogHelper.remove(this);
         }
     }
@@ -63,44 +67,24 @@ public class ScheduleActivity extends AppCompatActivity {
 
     //接收课表处理完毕的广播
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getScheduleFinish(FinishEvent event) {
+    public void getScheduleFinish(com.lepetit.eventmessage.FinishEvent event) {
         scheduleInfos = ScheduleData.search();
-        printSchedule();
-        setFragment();
+        addSchedule();
         LoadingDialogHelper.remove(this);
     }
 
     //打印课表
-    private void printSchedule() {
-        SetSchedule setSchedule = new SetSchedule(gridLayout, this);
+    private void addSchedule() {
         for (ScheduleInfo info : scheduleInfos) {
-            String course = info.getCourse();
-            String classroom = info.getClassroom();
-            String time = info.getTime();
-            int day = Integer.parseInt(info.getDay());
-            int rowStart = Integer.parseInt(time.substring(0, 2));
-            int rowEnd = Integer.parseInt(time.substring(time.length() - 3, time.length() - 1));
-            int rowSize = rowEnd - rowStart + 1;
-            setSchedule.addToScreen(course, classroom, rowStart, rowSize, day);
-        }
-    }
-
-    private void setFragment() {
-        for (int i = 0; i < scheduleInfos.size(); i++) {
-            ScheduleInfo info = scheduleInfos.get(i);
-            TextView textView = (TextView) gridLayout.getChildAt(56 + i);
-            textView.setOnClickListener((v) -> {
-                ScheduleFragment fragment = new ScheduleFragment();
-
-                Bundle bundle = new Bundle();
-                bundle.putString("course", info.getCourse());
-                bundle.putString("teacher", info.getTeacher());
-                bundle.putString("time", info.getWeek() + " " + info.getTime());
-                bundle.putString("classroom", info.getClassroom());
-
-                fragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().add(fragment, "1").commit();
-            });
+            SetSchedule setSchedule1 = new SetSchedule.Builder(this, gridLayout)
+                    .course(info.getCourse())
+                    .teacher(info.getTeacher())
+                    .week(info.getWeek())
+                    .time(info.getTime())
+                    .day(info.getDay())
+                    .classroom(info.getClassroom())
+                    .build();
+            setSchedule1.addToScreen();
         }
     }
 }
