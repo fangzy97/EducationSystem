@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menu">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/main_page"
+            android:title="@string/MainPage" />
+        <item
+            android:id="@+id/schedule"
+            android:title="@string/getSchedule" />
+        <item
+            android:id="@+id/logout"
+            android:title="@string/logout" />
+    </group>
+</menu>
