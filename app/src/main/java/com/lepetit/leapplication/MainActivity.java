@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,36 +51,32 @@ public class MainActivity extends AppCompatActivity {
         //初始化toolBar
         setActionBat();
         setNavigationView();
-        setMainPageItem();
         initMainFragment();
         //检查SharedPreference是否为空，若为空则调用登录界面，否则直接用对应的用户名和密码登录
         doSomeCheck();
     }
 
-    private void changeFragment(Fragment fragment) {
+    private void changeFragment(Fragment fragment, int id) {
         getFragmentManager().beginTransaction().replace(R.id.linear_view, fragment).commit();
+        toolbar.setTitle(id);
     }
 
     private void initMainFragment() {
-        mainFragment = new MainFragment();
-        changeFragment(mainFragment);
-    }
-
-    private void setMainPageItem() {
         MenuItem mItem =  navigationView.getMenu().findItem(R.id.main_page);
         mItem.setChecked(true);
+        mainFragment = new MainFragment();
+        changeFragment(mainFragment, R.string.MainPage);
     }
-
 
     private void setNavigationView() {
         navigationView.setNavigationItemSelectedListener((item) -> {
             if (!item.isChecked()) {
                 switch (item.getItemId()) {
                     case R.id.main_page:
-                        changeFragment(mainFragment);
+                        changeFragment(mainFragment, R.string.MainPage);
                         break;
                     case R.id.schedule:
-                        changeFragment(new ScheduleFragment());
+                        changeFragment(new ScheduleFragment(), R.string.Schedule);
                         break;
                     case R.id.logout:
                         StoreInfo.clearInfo();
@@ -93,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setActionBat() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.MainPage);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -173,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
             user = data.getStringExtra("UserName");
             pass = data.getStringExtra("Password");
             StoreInfo.storeInfo(user, pass);
-            setMainPageItem();
+            initMainFragment();
         }
         else {
             finish();

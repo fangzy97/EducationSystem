@@ -30,4 +30,5 @@
     <string name="classTime">上课时间：</string>
     <string name="classroom">教室：</string>
     <string name="MainPage">主页</string>
+    <string name="Schedule">课程表</string>
 </resources>
