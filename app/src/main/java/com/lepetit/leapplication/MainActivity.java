@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         //初始化toolBar
         setActionBat();
         setNavigationView();
+        setMainPageItem();
         initMainFragment();
         //检查SharedPreference是否为空，若为空则调用登录界面，否则直接用对应的用户名和密码登录
         doSomeCheck();
@@ -63,23 +64,28 @@ public class MainActivity extends AppCompatActivity {
         changeFragment(mainFragment);
     }
 
-    private void setNavigationView() {
+    private void setMainPageItem() {
         MenuItem mItem =  navigationView.getMenu().findItem(R.id.main_page);
         mItem.setChecked(true);
+    }
 
+
+    private void setNavigationView() {
         navigationView.setNavigationItemSelectedListener((item) -> {
-            switch (item.getItemId()) {
-                case R.id.main_page:
-                    changeFragment(mainFragment);
-                    break;
-                case R.id.schedule:
-                    changeFragment(new ScheduleFragment());
-                    break;
-                case R.id.logout:
-                    StoreInfo.clearInfo();
-                    goToLoginActivity();
-                    break;
-                default:
+            if (!item.isChecked()) {
+                switch (item.getItemId()) {
+                    case R.id.main_page:
+                        changeFragment(mainFragment);
+                        break;
+                    case R.id.schedule:
+                        changeFragment(new ScheduleFragment());
+                        break;
+                    case R.id.logout:
+                        StoreInfo.clearInfo();
+                        goToLoginActivity();
+                        break;
+                    default:
+                }
             }
             drawerLayout.closeDrawers();
             return true;
@@ -167,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
             user = data.getStringExtra("UserName");
             pass = data.getStringExtra("Password");
             StoreInfo.storeInfo(user, pass);
+            setMainPageItem();
         }
         else {
             finish();
