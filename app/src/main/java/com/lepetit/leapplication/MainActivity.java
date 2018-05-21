@@ -1,8 +1,14 @@
 package com.lepetit.leapplication;
 
 import android.content.Intent;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.lepetit.eventmessage.GetLtEvent;
@@ -16,14 +22,21 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemSelected;
 
 public class MainActivity extends AppCompatActivity {
     private final int LOGIN_REQUEST = 0;
 
     private String user;
     private String pass;
+
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,20 +45,47 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         //初始化SharedPreference
         StoreInfo.setPreferences(getApplicationContext());
+        setActionBat();
+        setNavigationView();
         //检查SharedPreference是否为空，若为空则调用登录界面，否则直接用对应的用户名和密码登录
         doSomeCheck();
     }
 
-    @OnClick(R.id.scheduleButton)
-    void writeSchedule() {
-        Intent intent = new Intent(MainActivity.this, ScheduleActivity.class);
-        startActivity(intent);
+    private void setNavigationView() {
+        navigationView.setNavigationItemSelectedListener((item) -> {
+            switch (item.getItemId()) {
+                case R.id.schedule:
+                    Intent intent = new Intent(MainActivity.this, ScheduleActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.logout:
+                    StoreInfo.clearInfo();
+                    goToLoginActivity();
+                    break;
+                default:
+            }
+            return true;
+        });
     }
 
-    @OnClick(R.id.logoutButton)
-    void logout() {
-        StoreInfo.clearInfo();
-        goToLoginActivity();
+    private void setActionBat() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                break;
+            default:
+        }
+        return true;
     }
 
     private void doSomeCheck() {
@@ -85,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getToast(String message) {
         MainActivity.this.runOnUiThread(() -> {
-            Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
         });
     }
 

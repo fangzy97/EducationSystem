@@ -74,7 +74,7 @@ public class SetSchedule {
         textView.setPadding(5, 5, 5, 5);
         textView.setTextSize(12);
         textView.setOnClickListener((v) -> {
-            ScheduleFragment fragment = new ScheduleFragment();
+            ScheduleInfoFragment fragment = new ScheduleInfoFragment();
             Bundle bundle = setBundle();
             fragment.setArguments(bundle);
             activity.getFragmentManager().beginTransaction().add(fragment, "1").commit();

@@ -16,7 +16,7 @@ import org.w3c.dom.Text;
 
 import butterknife.BindView;
 
-public class ScheduleFragment extends DialogFragment {
+public class ScheduleInfoFragment extends DialogFragment {
 
     @Nullable
     @Override
