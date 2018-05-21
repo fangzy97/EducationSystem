@@ -1,9 +1,13 @@
 package com.lepetit.schedule;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayout;
-
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+;
 import com.lepetit.eventmessage.ScheduleEvent;
 import com.lepetit.greendaohelper.ScheduleData;
 import com.lepetit.greendaohelper.ScheduleInfo;
@@ -20,41 +24,40 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ScheduleActivity extends AppCompatActivity {
+public class ScheduleFragment extends Fragment {
 
     private List<ScheduleInfo> scheduleInfos;
 
     @BindView(R.id.grid)
     GridLayout gridLayout;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedule_view);
-        ButterKnife.bind(this);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.schedule_fragment, container, false);
+        ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
-        //初始化数据库
-        ScheduleData.initDB(getApplicationContext(), "Schedule.db");
-        //检查数据库是否有数据
+        ScheduleData.initDB(getContext(), "Schedule.db");
         EventBus.getDefault().post(new FinishEvent(true));
+        return view;
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onFinishEvent(FinishEvent event) throws InterruptedException {
-        LoadingDialogHelper.add(this);
+        LoadingDialogHelper.add(getActivity());
         Thread.sleep(500);
         scheduleInfos =  ScheduleData.search();
         if (scheduleInfos.isEmpty()) {
             Schedule.getSchedule();
         } else {
             addSchedule();
-            LoadingDialogHelper.remove(this);
+            LoadingDialogHelper.remove(getActivity());
         }
     }
 
@@ -70,13 +73,13 @@ public class ScheduleActivity extends AppCompatActivity {
     public void getScheduleFinish(com.lepetit.eventmessage.FinishEvent event) {
         scheduleInfos = ScheduleData.search();
         addSchedule();
-        LoadingDialogHelper.remove(this);
+        LoadingDialogHelper.remove(getActivity());
     }
 
     //打印课表
     private void addSchedule() {
         for (ScheduleInfo info : scheduleInfos) {
-            SetSchedule setSchedule1 = new SetSchedule.Builder(this, gridLayout)
+            SetSchedule setSchedule1 = new SetSchedule.Builder(getActivity(), gridLayout)
                     .course(info.getCourse())
                     .teacher(info.getTeacher())
                     .week(info.getWeek())

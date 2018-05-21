@@ -29,4 +29,5 @@
     <string name="teacherName">教师：</string>
     <string name="classTime">上课时间：</string>
     <string name="classroom">教室：</string>
+    <string name="MainPage">主页</string>
 </resources>

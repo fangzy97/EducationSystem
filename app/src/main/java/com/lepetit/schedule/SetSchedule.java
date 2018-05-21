@@ -91,7 +91,7 @@ public class SetSchedule {
         return bundle;
     }
 
-    //设置控件在gridLayout中的参数
+    //设置控件在linearLayout中的参数
     private LinearLayout.LayoutParams setLayoutParams(int height) {
         int startTime = Integer.parseInt(time.substring(0, 2));
         int endTime = Integer.parseInt(time.substring(time.length() - 3, time.length() - 1));

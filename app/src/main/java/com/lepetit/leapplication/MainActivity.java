@@ -1,5 +1,6 @@
 package com.lepetit.leapplication;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -8,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -16,7 +18,7 @@ import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.login.LoginActivity;
 import com.lepetit.loginactivity.LoginPart;
 import com.lepetit.loginactivity.StoreInfo;
-import com.lepetit.schedule.ScheduleActivity;
+import com.lepetit.schedule.ScheduleFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,14 +26,13 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnItemSelected;
 
 public class MainActivity extends AppCompatActivity {
     private final int LOGIN_REQUEST = 0;
 
     private String user;
     private String pass;
+    private MainFragment mainFragment;
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
@@ -45,18 +46,34 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         //初始化SharedPreference
         StoreInfo.setPreferences(getApplicationContext());
+        //初始化toolBar
         setActionBat();
         setNavigationView();
+        initMainFragment();
         //检查SharedPreference是否为空，若为空则调用登录界面，否则直接用对应的用户名和密码登录
         doSomeCheck();
     }
 
+    private void changeFragment(Fragment fragment) {
+        getFragmentManager().beginTransaction().replace(R.id.linear_view, fragment).commit();
+    }
+
+    private void initMainFragment() {
+        mainFragment = new MainFragment();
+        changeFragment(mainFragment);
+    }
+
     private void setNavigationView() {
+        MenuItem mItem =  navigationView.getMenu().findItem(R.id.main_page);
+        mItem.setChecked(true);
+
         navigationView.setNavigationItemSelectedListener((item) -> {
             switch (item.getItemId()) {
+                case R.id.main_page:
+                    changeFragment(mainFragment);
+                    break;
                 case R.id.schedule:
-                    Intent intent = new Intent(MainActivity.this, ScheduleActivity.class);
-                    startActivity(intent);
+                    changeFragment(new ScheduleFragment());
                     break;
                 case R.id.logout:
                     StoreInfo.clearInfo();
@@ -64,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 default:
             }
+            drawerLayout.closeDrawers();
             return true;
         });
     }
@@ -74,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
         }
     }
 
