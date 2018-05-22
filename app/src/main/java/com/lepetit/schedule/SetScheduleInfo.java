@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.lepetit.leapplication.R;
 
-public class SetSchedule {
+public class SetScheduleInfo {
     private final Activity activity;
     private final GridLayout gridLayout;
     private final String course;
@@ -20,7 +20,7 @@ public class SetSchedule {
     private final String day;
     private final String classroom;
 
-    private SetSchedule(Builder builder) {
+    private SetScheduleInfo(Builder builder) {
         this.activity = builder.activity;
         this.gridLayout = builder.gridLayout;
         this.course = builder.mCourse;
@@ -169,8 +169,8 @@ public class SetSchedule {
             return this;
         }
 
-        public SetSchedule build() {
-            return new SetSchedule(this);
+        public SetScheduleInfo build() {
+            return new SetScheduleInfo(this);
         }
     }
 }

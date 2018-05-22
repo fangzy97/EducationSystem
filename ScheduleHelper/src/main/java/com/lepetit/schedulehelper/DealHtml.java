@@ -1,5 +1,6 @@
 package com.lepetit.schedulehelper;
 
+import com.lepetit.eventmessage.GetYearEvent;
 import com.lepetit.eventmessage.ScheduleEvent;
 
 import org.greenrobot.eventbus.EventBus;

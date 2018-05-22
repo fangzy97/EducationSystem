@@ -8,9 +8,12 @@ import java.util.List;
 
 public class ScheduleData extends GreenDaoUnit {
     private ScheduleInfoDao dao;
+    private boolean initialize;
     private static ScheduleData instance;
 
-    private ScheduleData() {}
+    private ScheduleData() {
+        this.initialize = false;
+    }
 
     private static ScheduleData getInstance() {
         if (instance == null) {
@@ -34,6 +37,7 @@ public class ScheduleData extends GreenDaoUnit {
 
     public static void initDB(Context context, String name) {
         getInstance().initialize(context, name);
+        getInstance().initialize = true;
         getInstance().dao = getInstance().getSession().getScheduleInfoDao();
     }
 
@@ -47,5 +51,9 @@ public class ScheduleData extends GreenDaoUnit {
 
     public static List<ScheduleInfo> search() {
         return getInstance()._search();
+    }
+
+    public static boolean isInitialize() {
+        return getInstance().initialize;
     }
 }

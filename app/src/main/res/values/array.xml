@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="year">
+        <item>2016&#8211;2017&#8211;1</item>
+        <item>2016&#8211;2017&#8211;2</item>
+        <item>2017&#8211;2018&#8211;1</item>
+        <item>2017&#8211;2018&#8211;2</item>
+        <item>2018&#8211;2019&#8211;1</item>
+        <item>2018&#8211;2019&#8211;2</item>
+    </string-array>
+</resources>

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.lepetit.eventmessage.GetLtEvent;
 import com.lepetit.eventmessage.LoginEvent;
+import com.lepetit.greendaohelper.ScheduleData;
 import com.lepetit.login.LoginActivity;
 import com.lepetit.loginactivity.LoginPart;
 import com.lepetit.loginactivity.StoreInfo;
@@ -79,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
                         changeFragment(new ScheduleFragment(), R.string.Schedule);
                         break;
                     case R.id.logout:
+                        if (ScheduleData.isInitialize()) {
+                            ScheduleData.clear();
+                        }
                         StoreInfo.clearInfo();
                         goToLoginActivity();
                         break;
