@@ -59,7 +59,7 @@ public class LoginPart {
     }
 
     private FormBody addFormBody(String userName, String password) {
-        FormBody body = new FormBody.Builder()
+        return new FormBody.Builder()
                 .add("username", userName)
                 .add("password", password)
                 .add("lt", lt)
@@ -67,15 +67,13 @@ public class LoginPart {
                 .add("_eventId", StringCollection._eventId)
                 .add("rmShown", StringCollection.rmShown)
                 .build();
-        return body;
     }
 
     private Headers addHeaders() {
-        Headers headers = new Headers.Builder()
+        return new Headers.Builder()
                 .add("User-Agent", StringCollection.userAgent)
                 .add("Referer", StringCollection.reference)
                 .build();
-        return headers;
     }
 
     private void _getLt() {

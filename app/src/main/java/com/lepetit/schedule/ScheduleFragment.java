@@ -7,7 +7,12 @@ import android.support.v7.widget.GridLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 ;
+import com.lepetit.eventmessage.GetYearEvent;
 import com.lepetit.eventmessage.ScheduleEvent;
 import com.lepetit.greendaohelper.ScheduleData;
 import com.lepetit.greendaohelper.ScheduleInfo;
@@ -19,6 +24,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,6 +36,8 @@ public class ScheduleFragment extends Fragment {
 
     @BindView(R.id.grid)
     GridLayout gridLayout;
+    @BindView(R.id.spinner)
+    Spinner spinner;
 
     @Nullable
     @Override
@@ -37,9 +45,53 @@ public class ScheduleFragment extends Fragment {
         View view = inflater.inflate(R.layout.schedule_fragment, container, false);
         ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
-        ScheduleData.initDB(getContext(), "Schedule.db");
-        EventBus.getDefault().post(new FinishEvent(true));
+        setSpinner();
+        ScheduleData.initDB(getContext(), spinner.getSelectedItem().toString());
+        EventBus.getDefault().post(new GetScheduleEvent(true));
         return view;
+    }
+
+    private ArrayAdapter<String> setAdapter() {
+        List<String> list = setList();
+        return new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, list);
+    }
+
+    private List<String> setList() {
+        List<String> list = new ArrayList<>();
+        GetTime getTime = new GetTime();
+        int year = getTime.getYear();
+        int month = getTime.getMonth();
+
+        for (int i = 2014; i < year; i++) {
+            String string1 = String.valueOf(i) + "-" + String.valueOf(i + 1) + "-1";
+            String string2 = String.valueOf(i) + "-" + String.valueOf(i + 1) + "-2";
+            list.add(string1);
+            list.add(string2);
+        }
+
+        if (month > 7) {
+            String string = String.valueOf(year) + "-" + String.valueOf(year + 1) + "-1";
+            list.add(string);
+        }
+        return list;
+    }
+
+    private void setSpinner() {
+        ArrayAdapter<String> spinnerAdapter = setAdapter();
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setSelection(spinner.getCount() - 1);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String string = spinner.getSelectedItem().toString();
+                Toast.makeText(getContext(), string, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -48,11 +100,12 @@ public class ScheduleFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
+    //延时读取数据库内容
     @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onFinishEvent(FinishEvent event) throws InterruptedException {
+    public void onGetScheduleEvent(GetScheduleEvent event) throws InterruptedException {
         LoadingDialogHelper.add(getActivity());
         Thread.sleep(500);
-        scheduleInfos =  ScheduleData.search();
+        scheduleInfos = ScheduleData.search();
         if (scheduleInfos.isEmpty()) {
             Schedule.getSchedule();
         } else {
@@ -79,7 +132,7 @@ public class ScheduleFragment extends Fragment {
     //打印课表
     private void addSchedule() {
         for (ScheduleInfo info : scheduleInfos) {
-            SetSchedule setSchedule1 = new SetSchedule.Builder(getActivity(), gridLayout)
+            SetScheduleInfo setScheduleInfo1 = new SetScheduleInfo.Builder(getActivity(), gridLayout)
                     .course(info.getCourse())
                     .teacher(info.getTeacher())
                     .week(info.getWeek())
@@ -87,7 +140,7 @@ public class ScheduleFragment extends Fragment {
                     .day(info.getDay())
                     .classroom(info.getClassroom())
                     .build();
-            setSchedule1.addToScreen();
+            setScheduleInfo1.addToScreen();
         }
     }
 }

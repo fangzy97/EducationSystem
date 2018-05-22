@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.lepetit.eventmessage.GetLtEvent;
 import com.lepetit.eventmessage.LoginEvent;
+import com.lepetit.greendaohelper.ScheduleData;
 import com.lepetit.login.LoginActivity;
 import com.lepetit.loginactivity.LoginPart;
 import com.lepetit.loginactivity.StoreInfo;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,32 +57,37 @@ public class MainActivity extends AppCompatActivity {
         doSomeCheck();
     }
 
-    private void changeFragment(Fragment fragment) {
+    private void changeFragment(Fragment fragment, int id) {
         getFragmentManager().beginTransaction().replace(R.id.linear_view, fragment).commit();
+        toolbar.setTitle(id);
     }
 
     private void initMainFragment() {
+        MenuItem mItem =  navigationView.getMenu().findItem(R.id.main_page);
+        mItem.setChecked(true);
         mainFragment = new MainFragment();
-        changeFragment(mainFragment);
+        changeFragment(mainFragment, R.string.MainPage);
     }
 
     private void setNavigationView() {
-        MenuItem mItem =  navigationView.getMenu().findItem(R.id.main_page);
-        mItem.setChecked(true);
-
         navigationView.setNavigationItemSelectedListener((item) -> {
-            switch (item.getItemId()) {
-                case R.id.main_page:
-                    changeFragment(mainFragment);
-                    break;
-                case R.id.schedule:
-                    changeFragment(new ScheduleFragment());
-                    break;
-                case R.id.logout:
-                    StoreInfo.clearInfo();
-                    goToLoginActivity();
-                    break;
-                default:
+            if (!item.isChecked()) {
+                switch (item.getItemId()) {
+                    case R.id.main_page:
+                        changeFragment(mainFragment, R.string.MainPage);
+                        break;
+                    case R.id.schedule:
+                        changeFragment(new ScheduleFragment(), R.string.Schedule);
+                        break;
+                    case R.id.logout:
+                        if (ScheduleData.isInitialize()) {
+                            ScheduleData.clear();
+                        }
+                        StoreInfo.clearInfo();
+                        goToLoginActivity();
+                        break;
+                    default:
+                }
             }
             drawerLayout.closeDrawers();
             return true;
@@ -87,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setActionBat() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.MainPage);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -167,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
             user = data.getStringExtra("UserName");
             pass = data.getStringExtra("Password");
             StoreInfo.storeInfo(user, pass);
+            initMainFragment();
         }
         else {
             finish();
