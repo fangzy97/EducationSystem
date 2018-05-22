@@ -9,10 +9,11 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.Response;
 
 public class Schedule {
-    private final static String url = "http://jwms.bit.edu.cn/jsxsd/xskb/xskb_list.do?Ves632DSdyV=NEW_XSD_PYGL";
     private static Schedule instance;
 
     private Schedule() {}
@@ -24,8 +25,42 @@ public class Schedule {
         return instance;
     }
 
+    private void _getChosenSchedule(String year) {
+        Headers headers = setHeaders();
+        FormBody body = setFormBody(year);
+        OKHttpUnit.postAsync(StringCollection.url, body, headers, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                System.out.println(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                DealHtml.analyze(response.body().string());
+                EventBus.getDefault().post(new FinishEvent());
+            }
+        });
+    }
+
+    private Headers setHeaders() {
+        return new Headers.Builder()
+                .add("User-Agent", StringCollection.userAgent)
+                .add("Referer", StringCollection.reference)
+                .build();
+    }
+
+    private FormBody setFormBody(String year) {
+        return new FormBody.Builder()
+                .add("cj0701id", "")
+                .add("zc", "")
+                .add("demo", "")
+                .add("xnxq01id", year)
+                .add("sfFD", "1")
+                .build();
+    }
+
     private void _getSchedule() {
-        OKHttpUnit.getAsync(url, new Callback() {
+        OKHttpUnit.getAsync(StringCollection.url, new Callback() {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -38,6 +73,10 @@ public class Schedule {
                 System.out.println(e.getMessage());
             }
         });
+    }
+
+    public static void getChosenSchedule(String year){
+        getInstance()._getChosenSchedule(year);
     }
 
     public static void getSchedule() {

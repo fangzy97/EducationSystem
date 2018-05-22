@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 ;
@@ -17,6 +18,7 @@ import com.lepetit.eventmessage.ScheduleEvent;
 import com.lepetit.greendaohelper.ScheduleData;
 import com.lepetit.greendaohelper.ScheduleInfo;
 import com.lepetit.leapplication.R;
+import com.lepetit.loadingdialog.LoadingDialog;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
 import com.lepetit.schedulehelper.Schedule;
 
@@ -47,7 +49,6 @@ public class ScheduleFragment extends Fragment {
         EventBus.getDefault().register(this);
         setSpinner();
         ScheduleData.initDB(getContext(), spinner.getSelectedItem().toString());
-        EventBus.getDefault().post(new GetScheduleEvent(true));
         return view;
     }
 
@@ -83,8 +84,17 @@ public class ScheduleFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String string = spinner.getSelectedItem().toString();
-                Toast.makeText(getContext(), string, Toast.LENGTH_SHORT).show();
+                LoadingDialogHelper.add(getActivity());
+                initialize();
+                String year = spinner.getSelectedItem().toString();
+                ScheduleData.initDB(getContext(), year);
+                if (isDatabaseEmpty()) {
+                    Schedule.getChosenSchedule(year);
+                }
+                else {
+                    addSchedule();
+                    LoadingDialogHelper.remove(getActivity());
+                }
             }
 
             @Override
@@ -98,20 +108,6 @@ public class ScheduleFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    //延时读取数据库内容
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onGetScheduleEvent(GetScheduleEvent event) throws InterruptedException {
-        LoadingDialogHelper.add(getActivity());
-        Thread.sleep(500);
-        scheduleInfos = ScheduleData.search();
-        if (scheduleInfos.isEmpty()) {
-            Schedule.getSchedule();
-        } else {
-            addSchedule();
-            LoadingDialogHelper.remove(getActivity());
-        }
     }
 
     //接收获取数据的广播 并将课表存到本地数据库
@@ -129,6 +125,11 @@ public class ScheduleFragment extends Fragment {
         LoadingDialogHelper.remove(getActivity());
     }
 
+    private boolean isDatabaseEmpty() {
+        scheduleInfos = ScheduleData.search();
+        return scheduleInfos.isEmpty();
+    }
+
     //打印课表
     private void addSchedule() {
         for (ScheduleInfo info : scheduleInfos) {
@@ -141,6 +142,13 @@ public class ScheduleFragment extends Fragment {
                     .classroom(info.getClassroom())
                     .build();
             setScheduleInfo1.addToScreen();
+        }
+    }
+
+    private void initialize() {
+        for (int i = 21; i < gridLayout.getChildCount(); i++) {
+            LinearLayout linearLayout = (LinearLayout) gridLayout.getChildAt(i);
+            getActivity().runOnUiThread(linearLayout::removeAllViews);
         }
     }
 }
