@@ -59,27 +59,7 @@ public class Schedule {
                 .build();
     }
 
-    private void _getSchedule() {
-        OKHttpUnit.getAsync(StringCollection.url, new Callback() {
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                DealHtml.analyze(response.body().string());
-                EventBus.getDefault().post(new FinishEvent());
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                System.out.println(e.getMessage());
-            }
-        });
-    }
-
     public static void getChosenSchedule(String year){
         getInstance()._getChosenSchedule(year);
-    }
-
-    public static void getSchedule() {
-        getInstance()._getSchedule();
     }
 }

@@ -8,6 +8,7 @@ public class LoadingDialogHelper {
 
     private LoadingDialogHelper() {
         dialog = new LoadingDialog();
+        dialog.setCancelable(false);
     }
 
     private static LoadingDialogHelper getInstance() {

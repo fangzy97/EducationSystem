@@ -39,7 +39,6 @@ public class DealHtml {
             Element element = document.getElementById(elements.get(i).attr("value"));
             if (element.children().size() > 0) {
                 int temp = i % 7 + 1;
-                String tesxt = element.text();
                 String day = String.valueOf(temp);
                 info = delString(element.text());
                 while (info.length() > 0) {
