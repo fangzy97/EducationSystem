@@ -67,7 +67,7 @@ public class ScheduleFragment extends Fragment {
                 initialize();
                 String year = spinner.getSelectedItem().toString();
                 GreenDaoUnit.initialize(getContext(), year);
-                if (isDatabaseEmpty()) {
+                if (GreenDaoUnit.isScheduleEmpty()) {
                     Schedule.getChosenSchedule(year);
                 }
                 else {
@@ -99,18 +99,13 @@ public class ScheduleFragment extends Fragment {
     //接收课表处理完毕的广播
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getScheduleFinish(com.lepetit.eventmessage.FinishEvent event) {
-        scheduleInfos = GreenDaoUnit.getSchedule();
         addSchedule();
         LoadingDialogHelper.remove(getActivity());
     }
 
-    private boolean isDatabaseEmpty() {
-        scheduleInfos = GreenDaoUnit.getSchedule();
-        return scheduleInfos.isEmpty();
-    }
-
     //打印课表
     private void addSchedule() {
+        scheduleInfos = GreenDaoUnit.getSchedule();
         for (ScheduleInfo info : scheduleInfos) {
             SetScheduleInfo setScheduleInfo1 = new SetScheduleInfo.Builder(getActivity(), gridLayout)
                     .course(info.getCourse())

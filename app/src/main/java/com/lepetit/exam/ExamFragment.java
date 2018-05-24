@@ -16,6 +16,8 @@ import com.lepetit.gettimehelper.GetTimeInfo;
 import com.lepetit.greendaohelper.ExamInfo;
 import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.leapplication.R;
+import com.lepetit.loadingdialog.LoadingDialog;
+import com.lepetit.loadingdialog.LoadingDialogHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,6 +41,7 @@ public class ExamFragment extends Fragment {
         View view = inflater.inflate(R.layout.exam_fragment, container, false);
         ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
+        LoadingDialogHelper.add(getActivity());
         GreenDaoUnit.initialize(getContext(), GetTimeInfo.getSimpleSTime());
         getExamInfo();
         return view;
@@ -48,17 +51,6 @@ public class ExamFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onCreateFinishEvent(CreateFinishEvent event) throws InterruptedException {
-        Thread.sleep(50);
-        if (GreenDaoUnit.isExamEmpty()) {
-            GetExamInfo.get();
-        }
-        else {
-            setRecyclerView();
-        }
     }
 
     private void getExamInfo() {
@@ -71,25 +63,24 @@ public class ExamFragment extends Fragment {
     }
 
     private void setRecyclerView() {
+        examList = GreenDaoUnit.getExam();
         getActivity().runOnUiThread(() -> {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(layoutManager);
 
-            examList = GreenDaoUnit.getExam();
             ExamAdapter adapter = new ExamAdapter(examList);
             recyclerView.setAdapter(adapter);
         });
+        LoadingDialogHelper.remove(getActivity());
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onExamEvent(ExamEvent event) {
-        System.out.println("OK");
         GreenDaoUnit.insertExam(event.getCourse(), event.getTime(), event.getClassroom(), event.getSeat());
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onFinish(ExamFinishEvent event) {
-        examList = GreenDaoUnit.getExam();
         setRecyclerView();
     }
 }

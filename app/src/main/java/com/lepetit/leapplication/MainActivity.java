@@ -16,6 +16,7 @@ import com.lepetit.eventmessage.GetLtEvent;
 import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.exam.ExamFragment;
 import com.lepetit.examhelper.GetExamInfo;
+import com.lepetit.grade.GradeFragment;
 import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.login.LoginActivity;
 import com.lepetit.loginactivity.LoginPart;
@@ -82,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.exam:
                         changeFragment(new ExamFragment(), R.string.Exam);
+                        break;
+                    case R.id.grade:
+                        changeFragment(new GradeFragment(), R.string.Grade);
                         break;
                     case R.id.logout:
                         if (GreenDaoUnit.isInitialize()) {

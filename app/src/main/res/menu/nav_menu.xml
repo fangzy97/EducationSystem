@@ -13,6 +13,9 @@
             android:id="@+id/exam"
             android:title="@string/Exam" />
         <item
+            android:id="@+id/grade"
+            android:title="@string/Grade" />
+        <item
             android:id="@+id/logout"
             android:title="@string/logout" />
     </group>

@@ -5,15 +5,16 @@ import android.content.Context;
 import com.lepetit.dao.DaoMaster;
 import com.lepetit.dao.DaoSession;
 import com.lepetit.dao.ExamInfoDao;
+import com.lepetit.dao.GradeInfoDao;
 import com.lepetit.dao.ScheduleInfoDao;
 
 import java.util.List;
 
 public class GreenDaoUnit {
     private static GreenDaoUnit instance;
-    private DaoSession session;
     private ScheduleInfoDao scheduleInfoDao;
     private ExamInfoDao examInfoDao;
+    private GradeInfoDao gradeInfoDao;
     private boolean initialize;
 
     private GreenDaoUnit() {
@@ -30,9 +31,10 @@ public class GreenDaoUnit {
     private void _initialize(Context context, String name) {
         DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(context, name, null);
         DaoMaster master = new DaoMaster(openHelper.getWritableDatabase());
-        session = master.newSession();
+        DaoSession session = master.newSession();
         scheduleInfoDao = session.getScheduleInfoDao();
         examInfoDao = session.getExamInfoDao();
+        gradeInfoDao = session.getGradeInfoDao();
         initialize = true;
     }
 
@@ -43,6 +45,7 @@ public class GreenDaoUnit {
     private void _clear() {
         scheduleInfoDao.deleteAll();
         examInfoDao.deleteAll();
+        gradeInfoDao.deleteAll();
     }
 
     private List<ScheduleInfo> _getSchedule() {
@@ -51,6 +54,10 @@ public class GreenDaoUnit {
 
     private List<ExamInfo> _getExam() {
         return examInfoDao.loadAll();
+    }
+
+    private List<GradeInfo> _getGrade() {
+        return gradeInfoDao.loadAll();
     }
 
     private void _insertSchedule(
@@ -64,12 +71,21 @@ public class GreenDaoUnit {
         examInfoDao.insert(info);
     }
 
+    private void _insertGrade(String course, String score, String credit) {
+        GradeInfo info = new GradeInfo(null, course, score, credit);
+        gradeInfoDao.insert(info);
+    }
+
     private boolean _isScheduleEmpty() {
         return _getSchedule().isEmpty();
     }
 
     private boolean _isExamEmpty() {
         return _getExam().isEmpty();
+    }
+
+    private boolean _isGradeEmpty() {
+        return _getGrade().isEmpty();
     }
 
     public static void initialize(Context context, String name) {
@@ -92,6 +108,10 @@ public class GreenDaoUnit {
         return getInstance()._getExam();
     }
 
+    public static List<GradeInfo> getGrade() {
+        return getInstance()._getGrade();
+    }
+
     public static void insertSchedule(
             String day, String course, String teacher, String week, String time, String classroom) {
         getInstance()._insertSchedule(day, course, teacher, week, time, classroom);
@@ -101,11 +121,19 @@ public class GreenDaoUnit {
         getInstance()._insertExam(course, time, classroom, seat);
     }
 
+    public static void insertGrade(String course, String score, String credit) {
+        getInstance()._insertGrade(course, score, credit);
+    }
+
     public static boolean isScheduleEmpty() {
         return getInstance()._isScheduleEmpty();
     }
 
     public static boolean isExamEmpty() {
         return getInstance()._isExamEmpty();
+    }
+
+    public static boolean isGradeEmpty() {
+        return getInstance()._isGradeEmpty();
     }
 }
