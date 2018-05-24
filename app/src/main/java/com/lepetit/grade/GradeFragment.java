@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.eventmessage.GetGradeFinishEvent;
 import com.lepetit.eventmessage.GradeEvent;
 import com.lepetit.gettimehelper.GetTimeInfo;
@@ -31,7 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GradeFragment extends Fragment {
+public class GradeFragment extends BackHandleFragment {
 
     private List<GradeInfo> list;
 
@@ -107,5 +108,10 @@ public class GradeFragment extends Fragment {
             LoadingDialogHelper.remove(getActivity());
         });
         LoadingDialogHelper.remove(getActivity());
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return true;
     }
 }

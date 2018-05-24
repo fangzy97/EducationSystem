@@ -7,12 +7,14 @@ public class GetTimeInfo {
     private GetTime getTime;
     private int year;
     private int month;
+    private int day;
     private static GetTimeInfo instance;
 
     private GetTimeInfo() {
         getTime = new GetTime();
         year = getTime.getYear();
         month = getTime.getMonth();
+        day = getTime.getDay();
     }
 
     private static GetTimeInfo getInstance() {
@@ -48,11 +50,19 @@ public class GetTimeInfo {
         }
     }
 
+    private String _getDate() {
+        return String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day);
+    }
+
     public static List<String> getTimeList() {
         return getInstance()._getTimeList();
     }
 
     public static String getSimpleSTime() {
         return getInstance()._getSimpleTime();
+    }
+
+    public static String getDate() {
+        return getInstance()._getDate();
     }
 }

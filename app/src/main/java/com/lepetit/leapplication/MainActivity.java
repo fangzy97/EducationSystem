@@ -10,8 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.lepetit.basefragment.BackHandleFragment;
+import com.lepetit.basefragment.BackHandleInterface;
 import com.lepetit.eventmessage.GetLtEvent;
 import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.exam.ExamFragment;
@@ -30,8 +33,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BackHandleInterface {
     private final int LOGIN_REQUEST = 0;
+    private BackHandleFragment backHandleFragment;
+    private boolean hadIntercept;
 
     private String user;
     private String pass;
@@ -43,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.linear_view)
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +66,13 @@ public class MainActivity extends AppCompatActivity {
         doSomeCheck();
     }
 
-    private void changeFragment(Fragment fragment, int id) {
+    void changeFragment(Fragment fragment, int id) {
         getFragmentManager().beginTransaction().replace(R.id.linear_view, fragment).commit();
         toolbar.setTitle(id);
+    }
+
+    void setExamChecked() {
+        navigationView.getMenu().findItem(R.id.exam).setChecked(true);
     }
 
     private void initMainFragment() {
@@ -187,6 +198,24 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             finish();
+        }
+    }
+
+    @Override
+    public void setSelectedFragment(BackHandleFragment selectedFragment) {
+        this.backHandleFragment = selectedFragment;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backHandleFragment == null || !backHandleFragment.onBackPressed()) {
+            if (getFragmentManager().getBackStackEntryCount() == 0) {
+                super.onBackPressed();
+            }
+        }
+        else {
+            changeFragment(mainFragment, R.string.MainPage);
+            navigationView.getMenu().findItem(R.id.main_page).setChecked(true);
         }
     }
 }

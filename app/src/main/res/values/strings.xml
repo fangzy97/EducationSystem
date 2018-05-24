@@ -33,4 +33,7 @@
     <string name="Schedule">课程表</string>
     <string name="Exam">考试</string>
     <string name="Grade">成绩</string>
+    <string name="Bit_only">北理乐学</string>
+    <string name="Edu_web">教务处</string>
+    <string name="recent_exam">近期考试：</string>
 </resources>

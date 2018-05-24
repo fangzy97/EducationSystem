@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lepetit.basefragment.BackHandleFragment;
+import com.lepetit.basefragment.BackHandleInterface;
 import com.lepetit.eventmessage.ExamEvent;
 import com.lepetit.eventmessage.ExamFinishEvent;
 import com.lepetit.examhelper.GetExamInfo;
@@ -28,8 +30,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ExamFragment extends Fragment {
-
+public class ExamFragment extends BackHandleFragment {
+    private BackHandleInterface backHandleInterface;
     private List<ExamInfo> examList;
 
     @BindView(R.id.exam_list)
@@ -82,5 +84,10 @@ public class ExamFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onFinish(ExamFinishEvent event) {
         setRecyclerView();
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return true;
     }
 }

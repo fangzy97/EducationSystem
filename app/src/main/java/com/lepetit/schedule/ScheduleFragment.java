@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 ;
+import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.eventmessage.ScheduleEvent;
 import com.lepetit.gettimehelper.GetTime;
 import com.lepetit.gettimehelper.GetTimeInfo;
@@ -31,7 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ScheduleFragment extends Fragment {
+public class ScheduleFragment extends BackHandleFragment {
 
     private List<ScheduleInfo> scheduleInfos;
 
@@ -124,5 +125,10 @@ public class ScheduleFragment extends Fragment {
             LinearLayout linearLayout = (LinearLayout) gridLayout.getChildAt(i);
             getActivity().runOnUiThread(linearLayout::removeAllViews);
         }
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return true;
     }
 }
