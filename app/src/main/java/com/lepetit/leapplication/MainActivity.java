@@ -9,13 +9,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.lepetit.eventmessage.GetLtEvent;
 import com.lepetit.eventmessage.LoginEvent;
-import com.lepetit.greendaohelper.ScheduleData;
+import com.lepetit.exam.ExamFragment;
+import com.lepetit.examhelper.GetExamInfo;
+import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.login.LoginActivity;
 import com.lepetit.loginactivity.LoginPart;
 import com.lepetit.loginactivity.StoreInfo;
@@ -79,9 +80,12 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.schedule:
                         changeFragment(new ScheduleFragment(), R.string.Schedule);
                         break;
+                    case R.id.exam:
+                        changeFragment(new ExamFragment(), R.string.Exam);
+                        break;
                     case R.id.logout:
-                        if (ScheduleData.isInitialize()) {
-                            ScheduleData.clear();
+                        if (GreenDaoUnit.isInitialize()) {
+                            GreenDaoUnit.clear();
                         }
                         StoreInfo.clearInfo();
                         goToLoginActivity();

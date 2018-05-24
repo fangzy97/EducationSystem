@@ -1,6 +1,5 @@
 package com.lepetit.schedulehelper;
 
-import com.lepetit.eventmessage.GetYearEvent;
 import com.lepetit.eventmessage.ScheduleEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -10,8 +9,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DealHtml {
     private String info;

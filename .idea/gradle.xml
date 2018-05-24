@@ -8,6 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/ExamHelper" />
+            <option value="$PROJECT_DIR$/GetTimeHelper" />
             <option value="$PROJECT_DIR$/LoginHelper" />
             <option value="$PROJECT_DIR$/OKHttpHelper" />
             <option value="$PROJECT_DIR$/ScheduleHelper" />

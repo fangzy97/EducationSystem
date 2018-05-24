@@ -11,14 +11,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 ;
-import com.lepetit.eventmessage.GetYearEvent;
 import com.lepetit.eventmessage.ScheduleEvent;
-import com.lepetit.greendaohelper.ScheduleData;
+import com.lepetit.gettimehelper.GetTime;
+import com.lepetit.gettimehelper.GetTimeInfo;
+import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.greendaohelper.ScheduleInfo;
 import com.lepetit.leapplication.R;
-import com.lepetit.loadingdialog.LoadingDialog;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
 import com.lepetit.schedulehelper.Schedule;
 
@@ -48,33 +47,13 @@ public class ScheduleFragment extends Fragment {
         ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
         setSpinner();
-        ScheduleData.initDB(getContext(), spinner.getSelectedItem().toString());
+        GreenDaoUnit.initialize(getContext(), spinner.getSelectedItem().toString());
         return view;
     }
 
     private ArrayAdapter<String> setAdapter() {
-        List<String> list = setList();
+        List<String> list = GetTimeInfo.getTimeList();
         return new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, list);
-    }
-
-    private List<String> setList() {
-        List<String> list = new ArrayList<>();
-        GetTime getTime = new GetTime();
-        int year = getTime.getYear();
-        int month = getTime.getMonth();
-
-        for (int i = 2014; i < year; i++) {
-            String string1 = String.valueOf(i) + "-" + String.valueOf(i + 1) + "-1";
-            String string2 = String.valueOf(i) + "-" + String.valueOf(i + 1) + "-2";
-            list.add(string1);
-            list.add(string2);
-        }
-
-        if (month > 7) {
-            String string = String.valueOf(year) + "-" + String.valueOf(year + 1) + "-1";
-            list.add(string);
-        }
-        return list;
     }
 
     private void setSpinner() {
@@ -87,7 +66,7 @@ public class ScheduleFragment extends Fragment {
                 LoadingDialogHelper.add(getActivity());
                 initialize();
                 String year = spinner.getSelectedItem().toString();
-                ScheduleData.initDB(getContext(), year);
+                GreenDaoUnit.initialize(getContext(), year);
                 if (isDatabaseEmpty()) {
                     Schedule.getChosenSchedule(year);
                 }
@@ -113,20 +92,20 @@ public class ScheduleFragment extends Fragment {
     //接收获取数据的广播 并将课表存到本地数据库
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onGetSchedule(ScheduleEvent event) {
-        ScheduleData.insert(event.getDay(), event.getCourse(), event.getTeacher(),
+        GreenDaoUnit.insertSchedule(event.getDay(), event.getCourse(), event.getTeacher(),
                 event.getWeek(), event.getTime(), event.getClassroom());
     }
 
     //接收课表处理完毕的广播
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getScheduleFinish(com.lepetit.eventmessage.FinishEvent event) {
-        scheduleInfos = ScheduleData.search();
+        scheduleInfos = GreenDaoUnit.getSchedule();
         addSchedule();
         LoadingDialogHelper.remove(getActivity());
     }
 
     private boolean isDatabaseEmpty() {
-        scheduleInfos = ScheduleData.search();
+        scheduleInfos = GreenDaoUnit.getSchedule();
         return scheduleInfos.isEmpty();
     }
 

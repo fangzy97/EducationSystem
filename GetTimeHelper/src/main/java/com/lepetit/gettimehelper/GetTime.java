@@ -1,9 +1,8 @@
-package com.lepetit.schedule;
+package com.lepetit.gettimehelper;
 
 import java.util.Calendar;
 
 public class GetTime {
-
     private Calendar calendar;
 
     GetTime() {

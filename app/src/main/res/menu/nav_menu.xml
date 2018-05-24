@@ -10,6 +10,9 @@
             android:id="@+id/schedule"
             android:title="@string/getSchedule" />
         <item
+            android:id="@+id/exam"
+            android:title="@string/Exam" />
+        <item
             android:id="@+id/logout"
             android:title="@string/logout" />
     </group>
