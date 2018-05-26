@@ -93,19 +93,19 @@ public class ScheduleFragment extends BackHandleFragment {
     }
 
     private void setSwipeRefreshLayout() {
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            new Thread(() -> {
-                year = spinner.getSelectedItem().toString();
-                getSchedule(FinalCollection.REFRESH);
-            }).start();
-        });
+        super.setSwipeRefreshLayout(swipeRefreshLayout);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void getData() {
+        year = spinner.getSelectedItem().toString();
+        getSchedule(FinalCollection.REFRESH);
     }
 
     private void getSchedule(int method) {

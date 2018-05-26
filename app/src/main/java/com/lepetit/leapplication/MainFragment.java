@@ -142,4 +142,7 @@ public class MainFragment extends BackHandleFragment {
     public boolean onBackPressed() {
         return false;
     }
+
+    @Override
+    protected void getData() {}
 }

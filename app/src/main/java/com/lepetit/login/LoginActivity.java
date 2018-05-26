@@ -1,22 +1,15 @@
 package com.lepetit.login;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.lepetit.baseactivity.BaseActivity;
 import com.lepetit.eventmessage.LoginEvent;
-import com.lepetit.leapplication.MainActivity;
 import com.lepetit.leapplication.R;
-import com.lepetit.loadingdialog.LoadingDialog;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
 import com.lepetit.loginactivity.LoginPart;
-import com.lepetit.eventmessage.GetLtEvent;
 import com.lepetit.loginactivity.StoreInfo;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -58,17 +51,6 @@ public class LoginActivity extends BaseActivity {
         }
         else {
             getToast("用户名或密码不能为空");
-        }
-    }
-
-    //接收获取隐藏值成功的事件
-    @Subscribe(threadMode = ThreadMode.POSTING)
-    public void onGetLtEvent(GetLtEvent event) {
-        if (event.isSuccessful()) {
-            LoginPart.postData(userName, password);
-        }
-        else {
-            getToast("网络好像发生了点问题");
         }
     }
 

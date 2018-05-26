@@ -5,7 +5,7 @@ public class MainExamInfo {
     private final String course;
     private final String examLastTime;
 
-    public MainExamInfo(String examTime, String course, String examLastTime) {
+    MainExamInfo(String examTime, String course, String examLastTime) {
         this.examTime = examTime;
         this.course = course;
         this.examLastTime = examLastTime;

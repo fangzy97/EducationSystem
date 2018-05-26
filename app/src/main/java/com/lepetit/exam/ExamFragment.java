@@ -3,12 +3,10 @@ package com.lepetit.exam;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.basefragment.BackHandleInterface;
@@ -36,7 +34,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ExamFragment extends BackHandleFragment {
-    private BackHandleInterface backHandleInterface;
     private List<ExamInfo> examList;
 
     @BindView(R.id.exam_list)
@@ -64,13 +61,13 @@ public class ExamFragment extends BackHandleFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    protected void getData() {
+        getExam(FinalCollection.REFRESH);
+    }
+
     private void setSwipeRefreshLayout() {
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            new Thread(() -> {
-                getExam(FinalCollection.REFRESH);
-            }).start();
-        });
+        super.setSwipeRefreshLayout(swipeRefreshLayout);
     }
 
     private void getExamInfo() {
@@ -112,15 +109,8 @@ public class ExamFragment extends BackHandleFragment {
 
     private void setRecyclerView() {
         examList = GreenDaoUnit.getExam();
-        getActivity().runOnUiThread(() -> {
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            recyclerView.setLayoutManager(layoutManager);
-
-            ExamAdapter adapter = new ExamAdapter(examList);
-            recyclerView.setAdapter(adapter);
-            swipeRefreshLayout.setRefreshing(false);
-        });
-        LoadingDialogHelper.remove(getActivity());
+        ExamAdapter adapter = new ExamAdapter(examList);
+        super.setRecyclerView(recyclerView, adapter, swipeRefreshLayout);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)

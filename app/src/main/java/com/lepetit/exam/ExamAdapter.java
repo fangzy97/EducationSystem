@@ -18,7 +18,7 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder> {
     private List<ExamInfo> examList;
     private Context context;
 
-    public ExamAdapter(List<ExamInfo> list) {
+    ExamAdapter(List<ExamInfo> list) {
         this.examList = list;
     }
 

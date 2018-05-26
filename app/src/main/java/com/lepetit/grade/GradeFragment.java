@@ -66,14 +66,14 @@ public class GradeFragment extends BackHandleFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    protected void getData() {
+        year = spinner.getSelectedItem().toString();
+        getGrade(FinalCollection.REFRESH);
+    }
+
     private void setSwipeRefreshLayout() {
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            new Thread(() -> {
-                year = spinner.getSelectedItem().toString();
-                getGrade(FinalCollection.REFRESH);
-            }).start();
-        });
+        super.setSwipeRefreshLayout(swipeRefreshLayout);
     }
 
     private void getGrade(int method) {
@@ -157,15 +157,8 @@ public class GradeFragment extends BackHandleFragment {
 
     private void setRecyclerView() {
         list = GreenDaoUnit.getGrade();
-        getActivity().runOnUiThread(() -> {
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-            recyclerView.setLayoutManager(layoutManager);
-
-            GradeAdapter adapter = new GradeAdapter(list);
-            recyclerView.setAdapter(adapter);
-            swipeRefreshLayout.setRefreshing(false);
-        });
-        LoadingDialogHelper.remove(getActivity());
+        GradeAdapter adapter = new GradeAdapter(list);
+        super.setRecyclerView(recyclerView, adapter, swipeRefreshLayout);
     }
 
     @Override
