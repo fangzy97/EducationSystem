@@ -23,6 +23,8 @@ import com.lepetit.greendaohelper.ScheduleInfo;
 import com.lepetit.leapplication.MainActivity;
 import com.lepetit.leapplication.R;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
+import com.lepetit.messagehelper.ConnectEvent;
+import com.lepetit.messagehelper.FinishEvent;
 import com.lepetit.schedulehelper.Schedule;
 
 import org.greenrobot.eventbus.EventBus;
@@ -109,7 +111,6 @@ public class ScheduleFragment extends BackHandleFragment {
     private void getSchedule(int method) {
         this.method = method;
         if (MainActivity.isLogin) {
-            GreenDaoUnit.clearSchedule();
             Schedule.getChosenSchedule(year);
         }
         else {
@@ -120,7 +121,6 @@ public class ScheduleFragment extends BackHandleFragment {
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event) {
         if (event.getLoginState() == 1) {
-            GreenDaoUnit.clearSchedule();
             Schedule.getChosenSchedule(year);
         }
         else {
@@ -132,9 +132,18 @@ public class ScheduleFragment extends BackHandleFragment {
                     swipeRefreshLayout.setRefreshing(false);
                 });
             }
-            getActivity().runOnUiThread(() -> {
-                Toast.makeText(getContext(), "暂时无法连接到教务处", Toast.LENGTH_SHORT).show();
-            });
+            setToast(LOGIN_ERROR);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onConnectEvent(ConnectEvent event) {
+        if (event.isSuccessful()) {
+            GreenDaoUnit.clearSchedule();
+        }
+        else {
+            setToast(CONNECT_ERROR);
+            addSchedule();
         }
     }
 
@@ -146,8 +155,8 @@ public class ScheduleFragment extends BackHandleFragment {
     }
 
     //接收课表处理完毕的广播
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getScheduleFinish(com.lepetit.eventmessage.FinishEvent event) {
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void getScheduleFinish(FinishEvent event) {
         addSchedule();
     }
 
@@ -167,7 +176,9 @@ public class ScheduleFragment extends BackHandleFragment {
             setScheduleInfo1.addToScreen();
         }
         LoadingDialogHelper.remove(getActivity());
-        swipeRefreshLayout.setRefreshing(false);
+        getActivity().runOnUiThread(() -> {
+            swipeRefreshLayout.setRefreshing(false);
+        });
     }
 
     private void initialize() {

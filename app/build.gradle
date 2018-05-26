@@ -44,4 +44,5 @@ dependencies {
     implementation project(':GetTimeHelper')
     implementation project(':ExamHelper')
     implementation project(':GradeHelper')
+    implementation project(':MessageHelper')
 }

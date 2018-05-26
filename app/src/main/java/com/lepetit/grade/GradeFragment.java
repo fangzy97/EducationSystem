@@ -14,7 +14,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.lepetit.basefragment.BackHandleFragment;
-import com.lepetit.eventmessage.GetGradeFinishEvent;
 import com.lepetit.eventmessage.GradeEvent;
 import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.finalcollection.FinalCollection;
@@ -25,7 +24,8 @@ import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.leapplication.MainActivity;
 import com.lepetit.leapplication.R;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
-import com.lepetit.schedulehelper.Schedule;
+import com.lepetit.messagehelper.ConnectEvent;
+import com.lepetit.messagehelper.FinishEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -79,7 +79,6 @@ public class GradeFragment extends BackHandleFragment {
     private void getGrade(int method) {
         this.method = method;
         if (MainActivity.isLogin) {
-            GreenDaoUnit.clearGrade();
             GetGradeInfo.get(year);
         }
         else {
@@ -90,7 +89,6 @@ public class GradeFragment extends BackHandleFragment {
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event) {
         if (event.getLoginState() == 1) {
-            GreenDaoUnit.clearGrade();
             GetGradeInfo.get(year);
         }
         else {
@@ -102,9 +100,7 @@ public class GradeFragment extends BackHandleFragment {
                     swipeRefreshLayout.setRefreshing(false);
                 });
             }
-            getActivity().runOnUiThread(() -> {
-                Toast.makeText(getContext(), "暂时无法连接到教务处", Toast.LENGTH_SHORT).show();
-            });
+            setToast(LOGIN_ERROR);
         }
     }
 
@@ -139,12 +135,23 @@ public class GradeFragment extends BackHandleFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onConnectEvent(ConnectEvent event) {
+        if (event.isSuccessful()) {
+            GreenDaoUnit.clearGrade();
+        }
+        else {
+            setToast(CONNECT_ERROR);
+            setRecyclerView();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.POSTING)
     public void onGradeEvent(GradeEvent event) {
         GreenDaoUnit.insertGrade(event.getCourse(), event.getScore(), event.getCredit());
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)
-    public void onGetGradeFinish(GetGradeFinishEvent event) {
+    public void onGetGradeFinish(FinishEvent event) {
         setRecyclerView();
     }
 
@@ -157,8 +164,8 @@ public class GradeFragment extends BackHandleFragment {
             GradeAdapter adapter = new GradeAdapter(list);
             recyclerView.setAdapter(adapter);
             swipeRefreshLayout.setRefreshing(false);
-            LoadingDialogHelper.remove(getActivity());
         });
+        LoadingDialogHelper.remove(getActivity());
     }
 
     @Override

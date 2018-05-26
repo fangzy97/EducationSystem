@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.lepetit.baseactivity.BaseActivity;
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.basefragment.BackHandleInterface;
 import com.lepetit.eventmessage.GetLtEvent;
@@ -34,13 +35,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements BackHandleInterface {
-    private final int LOGIN_REQUEST = 0;
+public class MainActivity extends BaseActivity implements BackHandleInterface {
     private BackHandleFragment backHandleFragment;
     public static boolean isLogin;
 
-    private String user;
-    private String pass;
     private MainFragment mainFragment;
 
     @BindView(R.id.nav_view)
@@ -57,8 +55,6 @@ public class MainActivity extends AppCompatActivity implements BackHandleInterfa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        //初始化SharedPreference
-        StoreInfo.setPreferences(getApplicationContext());
         //初始化toolBar
         setActionBat();
         setNavigationView();
@@ -66,6 +62,30 @@ public class MainActivity extends AppCompatActivity implements BackHandleInterfa
         isLogin = false;
         //检查SharedPreference是否为空，若为空则调用登录界面，否则直接用对应的用户名和密码登录
         doSomeCheck();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onLoginEvent(LoginEvent event) {
+        int state = event.getLoginState();
+        if (state == 1) {
+            isLogin = true;
+        }
+        else {
+            getToast("暂时无法连接到教务处");
+        }
     }
 
     void changeFragment(Fragment fragment, int id) {
@@ -121,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements BackHandleInterfa
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
     }
 
@@ -137,70 +157,26 @@ public class MainActivity extends AppCompatActivity implements BackHandleInterfa
     }
 
     public void doSomeCheck() {
-        String userName = StoreInfo.getInfo("UserName");
-        String password = StoreInfo.getInfo("Password");
-        if (isInfoEmpty(userName, password)) {
+        userName = getUserName();
+        password = getPassword();
+        if (isInfoEmpty()) {
             goToLoginActivity();
         }
         else {
-            if (!EventBus.getDefault().isRegistered(this)) {
-                EventBus.getDefault().register(this);
-            }
-            user = userName;
-            pass = password;
             LoginPart.getLt();
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.POSTING)
-    public void onGetLtEvent(GetLtEvent event) {
-        if (event.isSuccessful()) {
-            LoginPart.postData(user, pass);
-        }
-        else {
-            getToast("网络好像发生了点问题");
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.POSTING)
-    public void onLoginEvent(LoginEvent event) {
-        int state = event.getLoginState();
-        if (state == 1) {
-            isLogin = true;
-        }
-        else {
-            getToast("暂时无法连接到教务处");
-        }
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
-    }
-
-    private void getToast(String message) {
-        MainActivity.this.runOnUiThread(() -> {
-            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-        });
-    }
-
-    private boolean isInfoEmpty(String userName, String password) {
-        return userName.equals("") || password.equals("");
-    }
-
     private void goToLoginActivity() {
+        int LOGIN_REQUEST = 0;
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivityForResult(intent, LOGIN_REQUEST);
     }
 
-    private boolean isRequestOK(int resultCode) {
-        return resultCode == RESULT_OK;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (isRequestOK(resultCode)) {
-            user = data.getStringExtra("UserName");
-            pass = data.getStringExtra("Password");
-            StoreInfo.storeInfo(user, pass);
+        if (resultCode == RESULT_OK) {
+            isLogin = true;
             initMainFragment();
         }
         else {

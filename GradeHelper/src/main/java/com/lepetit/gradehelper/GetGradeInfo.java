@@ -1,6 +1,7 @@
 package com.lepetit.gradehelper;
 
-import com.lepetit.eventmessage.GetGradeFinishEvent;
+import com.lepetit.messagehelper.ConnectEvent;
+import com.lepetit.messagehelper.FinishEvent;
 import com.lepetit.okhttphelper.OKHttpUnit;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,12 +33,14 @@ public class GetGradeInfo {
             @Override
             public void onFailure(Call call, IOException e) {
                 System.out.println(e.getMessage());
+                EventBus.getDefault().post(new ConnectEvent(false));
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                EventBus.getDefault().post(new ConnectEvent(true));
                 DealHtml.analyze(response.body().string());
-                EventBus.getDefault().post(new GetGradeFinishEvent());
+                EventBus.getDefault().post(new FinishEvent());
             }
         });
     }

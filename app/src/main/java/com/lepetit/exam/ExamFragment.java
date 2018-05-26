@@ -1,7 +1,5 @@
 package com.lepetit.exam;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,7 +13,6 @@ import android.widget.Toast;
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.basefragment.BackHandleInterface;
 import com.lepetit.eventmessage.ExamEvent;
-import com.lepetit.eventmessage.ExamFinishEvent;
 import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.examhelper.GetExamInfo;
 import com.lepetit.finalcollection.FinalCollection;
@@ -24,8 +21,9 @@ import com.lepetit.greendaohelper.ExamInfo;
 import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.leapplication.MainActivity;
 import com.lepetit.leapplication.R;
-import com.lepetit.loadingdialog.LoadingDialog;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
+import com.lepetit.messagehelper.ConnectEvent;
+import com.lepetit.messagehelper.FinishEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -87,7 +85,6 @@ public class ExamFragment extends BackHandleFragment {
     private void getExam(int method) {
         this.method = method;
         if (MainActivity.isLogin) {
-            GreenDaoUnit.clearExam();
             GetExamInfo.get();
         }
         else {
@@ -98,7 +95,6 @@ public class ExamFragment extends BackHandleFragment {
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event) {
         if (event.getLoginState() == 1) {
-            GreenDaoUnit.clearExam();
             GetExamInfo.get();
         }
         else {
@@ -110,9 +106,7 @@ public class ExamFragment extends BackHandleFragment {
                     swipeRefreshLayout.setRefreshing(false);
                 });
             }
-            getActivity().runOnUiThread(() -> {
-                Toast.makeText(getContext(), "暂时无法连接到教务处", Toast.LENGTH_SHORT).show();
-            });
+            setToast(LOGIN_ERROR);
         }
     }
 
@@ -130,12 +124,23 @@ public class ExamFragment extends BackHandleFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onConnectEvent(ConnectEvent event) {
+        if (event.isSuccessful()) {
+            GreenDaoUnit.clearExam();
+        }
+        else {
+            setToast(CONNECT_ERROR);
+            setRecyclerView();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.POSTING)
     public void onExamEvent(ExamEvent event) {
         GreenDaoUnit.insertExam(event.getCourse(), event.getTime(), event.getClassroom(), event.getSeat());
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)
-    public void onFinish(ExamFinishEvent event) {
+    public void onFinish(FinishEvent event) {
         setRecyclerView();
     }
 

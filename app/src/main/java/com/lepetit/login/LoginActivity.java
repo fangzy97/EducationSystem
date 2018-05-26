@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.lepetit.baseactivity.BaseActivity;
 import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.leapplication.MainActivity;
 import com.lepetit.leapplication.R;
@@ -13,6 +14,7 @@ import com.lepetit.loadingdialog.LoadingDialog;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
 import com.lepetit.loginactivity.LoginPart;
 import com.lepetit.eventmessage.GetLtEvent;
+import com.lepetit.loginactivity.StoreInfo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,16 +24,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     //错误三次后会产生验证码
-    private String user;
-    private String pass;
 
     @BindView(R.id.userName)
-    EditText userName;
+    EditText userNameText;
     @BindView(R.id.password)
-    EditText password;
+    EditText passwordText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +39,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         //绑定ButterKnife
         ButterKnife.bind(this);
-        //注册EventBus
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -49,21 +47,14 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //解除注册EventBus
-        EventBus.getDefault().unregister(this);
-    }
-
     //点击按钮开始登录
     @OnClick(R.id.loginButton)
     void onLogin() {
-        user = userName.getText().toString();
-        pass = password.getText().toString();
-        if (isLegal(user, pass)) {
-            LoginPart.getLt();      //获取隐藏值
+        userName = userNameText.getText().toString();
+        password = passwordText.getText().toString();
+        if (!isInfoEmpty()) {
             LoadingDialogHelper.add(this);
+            LoginPart.getLt();      //获取隐藏值
         }
         else {
             getToast("用户名或密码不能为空");
@@ -74,20 +65,19 @@ public class LoginActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onGetLtEvent(GetLtEvent event) {
         if (event.isSuccessful()) {
-            LoginPart.postData(user, pass);
+            LoginPart.postData(userName, password);
         }
         else {
             getToast("网络好像发生了点问题");
         }
     }
 
-    //接受登录成功的事件
+    @Override
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event) {
-        LoadingDialogHelper.remove(this);
         int state = event.getLoginState();
         if (state == 1) {
-            sendInfoBack();
+            storeInfo();
             finish();
         }
         else if (state == 0){
@@ -98,21 +88,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void sendInfoBack() {
-        Intent intent = new Intent();
-        intent.putExtra("UserName", user);
-        intent.putExtra("Password", pass);
-        setResult(RESULT_OK, intent);
-    }
-
-    private boolean isLegal(String un, String pw) {
-        return !(un.equals("") || pw.equals(""));
-    }
-
-    //生成Toast
-    private void getToast(String message) {
-        LoginActivity.this.runOnUiThread(() -> {
-            Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
-        });
+    private void storeInfo() {
+        StoreInfo.storeInfo(userName, password);
+        setResult(RESULT_OK);
     }
 }

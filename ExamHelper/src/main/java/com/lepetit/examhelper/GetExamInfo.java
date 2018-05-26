@@ -1,7 +1,8 @@
 package com.lepetit.examhelper;
 
-import com.lepetit.eventmessage.ExamFinishEvent;
 import com.lepetit.gettimehelper.GetTimeInfo;
+import com.lepetit.messagehelper.ConnectEvent;
+import com.lepetit.messagehelper.FinishEvent;
 import com.lepetit.okhttphelper.OKHttpUnit;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,13 +35,15 @@ public class GetExamInfo {
             @Override
             public void onFailure(Call call, IOException e) {
                 System.out.println(e.getMessage());
+                EventBus.getDefault().post(new ConnectEvent(false));
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                EventBus.getDefault().post(new ConnectEvent(true));
                 DealHtml dealHtml = new DealHtml();
                 dealHtml.analyze(response.body().string());
-                EventBus.getDefault().post(new ExamFinishEvent());
+                EventBus.getDefault().post(new FinishEvent());
             }
         });
     }

@@ -6,6 +6,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':OKHttpHelper')
+    implementation project(':MessageHelper')
 }
 
 sourceCompatibility = "1.7"

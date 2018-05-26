@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Statistic">
+    <option name="excludedDirectories">
+      <list>
+        <option value="$PROJECT_DIR$/GetTimeHelper/libs" />
+        <option value="$PROJECT_DIR$/OKHttpHelper/build" />
+        <option value="$PROJECT_DIR$/LoginHelper/libs" />
+        <option value="$PROJECT_DIR$/greendaohelper/src/main/java/com/lepetit/dao" />
+        <option value="$PROJECT_DIR$/GradeHelper/build" />
+        <option value="$PROJECT_DIR$/greendaohelper/libs" />
+        <option value="$PROJECT_DIR$/ScheduleHelper" />
+        <option value="$PROJECT_DIR$/LoginHelper/build" />
+        <option value="$PROJECT_DIR$/LoginHelper/src/androidTest" />
+        <option value="$PROJECT_DIR$/app/src/androidTest" />
+        <option value="$PROJECT_DIR$/greendaohelper/src/androidTest" />
+        <option value="$PROJECT_DIR$/MessageHelper/libs" />
+        <option value="$PROJECT_DIR$/ExamHelper/libs" />
+        <option value="$PROJECT_DIR$/LoginHelper/src/test" />
+        <option value="$PROJECT_DIR$/GetTimeHelper/build" />
+        <option value="$PROJECT_DIR$/GradeHelper/libs" />
+        <option value="$PROJECT_DIR$/greendaohelper/src/main/res" />
+        <option value="$PROJECT_DIR$/gradle" />
+        <option value="$PROJECT_DIR$/MessageHelper/build" />
+        <option value="$PROJECT_DIR$/ExamHelper/build" />
+        <option value="$PROJECT_DIR$/ScheduleHelper/libs" />
+        <option value="$PROJECT_DIR$/ScheduleHelper/build" />
+        <option value="$PROJECT_DIR$/greendaohelper/build" />
+        <option value="$PROJECT_DIR$/greendaohelper/src/test" />
+        <option value="$PROJECT_DIR$/OKHttpHelper/libs" />
+        <option value="$PROJECT_DIR$/app/src/test" />
+        <option value="$PROJECT_DIR$/app/build" />
+        <option value="$PROJECT_DIR$/app/libs" />
+        <option value="$PROJECT_DIR$/.gradle" />
+        <option value="$PROJECT_DIR$/.idea" />
+      </list>
+    </option>
+  </component>
+</project>

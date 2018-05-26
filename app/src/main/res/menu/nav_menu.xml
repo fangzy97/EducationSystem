@@ -5,18 +5,33 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/main_page"
+            android:icon="@drawable/ic_home"
             android:title="@string/MainPage" />
-        <item
-            android:id="@+id/schedule"
-            android:title="@string/getSchedule" />
-        <item
-            android:id="@+id/exam"
-            android:title="@string/Exam" />
-        <item
-            android:id="@+id/grade"
-            android:title="@string/Grade" />
-        <item
-            android:id="@+id/logout"
-            android:title="@string/logout" />
     </group>
+    <item android:title="@string/edu_check">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/schedule"
+                    android:icon="@drawable/ic_schedule"
+                    android:title="@string/getSchedule" />
+                <item
+                    android:id="@+id/exam"
+                    android:icon="@drawable/ic_exam"
+                    android:title="@string/Exam" />
+                <item
+                    android:id="@+id/grade"
+                    android:icon="@drawable/ic_grade"
+                    android:title="@string/Grade" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="@string/application">
+        <menu>
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_logout"
+                android:title="@string/logout" />
+        </menu>
+    </item>
 </menu>

@@ -36,4 +36,6 @@
     <string name="Bit_only">北理乐学</string>
     <string name="Edu_web">教务处</string>
     <string name="recent_exam">近期考试：</string>
+    <string name="edu_check">教务查询</string>
+    <string name="application">应用</string>
 </resources>
