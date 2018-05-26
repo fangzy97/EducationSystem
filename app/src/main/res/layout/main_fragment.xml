@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
@@ -14,24 +16,22 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/main_month_and_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
                 android:padding="10dp"
-                android:text="5月24日"
                 android:textColor="@color/colorPrimary"
                 android:textSize="30sp" />
 
             <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
+                android:id="@+id/main_week"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_toEndOf="@id/textView8"
+                android:layout_toEndOf="@id/main_month_and_day"
                 android:padding="10dp"
-                android:text="星期五"
                 android:textSize="20sp" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
@@ -78,8 +78,8 @@
         android:layout_marginTop="5dp">
 
         <TextView
-            android:id="@+id/textView27"
-            android:layout_width="wrap_content"
+            android:id="@+id/edu_web"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/Edu_web"
             android:textSize="15sp"
@@ -93,8 +93,8 @@
         android:layout_marginTop="5dp">
 
         <TextView
-            android:id="@+id/textView29"
-            android:layout_width="wrap_content"
+            android:id="@+id/bit_online"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/Bit_only"
             android:textSize="15sp"

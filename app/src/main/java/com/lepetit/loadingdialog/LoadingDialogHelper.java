@@ -8,6 +8,7 @@ public class LoadingDialogHelper {
 
     private LoadingDialogHelper() {
         dialog = new LoadingDialog();
+        LoadingDialog.isAdd = false;
     }
 
     private static LoadingDialogHelper getInstance() {
@@ -18,11 +19,17 @@ public class LoadingDialogHelper {
     }
 
     private void _add(Activity activity) {
-        activity.getFragmentManager().beginTransaction().add(dialog, "Loading").commit();
+        if (!LoadingDialog.isAdd) {
+            activity.getFragmentManager().beginTransaction().add(dialog, "Loading").commit();
+            LoadingDialog.isAdd = true;
+        }
     }
 
     private void _remove(Activity activity) {
-        activity.getFragmentManager().beginTransaction().remove(dialog).commit();
+        if (LoadingDialog.isAdd) {
+            activity.getFragmentManager().beginTransaction().remove(dialog).commit();
+            LoadingDialog.isAdd = false;
+        }
     }
 
     public static void add(Activity activity) {

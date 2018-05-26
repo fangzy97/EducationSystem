@@ -1,8 +1,8 @@
 package com.lepetit.schedule;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +11,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 ;
 import com.lepetit.basefragment.BackHandleFragment;
+import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.eventmessage.ScheduleEvent;
-import com.lepetit.gettimehelper.GetTime;
+import com.lepetit.finalcollection.FinalCollection;
 import com.lepetit.gettimehelper.GetTimeInfo;
 import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.greendaohelper.ScheduleInfo;
+import com.lepetit.leapplication.MainActivity;
 import com.lepetit.leapplication.R;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
 import com.lepetit.schedulehelper.Schedule;
@@ -40,6 +43,8 @@ public class ScheduleFragment extends BackHandleFragment {
     GridLayout gridLayout;
     @BindView(R.id.spinner)
     Spinner spinner;
+    @BindView(R.id.schedule_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
@@ -48,7 +53,9 @@ public class ScheduleFragment extends BackHandleFragment {
         ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
         setSpinner();
+        scheduleInfos = new ArrayList<>();
         GreenDaoUnit.initialize(getContext(), spinner.getSelectedItem().toString());
+        setSwipeRefreshLayout();
         return view;
     }
 
@@ -65,11 +72,10 @@ public class ScheduleFragment extends BackHandleFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 LoadingDialogHelper.add(getActivity());
-                initialize();
-                String year = spinner.getSelectedItem().toString();
+                year = spinner.getSelectedItem().toString();
                 GreenDaoUnit.initialize(getContext(), year);
                 if (GreenDaoUnit.isScheduleEmpty()) {
-                    Schedule.getChosenSchedule(year);
+                    getSchedule(FinalCollection.SELECT);
                 }
                 else {
                     addSchedule();
@@ -84,10 +90,52 @@ public class ScheduleFragment extends BackHandleFragment {
         });
     }
 
+    private void setSwipeRefreshLayout() {
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            new Thread(() -> {
+                year = spinner.getSelectedItem().toString();
+                getSchedule(FinalCollection.REFRESH);
+            }).start();
+        });
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    private void getSchedule(int method) {
+        this.method = method;
+        if (MainActivity.isLogin) {
+            GreenDaoUnit.clearSchedule();
+            Schedule.getChosenSchedule(year);
+        }
+        else {
+            mainActivity.doSomeCheck();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onLoginEvent(LoginEvent event) {
+        if (event.getLoginState() == 1) {
+            GreenDaoUnit.clearSchedule();
+            Schedule.getChosenSchedule(year);
+        }
+        else {
+            if (method == FinalCollection.SELECT) {
+                addSchedule();
+            }
+            else {
+                getActivity().runOnUiThread(() -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+            }
+            getActivity().runOnUiThread(() -> {
+                Toast.makeText(getContext(), "暂时无法连接到教务处", Toast.LENGTH_SHORT).show();
+            });
+        }
     }
 
     //接收获取数据的广播 并将课表存到本地数据库
@@ -101,11 +149,11 @@ public class ScheduleFragment extends BackHandleFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getScheduleFinish(com.lepetit.eventmessage.FinishEvent event) {
         addSchedule();
-        LoadingDialogHelper.remove(getActivity());
     }
 
     //打印课表
     private void addSchedule() {
+        initialize();
         scheduleInfos = GreenDaoUnit.getSchedule();
         for (ScheduleInfo info : scheduleInfos) {
             SetScheduleInfo setScheduleInfo1 = new SetScheduleInfo.Builder(getActivity(), gridLayout)
@@ -118,6 +166,8 @@ public class ScheduleFragment extends BackHandleFragment {
                     .build();
             setScheduleInfo1.addToScreen();
         }
+        LoadingDialogHelper.remove(getActivity());
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void initialize() {

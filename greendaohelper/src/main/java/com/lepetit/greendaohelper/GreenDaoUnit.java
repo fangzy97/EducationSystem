@@ -42,9 +42,21 @@ public class GreenDaoUnit {
         return initialize;
     }
 
-    private void _clear() {
+    private void _clearAll() {
+        _clearSchedule();
+        _clearExam();
+        _clearGrade();
+    }
+
+    private void _clearSchedule() {
         scheduleInfoDao.deleteAll();
+    }
+
+    private void _clearExam() {
         examInfoDao.deleteAll();
+    }
+
+    private void _clearGrade() {
         gradeInfoDao.deleteAll();
     }
 
@@ -96,8 +108,20 @@ public class GreenDaoUnit {
         return getInstance()._isInitialize();
     }
 
-    public static void clear() {
-        getInstance()._clear();
+    public static void clearAll() {
+        getInstance()._clearAll();
+    }
+
+    public static void clearSchedule() {
+        getInstance()._clearSchedule();
+    }
+
+    public static void clearExam() {
+        getInstance()._clearExam();
+    }
+
+    public static void clearGrade() {
+        getInstance()._clearGrade();
     }
 
     public static List<ScheduleInfo> getSchedule() {

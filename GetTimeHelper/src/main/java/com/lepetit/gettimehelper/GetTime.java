@@ -2,7 +2,7 @@ package com.lepetit.gettimehelper;
 
 import java.util.Calendar;
 
-public class GetTime {
+class GetTime {
     private Calendar calendar;
 
     GetTime() {
@@ -19,5 +19,9 @@ public class GetTime {
 
     public int getDay() {
         return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public int getWeek() {
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 }

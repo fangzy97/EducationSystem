@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -36,7 +37,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements BackHandleInterface {
     private final int LOGIN_REQUEST = 0;
     private BackHandleFragment backHandleFragment;
-    private boolean hadIntercept;
+    public static boolean isLogin;
 
     private String user;
     private String pass;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements BackHandleInterfa
         setActionBat();
         setNavigationView();
         initMainFragment();
+        isLogin = false;
         //检查SharedPreference是否为空，若为空则调用登录界面，否则直接用对应的用户名和密码登录
         doSomeCheck();
     }
@@ -100,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements BackHandleInterfa
                         break;
                     case R.id.logout:
                         if (GreenDaoUnit.isInitialize()) {
-                            GreenDaoUnit.clear();
+                            GreenDaoUnit.clearAll();
                         }
                         StoreInfo.clearInfo();
                         goToLoginActivity();
@@ -134,14 +136,16 @@ public class MainActivity extends AppCompatActivity implements BackHandleInterfa
         return true;
     }
 
-    private void doSomeCheck() {
+    public void doSomeCheck() {
         String userName = StoreInfo.getInfo("UserName");
         String password = StoreInfo.getInfo("Password");
         if (isInfoEmpty(userName, password)) {
             goToLoginActivity();
         }
         else {
-            EventBus.getDefault().register(this);
+            if (!EventBus.getDefault().isRegistered(this)) {
+                EventBus.getDefault().register(this);
+            }
             user = userName;
             pass = password;
             LoginPart.getLt();
@@ -162,10 +166,13 @@ public class MainActivity extends AppCompatActivity implements BackHandleInterfa
     public void onLoginEvent(LoginEvent event) {
         int state = event.getLoginState();
         if (state == 1) {
-            EventBus.getDefault().unregister(this);
+            isLogin = true;
         }
         else {
             getToast("暂时无法连接到教务处");
+        }
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
         }
     }
 
@@ -208,14 +215,19 @@ public class MainActivity extends AppCompatActivity implements BackHandleInterfa
 
     @Override
     public void onBackPressed() {
-        if (backHandleFragment == null || !backHandleFragment.onBackPressed()) {
-            if (getFragmentManager().getBackStackEntryCount() == 0) {
-                super.onBackPressed();
-            }
+        if (drawerLayout.isDrawerOpen(Gravity.START)) {
+            drawerLayout.closeDrawers();
         }
         else {
-            changeFragment(mainFragment, R.string.MainPage);
-            navigationView.getMenu().findItem(R.id.main_page).setChecked(true);
+            if (backHandleFragment == null || !backHandleFragment.onBackPressed()) {
+                if (getFragmentManager().getBackStackEntryCount() == 0) {
+                    super.onBackPressed();
+                }
+            }
+            else {
+                changeFragment(mainFragment, R.string.MainPage);
+                navigationView.getMenu().findItem(R.id.main_page).setChecked(true);
+            }
         }
     }
 }
