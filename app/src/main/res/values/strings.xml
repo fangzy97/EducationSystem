@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LeApplication</string>
+    <string name="app_name">掌上教务处</string>
     <string name="userName">学号</string>
     <string name="password">密码</string>
     <string name="loginButton">登录</string>
