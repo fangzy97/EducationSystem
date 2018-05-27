@@ -18,7 +18,7 @@ public class GradeAdapter extends RecyclerView.Adapter<GradeAdapter.ViewHolder> 
     private List<GradeInfo> gradeList;
     private Context context;
 
-    public GradeAdapter(List<GradeInfo> gradeList) {
+    GradeAdapter(List<GradeInfo> gradeList) {
         this.gradeList = gradeList;
     }
 

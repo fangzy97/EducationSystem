@@ -68,6 +68,7 @@ public class LoginActivity extends BaseActivity {
         else {
             getToast("没有连接到校园网");
         }
+        LoadingDialogHelper.remove(this);
     }
 
     private void storeInfo() {

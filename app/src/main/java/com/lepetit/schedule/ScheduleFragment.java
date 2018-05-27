@@ -11,12 +11,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 ;
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.eventmessage.ScheduleEvent;
-import com.lepetit.finalcollection.FinalCollection;
 import com.lepetit.gettimehelper.GetTimeInfo;
 import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.greendaohelper.ScheduleInfo;
@@ -77,7 +75,7 @@ public class ScheduleFragment extends BackHandleFragment {
                 year = spinner.getSelectedItem().toString();
                 GreenDaoUnit.initialize(getContext(), year);
                 if (GreenDaoUnit.isScheduleEmpty()) {
-                    getSchedule(FinalCollection.SELECT);
+                    getSchedule(SELECT);
                 }
                 else {
                     addSchedule();
@@ -105,7 +103,7 @@ public class ScheduleFragment extends BackHandleFragment {
     @Override
     protected void getData() {
         year = spinner.getSelectedItem().toString();
-        getSchedule(FinalCollection.REFRESH);
+        getSchedule(REFRESH);
     }
 
     private void getSchedule(int method) {
@@ -124,13 +122,11 @@ public class ScheduleFragment extends BackHandleFragment {
             Schedule.getChosenSchedule(year);
         }
         else {
-            if (method == FinalCollection.SELECT) {
+            if (method == SELECT) {
                 addSchedule();
             }
             else {
-                getActivity().runOnUiThread(() -> {
-                    swipeRefreshLayout.setRefreshing(false);
-                });
+                removeRefreshSign(swipeRefreshLayout);
             }
             setToast(LOGIN_ERROR);
         }
@@ -176,9 +172,7 @@ public class ScheduleFragment extends BackHandleFragment {
             setScheduleInfo1.addToScreen();
         }
         LoadingDialogHelper.remove(getActivity());
-        getActivity().runOnUiThread(() -> {
-            swipeRefreshLayout.setRefreshing(false);
-        });
+        removeRefreshSign(swipeRefreshLayout);
     }
 
     private void initialize() {

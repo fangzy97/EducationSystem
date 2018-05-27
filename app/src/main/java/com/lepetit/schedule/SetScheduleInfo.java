@@ -20,7 +20,7 @@ public class SetScheduleInfo {
     private final String day;
     private final String classroom;
 
-    private SetScheduleInfo(Builder builder) {
+        private SetScheduleInfo(Builder builder) {
         this.activity = builder.activity;
         this.gridLayout = builder.gridLayout;
         this.course = builder.mCourse;

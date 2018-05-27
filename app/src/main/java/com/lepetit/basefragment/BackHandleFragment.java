@@ -1,18 +1,13 @@
 package com.lepetit.basefragment;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.lepetit.finalcollection.FinalCollection;
-import com.lepetit.gettimehelper.GetTimeInfo;
-import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.leapplication.MainActivity;
 import com.lepetit.leapplication.R;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
@@ -24,6 +19,8 @@ public abstract class BackHandleFragment extends Fragment {
     protected MainActivity mainActivity;
     protected String year;
     protected int method;
+    protected static final int SELECT = 0;
+    protected static final int REFRESH = 1;
     protected static final String LOGIN_ERROR = "暂时无法登录，请检查网络设置";
     protected static final String CONNECT_ERROR = "暂时无法连接到教务处，请检查网络设置";
 
@@ -76,6 +73,12 @@ public abstract class BackHandleFragment extends Fragment {
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             new Thread(this::getData).start();
+        });
+    }
+
+    protected void removeRefreshSign(SwipeRefreshLayout swipeRefreshLayout) {
+        getActivity().runOnUiThread(() -> {
+            swipeRefreshLayout.setRefreshing(false);
         });
     }
 

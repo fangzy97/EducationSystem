@@ -3,7 +3,6 @@ package com.lepetit.grade;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +10,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.eventmessage.GradeEvent;
 import com.lepetit.eventmessage.LoginEvent;
-import com.lepetit.finalcollection.FinalCollection;
 import com.lepetit.gettimehelper.GetTimeInfo;
 import com.lepetit.gradehelper.GetGradeInfo;
 import com.lepetit.greendaohelper.GradeInfo;
@@ -69,7 +66,7 @@ public class GradeFragment extends BackHandleFragment {
     @Override
     protected void getData() {
         year = spinner.getSelectedItem().toString();
-        getGrade(FinalCollection.REFRESH);
+        getGrade(REFRESH);
     }
 
     private void setSwipeRefreshLayout() {
@@ -92,13 +89,11 @@ public class GradeFragment extends BackHandleFragment {
             GetGradeInfo.get(year);
         }
         else {
-            if (method == FinalCollection.SELECT) {
+            if (method == SELECT) {
                 setRecyclerView();
             }
             else {
-                getActivity().runOnUiThread(() -> {
-                    swipeRefreshLayout.setRefreshing(false);
-                });
+                removeRefreshSign(swipeRefreshLayout);
             }
             setToast(LOGIN_ERROR);
         }
@@ -120,7 +115,7 @@ public class GradeFragment extends BackHandleFragment {
                 year = spinner.getSelectedItem().toString();
                 GreenDaoUnit.initialize(getContext(), year);
                 if (GreenDaoUnit.isGradeEmpty()) {
-                    getGrade(FinalCollection.SELECT);
+                    getGrade(SELECT);
                 }
                 else {
                     setRecyclerView();

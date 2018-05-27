@@ -9,11 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lepetit.basefragment.BackHandleFragment;
-import com.lepetit.basefragment.BackHandleInterface;
 import com.lepetit.eventmessage.ExamEvent;
 import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.examhelper.GetExamInfo;
-import com.lepetit.finalcollection.FinalCollection;
 import com.lepetit.gettimehelper.GetTimeInfo;
 import com.lepetit.greendaohelper.ExamInfo;
 import com.lepetit.greendaohelper.GreenDaoUnit;
@@ -63,7 +61,7 @@ public class ExamFragment extends BackHandleFragment {
 
     @Override
     protected void getData() {
-        getExam(FinalCollection.REFRESH);
+        getExam(REFRESH);
     }
 
     private void setSwipeRefreshLayout() {
@@ -72,7 +70,7 @@ public class ExamFragment extends BackHandleFragment {
 
     private void getExamInfo() {
         if (GreenDaoUnit.isExamEmpty()) {
-            getExam(FinalCollection.SELECT);
+            getExam(SELECT);
         }
         else {
             setRecyclerView();
@@ -95,13 +93,11 @@ public class ExamFragment extends BackHandleFragment {
             GetExamInfo.get();
         }
         else {
-            if (method == FinalCollection.SELECT) {
+            if (method == SELECT) {
                 setRecyclerView();
             }
             else {
-                getActivity().runOnUiThread(() -> {
-                    swipeRefreshLayout.setRefreshing(false);
-                });
+                removeRefreshSign(swipeRefreshLayout);
             }
             setToast(LOGIN_ERROR);
         }

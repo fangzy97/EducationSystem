@@ -20,7 +20,6 @@ import com.lepetit.web.WebActivity;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -61,7 +60,7 @@ public class MainFragment extends BackHandleFragment {
 
     @OnClick(R.id.bit_online)
     void onBitOnlineClick() {
-        goToWebActivity(UrlCollection.BITONLINE);
+        goToWebActivity(UrlCollection.BIT_ONLINE);
     }
 
     private void goToWebActivity(String url) {
