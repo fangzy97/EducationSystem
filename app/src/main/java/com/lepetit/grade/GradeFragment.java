@@ -3,6 +3,7 @@ package com.lepetit.grade;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -111,7 +112,7 @@ public class GradeFragment extends BackHandleFragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                LoadingDialogHelper.add(getActivity());
+                LoadingDialogHelper.add((AppCompatActivity) getActivity());
                 year = spinner.getSelectedItem().toString();
                 GreenDaoUnit.initialize(getContext(), year);
                 if (GreenDaoUnit.isGradeEmpty()) {

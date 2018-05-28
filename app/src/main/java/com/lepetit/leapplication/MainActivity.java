@@ -1,8 +1,8 @@
 package com.lepetit.leapplication;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -85,7 +85,11 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     }
 
     void changeFragment(Fragment fragment, int id) {
-        getFragmentManager().beginTransaction().replace(R.id.linear_view, fragment).commit();
+        try {
+            getSupportFragmentManager().beginTransaction().replace(R.id.linear_view, fragment).commit();
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
         toolbar.setTitle(id);
     }
 

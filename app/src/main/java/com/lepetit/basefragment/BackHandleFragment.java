@@ -1,9 +1,10 @@
 package com.lepetit.basefragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
@@ -66,7 +67,7 @@ public abstract class BackHandleFragment extends Fragment {
             recyclerView.setAdapter(adapter);
             swipeRefreshLayout.setRefreshing(false);
         });
-        LoadingDialogHelper.remove(getActivity());
+        LoadingDialogHelper.remove((AppCompatActivity) getActivity());
     }
 
     protected void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {

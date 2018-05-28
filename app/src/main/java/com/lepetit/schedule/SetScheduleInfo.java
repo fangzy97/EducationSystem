@@ -69,7 +69,7 @@ public class SetScheduleInfo {
         TextView textView = new TextView(activity);
         textView.setText(text);
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        textView.setBackgroundColor(activity.getColor(R.color.colorPrimary));
+        textView.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
         textView.setTextColor(Color.WHITE);
         textView.setPadding(5, 5, 5, 5);
         textView.setTextSize(12);
