@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     }
 
     void changeFragment(Fragment fragment, int id) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.linear_view, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.linear_view, fragment).commitAllowingStateLoss();
         toolbar.setTitle(id);
     }
 
