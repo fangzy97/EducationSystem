@@ -34,7 +34,7 @@ public class GetExamInfo {
         OKHttpUnit.postAsync(StringCollection.url, body, headers, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
                 EventBus.getDefault().post(new ConnectEvent(false));
             }
 

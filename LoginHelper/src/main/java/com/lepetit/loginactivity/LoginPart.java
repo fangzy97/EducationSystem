@@ -81,7 +81,7 @@ public class LoginPart {
             @Override
             public void onFailure(Call call, IOException e) {
                 lt = null;
-                System.out.println(e.getMessage());
+                e.printStackTrace();
                 sendLtEvent();
             }
 
@@ -99,14 +99,13 @@ public class LoginPart {
                 userName, password), addHeaders(), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                System.out.println("Login Error");
-                System.out.println(e.getMessage());
+                e.printStackTrace();
                 EventBus.getDefault().post(new LoginEvent(-1));
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                sendLoginEvent(isLoginSuccessful(response.body().string()));
+                    sendLoginEvent(isLoginSuccessful(response.body().string()));
             }
         });
     }
