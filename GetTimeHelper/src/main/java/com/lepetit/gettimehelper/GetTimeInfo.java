@@ -1,10 +1,12 @@
 package com.lepetit.gettimehelper;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class GetTimeInfo {
     private GetTime getTime;
@@ -54,20 +56,28 @@ public class GetTimeInfo {
     }
 
     private String _getDate() {
-        return String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day);
+        String mMonth = (month < 10) ? "0" + String.valueOf(month) : String.valueOf(month);
+        String mDay = (day < 10) ? "0" + String.valueOf(day) : String.valueOf(day);
+        return String.valueOf(year) + "-" + mMonth + "-" + mDay;
     }
 
-    private int _getPastDay(String dateNow, String dateExam) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date1 = format.parse(dateNow);
-        Date date2 = format.parse(dateExam);
-        System.out.println(date1);
-        System.out.println(date2);
-        int temp = (int)(date2.getTime() - date1.getTime());
-        if (temp < 0) {
+    private int _getPastDay(String dateNow, String dateExam) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        Date mDateNow = new Date();
+        Date mDateExam = new Date();
+        try {
+            mDateNow = format.parse(dateNow);
+            mDateExam = format.parse(dateExam);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (mDateExam.after(mDateNow)) {
+            int temp = (int)(mDateExam.getTime() - mDateNow.getTime());
+            return temp / (1000 * 3600 * 24);
+        }
+        else {
             return -1;
         }
-        return temp / (1000*3600*24);
     }
 
     public static List<String> getTimeList() {
@@ -82,7 +92,7 @@ public class GetTimeInfo {
         return getInstance()._getDate();
     }
 
-    public static int getPastDay(String dateNow, String dateExam) throws ParseException {
+    public static int getPastDay(String dateNow, String dateExam) {
         return getInstance()._getPastDay(dateNow, dateExam);
     }
 

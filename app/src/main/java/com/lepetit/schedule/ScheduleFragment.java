@@ -3,6 +3,7 @@ package com.lepetit.schedule;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,7 +72,7 @@ public class ScheduleFragment extends BackHandleFragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                LoadingDialogHelper.add(getActivity());
+                LoadingDialogHelper.add((AppCompatActivity) getActivity());
                 year = spinner.getSelectedItem().toString();
                 GreenDaoUnit.initialize(getContext(), year);
                 if (GreenDaoUnit.isScheduleEmpty()) {
@@ -79,7 +80,7 @@ public class ScheduleFragment extends BackHandleFragment {
                 }
                 else {
                     addSchedule();
-                    LoadingDialogHelper.remove(getActivity());
+                    LoadingDialogHelper.remove((MainActivity) getActivity());
                 }
             }
 
@@ -171,7 +172,7 @@ public class ScheduleFragment extends BackHandleFragment {
                     .build();
             setScheduleInfo1.addToScreen();
         }
-        LoadingDialogHelper.remove(getActivity());
+        LoadingDialogHelper.remove((AppCompatActivity) getActivity());
         removeRefreshSign(swipeRefreshLayout);
     }
 

@@ -1,6 +1,6 @@
 package com.lepetit.loadingdialog;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 
 public class LoadingDialogHelper {
     private LoadingDialog dialog;
@@ -18,25 +18,25 @@ public class LoadingDialogHelper {
         return instance;
     }
 
-    private void _add(Activity activity) {
+    private void _add(AppCompatActivity activity) {
         if (!LoadingDialog.isAdd) {
-            activity.getFragmentManager().beginTransaction().add(dialog, "Loading").commit();
+            activity.getSupportFragmentManager().beginTransaction().add(dialog, "Loading").commit();
             LoadingDialog.isAdd = true;
         }
     }
 
-    private void _remove(Activity activity) {
+    private void _remove(AppCompatActivity activity) {
         if (LoadingDialog.isAdd) {
-            activity.getFragmentManager().beginTransaction().remove(dialog).commit();
+            activity.getSupportFragmentManager().beginTransaction().remove(dialog).commit();
             LoadingDialog.isAdd = false;
         }
     }
 
-    public static void add(Activity activity) {
+    public static void add(AppCompatActivity activity) {
         getInstance()._add(activity);
     }
 
-    public static void remove(Activity activity) {
+    public static void remove(AppCompatActivity activity) {
         getInstance()._remove(activity);
     }
 }

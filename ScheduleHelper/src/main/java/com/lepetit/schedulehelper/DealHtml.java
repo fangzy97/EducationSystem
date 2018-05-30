@@ -9,6 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 public class DealHtml {
     private String info;
@@ -67,39 +68,69 @@ public class DealHtml {
         if (index == -1) {
             string = info;
             info = info.substring(info.length());
-        }
+		}
         else {
-            if (sign != 1) {
-                string = info.substring(0, index);
-                info = info.substring(index + 1);
-                if (sign == 0) {
-                    if (isLetter(info.charAt(0))) {
-                        int temp = info.indexOf(" ");
-                        string += " " + info.substring(0, temp);
-                        info = info.substring(temp + 1);
-                    }
-                }
-            }
-            else {
-                if (isNumber(info.charAt(0))) {
-                    string = " ";
-                }
-                else {
-                    string = info.substring(0, index);
-                    info = info.substring(index + 1);
-                }
-            }
+        	if (sign == 0) {
+        		string = info.substring(0, index);
+        		info = info.substring(index + 1);
+
+        		if (isI(info.charAt(0))) {
+        			int temp = info.indexOf(" ");
+        			string += " " + info.substring(0, temp);
+        			info = info.substring(temp + 1);
+				}
+			}
+			else if (sign == 1) {
+        		if (isNumber(info.charAt(0))) {
+        			string = " ";
+				}
+				else {
+					string = info.substring(0, index);
+					info = info.substring(index + 1);
+
+					if (isLetter(info.charAt(0))) {
+						int temp = info.indexOf(" ");
+						string += " " + info.substring(0, temp);
+						info = info.substring(temp + 1);
+					}
+				}
+			}
+			else if (sign == 3) {
+        		if (isClassroom(info.substring(0, 2))) {
+        			string = info.substring(0, index);
+        			info = info.substring(index + 1);
+				}
+				else {
+        			string = " ";
+				}
+			}
+			else {
+        		string = info.substring(0, index);
+        		info = info.substring(index + 1);
+			}
         }
         sign = (sign + 1) % 4;
         return string;
     }
 
+    private boolean isClassroom(String string) {
+    	string = string.replaceAll("\\u4fe1[0-9]", "0");
+		string = string.replaceAll("\\u826f\\u4e61", "0");
+		string = string.replaceAll("\\u81f3\\u5584", "0");
+		string = string.replaceAll("3-", "0");
+    	return string.equals("0");
+	}
+
+    private boolean isLetter(char ch) {
+    	return ch >= 'A' && ch <= 'Z';
+	}
+
     private boolean isNumber(char ch) {
         return ch >= '0' && ch <= '9';
     }
 
-    private boolean isLetter(char ch) {
-        return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
+    private boolean isI(char ch) {
+        return ch == 'I';
     }
 
     private String delString(String text) {

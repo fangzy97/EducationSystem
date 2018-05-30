@@ -124,15 +124,13 @@ public class MainFragment extends BackHandleFragment {
                 String time = info.getTime();
                 int loc = time.indexOf("日");
                 String dateExam = time.substring(0, loc);
-                try {
-                    int pastDay = GetTimeInfo.getPastDay(dateNow, dateExam);
-                    if (pastDay > -1) {
-                        head += String.valueOf(pastDay) + "天";
-                        list.add(new MainExamInfo(dateExam, course, head));
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
+
+                int pastDay = GetTimeInfo.getPastDay(dateNow, dateExam);
+                if (pastDay > -1) {
+                    head += String.valueOf(pastDay) + "天";
+                    list.add(new MainExamInfo(dateExam, course, head));
                 }
+
             }
         }
     }

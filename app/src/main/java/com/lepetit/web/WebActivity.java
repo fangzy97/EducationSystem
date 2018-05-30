@@ -1,5 +1,6 @@
 package com.lepetit.web;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ public class WebActivity extends AppCompatActivity {
         String url = intent.getStringExtra("url");
         setWebView(url);
         LoadingDialogHelper.remove(this);
+
     }
 
     @Override
