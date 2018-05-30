@@ -38,18 +38,36 @@ public class SetScheduleInfo {
 	private LinearLayout getLinearLayout() {
 		int mDay = Integer.parseInt(day);
 		int startTime = Integer.parseInt(time.substring(0, 2));
-		int index = 20 + 5 * (mDay - 1) + dealStartTime(startTime);
+		int index = getIndex(mDay, startTime);
 		return (LinearLayout) gridLayout.getChildAt(index);
 	}
 
-	private int dealStartTime(int startTime) {
-		switch (startTime) {
-			case 1: return 1;
-			case 3: return 2;
-			case 6: return 3;
-			case 8: return 4;
-			case 11 : return 5;
-			default: return 0;
+	private int getIndex(int day, int startTime) {
+		if (day == 6 || day == 7) {
+			return 45 + 2 * (day - 6) + dealStartTime(day, startTime);
+		}
+		else {
+			return 20 + 5 * (day - 1) + dealStartTime(day, startTime);
+		}
+	}
+
+	private int dealStartTime(int day, int startTime) {
+		if (day == 6 || day == 7) {
+			switch (startTime) {
+				case 1: return 1;
+				case 6: return 2;
+				default: return 0;
+			}
+		}
+		else {
+			switch (startTime) {
+				case 1: return 1;
+				case 3: return 2;
+				case 6: return 3;
+				case 8: return 4;
+				case 11 : return 5;
+				default: return 0;
+			}
 		}
 	}
 

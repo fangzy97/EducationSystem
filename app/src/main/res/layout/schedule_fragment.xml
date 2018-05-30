@@ -666,21 +666,7 @@
                     app:layout_columnSpan="1"
                     app:layout_columnWeight="1"
                     app:layout_row="1"
-                    app:layout_rowSpan="2"
-                    app:layout_rowWeight="2">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linear63"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:orientation="horizontal"
-                    app:layout_column="6"
-                    app:layout_columnSpan="1"
-                    app:layout_columnWeight="1"
-                    app:layout_row="3"
-                    app:layout_rowSpan="3"
+                    app:layout_rowSpan="4"
                     app:layout_rowWeight="2">
 
                 </LinearLayout>
@@ -694,35 +680,7 @@
                     app:layout_columnSpan="1"
                     app:layout_columnWeight="1"
                     app:layout_row="6"
-                    app:layout_rowSpan="2"
-                    app:layout_rowWeight="2">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linear68"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:orientation="horizontal"
-                    app:layout_column="6"
-                    app:layout_columnSpan="1"
-                    app:layout_columnWeight="1"
-                    app:layout_row="8"
-                    app:layout_rowSpan="3"
-                    app:layout_rowWeight="2">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linear611"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:orientation="horizontal"
-                    app:layout_column="6"
-                    app:layout_columnSpan="1"
-                    app:layout_columnWeight="1"
-                    app:layout_row="11"
-                    app:layout_rowSpan="3"
+                    app:layout_rowSpan="4"
                     app:layout_rowWeight="2">
 
                 </LinearLayout>
@@ -736,21 +694,7 @@
                     app:layout_columnSpan="1"
                     app:layout_columnWeight="1"
                     app:layout_row="1"
-                    app:layout_rowSpan="2"
-                    app:layout_rowWeight="2">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linear73"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:orientation="horizontal"
-                    app:layout_column="7"
-                    app:layout_columnSpan="1"
-                    app:layout_columnWeight="1"
-                    app:layout_row="3"
-                    app:layout_rowSpan="3"
+                    app:layout_rowSpan="4"
                     app:layout_rowWeight="2">
 
                 </LinearLayout>
@@ -764,35 +708,7 @@
                     app:layout_columnSpan="1"
                     app:layout_columnWeight="1"
                     app:layout_row="6"
-                    app:layout_rowSpan="2"
-                    app:layout_rowWeight="2">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linear78"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:orientation="horizontal"
-                    app:layout_column="7"
-                    app:layout_columnSpan="1"
-                    app:layout_columnWeight="1"
-                    app:layout_row="8"
-                    app:layout_rowSpan="3"
-                    app:layout_rowWeight="2">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linear711"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:orientation="horizontal"
-                    app:layout_column="7"
-                    app:layout_columnSpan="1"
-                    app:layout_columnWeight="1"
-                    app:layout_row="11"
-                    app:layout_rowSpan="3"
+                    app:layout_rowSpan="4"
                     app:layout_rowWeight="2">
 
                 </LinearLayout>
