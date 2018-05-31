@@ -8,6 +8,8 @@ import com.lepetit.dao.ExamInfoDao;
 import com.lepetit.dao.GradeInfoDao;
 import com.lepetit.dao.ScheduleInfoDao;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import java.util.List;
 
 public class GreenDaoUnit {
@@ -60,6 +62,12 @@ public class GreenDaoUnit {
         gradeInfoDao.deleteAll();
     }
 
+    private List<ScheduleInfo> _querySchedule(String course) {
+		QueryBuilder<ScheduleInfo> qb = scheduleInfoDao.queryBuilder();
+		qb.where(ScheduleInfoDao.Properties.Course.eq(course));
+		return qb.list();
+	}
+
     private List<ScheduleInfo> _getSchedule() {
         return scheduleInfoDao.loadAll();
     }
@@ -75,7 +83,7 @@ public class GreenDaoUnit {
     private void _insertSchedule(
             String day, String course, String teacher, String week, String time, String classroom) {
         ScheduleInfo info = new ScheduleInfo(null, day, course, teacher, week, time, classroom);
-        scheduleInfoDao.insert(info);
+        scheduleInfoDao.insertOrReplace(info);
     }
 
     private void _insertExam(String course, String time, String classroom, String seat) {
@@ -103,6 +111,10 @@ public class GreenDaoUnit {
     public static void initialize(Context context, String name) {
         getInstance()._initialize(context, name);
     }
+
+    public static List<ScheduleInfo> querySchedule(String course) {
+    	return getInstance()._querySchedule(course);
+	}
 
     public static boolean isInitialize() {
         return getInstance()._isInitialize();

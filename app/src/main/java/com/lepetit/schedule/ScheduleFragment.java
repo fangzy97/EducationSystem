@@ -147,8 +147,26 @@ public class ScheduleFragment extends BackHandleFragment {
     //接收获取数据的广播 并将课表存到本地数据库
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onGetSchedule(ScheduleEvent event) {
-        GreenDaoUnit.insertSchedule(event.getDay(), event.getCourse(), event.getTeacher(),
-                event.getWeek(), event.getTime(), event.getClassroom());
+    	boolean flag = false;
+
+        String day = event.getDay();
+        String course = event.getCourse();
+        String teacher = event.getTeacher();
+        String week = event.getWeek();
+        String time = event.getTime();
+        String classroom = event.getClassroom();
+
+		List<ScheduleInfo> list = GreenDaoUnit.querySchedule(course);
+		for (ScheduleInfo info : list) {
+			flag = day.equals(info.getDay()) && teacher.equals(info.getTeacher()) && week.equals(info.getWeek())
+					&& time.equals(info.getTime()) && classroom.equals(info.getClassroom());
+			if (flag) {
+				break;
+			}
+		}
+		if (!flag) {
+			GreenDaoUnit.insertSchedule(day, course, teacher, week, time, classroom);
+		}
     }
 
     //接收课表处理完毕的广播

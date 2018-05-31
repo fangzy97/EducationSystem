@@ -17,6 +17,7 @@ import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.basefragment.BackHandleInterface;
 import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.exam.ExamFragment;
+import com.lepetit.gettimehelper.GetTimeInfo;
 import com.lepetit.grade.GradeFragment;
 import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.login.LoginActivity;
@@ -27,6 +28,8 @@ import com.lepetit.schedule.ScheduleFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -117,9 +120,7 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
                         changeFragment(new GradeFragment(), R.string.Grade);
                         break;
                     case R.id.logout:
-                        if (GreenDaoUnit.isInitialize()) {
-                            GreenDaoUnit.clearAll();
-                        }
+                        clearDatabase();
                         StoreInfo.clearInfo();
                         goToLoginActivity();
                         break;
@@ -130,6 +131,16 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
             return true;
         });
     }
+
+    private void clearDatabase() {
+		List<String> list = GetTimeInfo.getTimeList();
+		for (String time : list) {
+			GreenDaoUnit.initialize(getApplicationContext(), time);
+			if (GreenDaoUnit.isInitialize()) {
+				GreenDaoUnit.clearAll();
+			}
+		}
+	}
 
     private void setActionBat() {
         toolbar.setTitle(R.string.MainPage);

@@ -20,14 +20,14 @@ public class LoadingDialogHelper {
 
     private void _add(AppCompatActivity activity) {
         if (!LoadingDialog.isAdd) {
-            activity.getSupportFragmentManager().beginTransaction().add(dialog, "Loading").commit();
+            activity.getSupportFragmentManager().beginTransaction().add(dialog, "Loading").commitAllowingStateLoss();
             LoadingDialog.isAdd = true;
         }
     }
 
     private void _remove(AppCompatActivity activity) {
         if (LoadingDialog.isAdd) {
-            activity.getSupportFragmentManager().beginTransaction().remove(dialog).commit();
+            activity.getSupportFragmentManager().beginTransaction().remove(dialog).commitAllowingStateLoss();
             LoadingDialog.isAdd = false;
         }
     }
