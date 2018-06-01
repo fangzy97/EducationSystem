@@ -94,6 +94,7 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
 
     void setExamChecked() {
         navigationView.getMenu().findItem(R.id.exam).setChecked(true);
+        navigationView.getMenu().findItem(R.id.main_page).setChecked(false);
     }
 
     private void initMainFragment() {
@@ -179,6 +180,10 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivityForResult(intent, LOGIN_REQUEST);
     }
+
+    public void setItemUnchecked(int id) {
+    	navigationView.getMenu().findItem(id).setChecked(false);
+	}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

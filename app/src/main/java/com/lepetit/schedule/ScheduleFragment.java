@@ -205,4 +205,10 @@ public class ScheduleFragment extends BackHandleFragment {
     public boolean onBackPressed() {
         return true;
     }
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mainActivity.setItemUnchecked(R.id.schedule);
+	}
 }
