@@ -70,6 +70,7 @@ public class MainFragment extends BackHandleFragment {
     }
 
     private void goToExamFragment() {
+        mainActivity.setExamChecked();
         mainActivity.changeFragment(new ExamFragment(), R.string.Exam);
     }
 
