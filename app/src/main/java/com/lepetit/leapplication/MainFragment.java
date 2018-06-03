@@ -134,7 +134,13 @@ public class MainFragment extends BackHandleFragment {
         }
     }
 
-    @Override
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mainActivity.setItemUnchecked(R.id.main_page);
+	}
+
+	@Override
     public boolean onBackPressed() {
         return false;
     }

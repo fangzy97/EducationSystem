@@ -66,6 +66,7 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     @Override
     protected void onStop() {
         super.onStop();
+        setItemUnchecked(R.id.logout);
         EventBus.getDefault().unregister(this);
     }
 
@@ -75,7 +76,13 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
         EventBus.getDefault().register(this);
     }
 
-    @Override
+	@Override
+	protected void onResume() {
+		super.onResume();
+		setItemChecked(R.id.main_page);
+	}
+
+	@Override
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event) {
         int state = event.getLoginState();
@@ -93,8 +100,8 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     }
 
     void setExamChecked() {
-        navigationView.getMenu().findItem(R.id.exam).setChecked(true);
-        navigationView.getMenu().findItem(R.id.main_page).setChecked(false);
+        setItemChecked(R.id.exam);
+        setItemUnchecked(R.id.main_page);
     }
 
     private void initMainFragment() {
@@ -127,6 +134,7 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
                         break;
                     default:
                 }
+                setItemChecked(item.getItemId());
             }
             drawerLayout.closeDrawers();
             return true;
@@ -180,6 +188,10 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivityForResult(intent, LOGIN_REQUEST);
     }
+
+    private void setItemChecked(int id) {
+    	navigationView.getMenu().findItem(id).setChecked(true);
+	}
 
     public void setItemUnchecked(int id) {
     	navigationView.getMenu().findItem(id).setChecked(false);
