@@ -21,10 +21,12 @@ class DealHtml {
 
     private void preDeal() {
         int loc = info.indexOf("1");
-        info = info.replaceAll("\\u5907\\u6CE8", "")
-                .replaceAll("\\u5206\\u6563\\u8003\\u8BD5", "")
-                .replaceAll("\\s+", " ")
-                .substring(loc);
+        if (loc > -1) {
+			info = info.replaceAll("\\u5907\\u6CE8", "")
+					.replaceAll("\\u5206\\u6563\\u8003\\u8BD5", "")
+					.replaceAll("\\s+", " ")
+					.substring(loc);
+		}
     }
 
     private void getInfo() {
@@ -45,16 +47,24 @@ class DealHtml {
     }
 
     private String divide() {
+    	String string;
         int loc = info.indexOf(" ");
-        String string = info.substring(0, loc);
-        info = info.substring(loc + 1);
+        if (loc > -1) {
+			string = info.substring(0, loc);
+			info = info.substring(loc + 1);
+		}
+		else {
+        	string = info;
+		}
         return string;
     }
 
     private void sub(int n) {
         for (int i = 0; i < n; i++) {
             int loc = info.indexOf(" ");
-            info = info.substring(loc + 1);
+            if (loc > -1) {
+				info = info.substring(loc + 1);
+			}
         }
     }
 
