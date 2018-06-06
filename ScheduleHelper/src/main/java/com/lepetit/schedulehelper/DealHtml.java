@@ -93,6 +93,11 @@ public class DealHtml {
 						string += " " + info.substring(0, temp);
 						info = info.substring(temp + 1);
 					}
+					else if (isExtraWord(string)) {
+						int temp = info.indexOf(" ");
+						string = info.substring(0, temp);
+						info = info.substring(temp + 1);
+					}
 				}
 			}
 			else if (sign == 3) {
@@ -113,7 +118,13 @@ public class DealHtml {
         return string;
     }
 
+    private boolean isExtraWord(String string) {
+    	string = string.replaceAll("\\u8bf7\\u5c3d\\u91cf[\\u4e00-\\u9fa5]*", "0");
+    	return string.equals("0");
+	}
+
     private boolean isClassroom(String string) {
+    	string = string.replaceAll("\\u7530\\u5f84", "0");
     	string = string.replaceAll("\\u4fe1[0-9]", "0");
 		string = string.replaceAll("\\u826f\\u4e61", "0");
 		string = string.replaceAll("\\u81f3\\u5584", "0");
