@@ -73,7 +73,9 @@ public class GreenDaoUnit {
     }
 
     private List<ExamInfo> _getExam() {
-        return examInfoDao.loadAll();
+		QueryBuilder<ExamInfo> qb = examInfoDao.queryBuilder();
+		qb.orderAsc(ExamInfoDao.Properties.Time);
+		return qb.list();
     }
 
     private List<GradeInfo> _getGrade() {
