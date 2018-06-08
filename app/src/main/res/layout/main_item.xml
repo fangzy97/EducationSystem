@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/exam_mon"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:layout_weight="1"
         android:gravity="start" />
 
     <TextView
         android:id="@+id/exam_course_main"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
+        android:singleLine="true"
+        android:layout_weight="2"
+        android:ellipsize="end"
         android:gravity="start" />
 
     <TextView
         android:id="@+id/exam_last_day"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:layout_weight="1"
-        android:gravity="end" />
+        android:gravity="start" />
 </LinearLayout>

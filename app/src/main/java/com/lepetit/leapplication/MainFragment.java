@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.exam.ExamFragment;
@@ -75,11 +76,16 @@ public class MainFragment extends BackHandleFragment {
     }
 
     private void initialize() {
-        dateNow = GetTimeInfo.getDate();
-        list = new ArrayList<>();
-        setTextView();
-        setList();
-        setRecyclerView();
+        try {
+			dateNow = GetTimeInfo.getDate();
+			list = new ArrayList<>();
+			setTextView();
+			setList();
+			setRecyclerView();
+		} catch (Exception e) {
+        	e.printStackTrace();
+			Toast.makeText(getContext(), "404 Error", Toast.LENGTH_SHORT).show();
+		}
     }
 
     private void setTextView() {
