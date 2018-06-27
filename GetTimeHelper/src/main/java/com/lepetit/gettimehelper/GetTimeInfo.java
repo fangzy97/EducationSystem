@@ -1,6 +1,5 @@
 package com.lepetit.gettimehelper;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -99,4 +98,8 @@ public class GetTimeInfo {
     public static int getWeek() {
         return getInstance().getTime.getWeek();
     }
+
+    public static int getMonth() {
+    	return getInstance().month;
+	}
 }

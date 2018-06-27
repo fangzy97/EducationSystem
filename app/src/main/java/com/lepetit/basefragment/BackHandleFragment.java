@@ -7,8 +7,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.lepetit.gettimehelper.GetTimeInfo;
 import com.lepetit.leapplication.MainActivity;
 import com.lepetit.leapplication.R;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
@@ -83,5 +85,14 @@ public abstract class BackHandleFragment extends Fragment {
         });
     }
 
+    protected int getSelectYear(Spinner spinner) {
+        int month = GetTimeInfo.getMonth();
+        if (month == 1 || month == 6 || month == 7) {
+            return spinner.getCount() - 2;
+        }
+        else {
+            return spinner.getCount() - 1;
+        }
+    }
     protected abstract void getData();
 }

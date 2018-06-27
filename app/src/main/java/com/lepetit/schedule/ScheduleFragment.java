@@ -68,7 +68,7 @@ public class ScheduleFragment extends BackHandleFragment {
     private void setSpinner() {
         ArrayAdapter<String> spinnerAdapter = setAdapter();
         spinner.setAdapter(spinnerAdapter);
-        spinner.setSelection(spinner.getCount() - 1);
+        spinner.setSelection(getSelectYear(spinner));
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
