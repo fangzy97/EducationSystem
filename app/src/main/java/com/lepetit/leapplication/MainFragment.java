@@ -116,7 +116,7 @@ public class MainFragment extends BackHandleFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        MainAdapter adapter = new MainAdapter(list, (MainActivity) getActivity());
+        MainAdapter adapter = new MainAdapter(list, mainActivity);
         recyclerView.setAdapter(adapter);
     }
 
@@ -135,9 +135,14 @@ public class MainFragment extends BackHandleFragment {
                     head += String.valueOf(pastDay) + "天";
                     list.add(new MainExamInfo(dateExam, course, head));
                 }
-
+                if (list.isEmpty()) {
+					list.add(new MainExamInfo("最近没有考试", "", ""));
+				}
             }
         }
+        else {
+        	list.add(new MainExamInfo("最近没有考试", "", ""));
+		}
     }
 
 	@Override

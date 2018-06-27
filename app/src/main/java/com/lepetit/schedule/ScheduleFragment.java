@@ -197,7 +197,7 @@ public class ScheduleFragment extends BackHandleFragment {
     private void initialize() {
         for (int i = 21; i < gridLayout.getChildCount(); i++) {
             LinearLayout linearLayout = (LinearLayout) gridLayout.getChildAt(i);
-            getActivity().runOnUiThread(linearLayout::removeAllViews);
+            mainActivity.runOnUiThread(linearLayout::removeAllViews);
         }
     }
 

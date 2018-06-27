@@ -58,6 +58,11 @@ class DealHtml {
     	return string.equals("0");
 	}
 
+	private boolean isI(String string) {
+    	string = string.replaceAll("I+", "0");
+    	return string.equals("0");
+	}
+
     private String divide() {
     	String string;
         int loc = info.indexOf(" ");
@@ -72,6 +77,10 @@ class DealHtml {
         		String temp = info.substring(0, loc);
 				if (isTime(temp)) {
 					string += "»’" + temp;
+					info = info.substring(loc + 1);
+				}
+				else if (isI(temp)) {
+					string += temp;
 					info = info.substring(loc + 1);
 				}
 			}

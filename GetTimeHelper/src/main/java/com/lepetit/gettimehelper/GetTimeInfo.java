@@ -39,7 +39,7 @@ public class GetTimeInfo {
             list.add(string2);
         }
 
-        if (month > 7) {
+        if (month >= 6) {
             String string = String.valueOf(year) + "-" + String.valueOf(year + 1) + "-1";
             list.add(string);
         }
@@ -71,7 +71,7 @@ public class GetTimeInfo {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (mDateExam.after(mDateNow)) {
+        if (mDateExam.after(mDateNow) || mDateExam.equals(mDateNow)) {
             int temp = (int)(mDateExam.getTime() - mDateNow.getTime());
             return temp / (1000 * 3600 * 24);
         }

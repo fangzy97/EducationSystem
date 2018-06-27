@@ -8,6 +8,7 @@ dependencies {
     implementation project(':OKHttpHelper')
     implementation project(':GetTimeHelper')
     implementation project(':MessageHelper')
+    implementation 'junit:junit:4.12'
 }
 
 sourceCompatibility = "1.7"

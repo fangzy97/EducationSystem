@@ -20,6 +20,10 @@ public class SetScheduleInfo {
 	private final String day;
 	private final String classroom;
 
+	private final int startTime;
+	private final int endTime;
+	private final int length;
+
 	private SetScheduleInfo(Builder builder) {
 		this.activity = builder.activity;
 		this.gridLayout = builder.gridLayout;
@@ -29,6 +33,10 @@ public class SetScheduleInfo {
 		this.time = builder.mTime;
 		this.day = builder.mDay;
 		this.classroom = builder.mClassroom;
+
+		startTime = Integer.parseInt(time.substring(0, 2));
+		endTime = Integer.parseInt(time.substring(time.length() - 3, time.length() - 1));
+		length = getLength();
 	}
 
 	public void addToScreen() {
@@ -37,37 +45,44 @@ public class SetScheduleInfo {
 
 	private LinearLayout getLinearLayout() {
 		int mDay = Integer.parseInt(day);
-		int startTime = Integer.parseInt(time.substring(0, 2));
-		int index = getIndex(mDay, startTime);
+		int index = getIndex(mDay);
 		return (LinearLayout) gridLayout.getChildAt(index);
 	}
 
-	private int getIndex(int day, int startTime) {
+	private int getIndex(int day) {
 		if (day == 6 || day == 7) {
-			return 45 + 2 * (day - 6) + dealStartTime(day, startTime);
+			return 45 + 6 * (day - 6) + dealStartTime(day);
 		}
 		else {
-			return 20 + 5 * (day - 1) + dealStartTime(day, startTime);
+			return 20 + 5 * (day - 1) + dealStartTime(day);
 		}
 	}
 
-	private int dealStartTime(int day, int startTime) {
-		if (day == 6 || day == 7) {
-			switch (startTime) {
-				case 1: return 1;
-				case 6: return 2;
-				default: return 0;
-			}
-		}
-		else {
-			switch (startTime) {
-				case 1: return 1;
-				case 3: return 2;
-				case 6: return 3;
-				case 8: return 4;
-				case 11 : return 5;
-				default: return 0;
-			}
+	private int dealStartTime(int day) {
+		switch (startTime) {
+			case 1:
+			case 2:
+				if (length == 2 || length == 1) {
+					return 1;
+				}
+				else {
+					return 5;
+				}
+			case 3:
+				return 2;
+			case 6:
+				if (length == 2) {
+					return 3;
+				}
+				else {
+					return 6;
+				}
+			case 8:
+				return 4;
+			case 11 :
+				return 5;
+			default:
+				return 0;
 		}
 	}
 
@@ -111,9 +126,7 @@ public class SetScheduleInfo {
 
 	//设置控件在linearLayout中的参数
 	private LinearLayout.LayoutParams setLayoutParams(int height) {
-		int startTime = Integer.parseInt(time.substring(0, 2));
-		int endTime = Integer.parseInt(time.substring(time.length() - 3, time.length() - 1));
-		int mHeight = getHeight(startTime, endTime, height);
+		int mHeight = getHeight(height);
 
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.WRAP_CONTENT, mHeight);
@@ -122,13 +135,12 @@ public class SetScheduleInfo {
 		return layoutParams;
 	}
 
-	private int getHeight(int startTime, int endTime, int height) {
-		if (isOnlyTwo(startTime)) {
+	private int getHeight(int height) {
+		if (isFirstOrSixth()) {
 			return height;
 		}
 		else {
-			int size = endTime - startTime + 1;
-			if (size == 2) {
+			if (length == 2) {
 				return height / 3 * 2;
 			}
 			else {
@@ -137,7 +149,11 @@ public class SetScheduleInfo {
 		}
 	}
 
-	private boolean isOnlyTwo(int startTime) {
+	private int getLength() {
+		return endTime - startTime + 1;
+	}
+
+	private boolean isFirstOrSixth() {
 		return startTime == 1 || startTime == 6;
 	}
 

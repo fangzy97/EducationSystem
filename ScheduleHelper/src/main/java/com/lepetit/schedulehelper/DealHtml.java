@@ -101,7 +101,7 @@ public class DealHtml {
 				}
 			}
 			else if (sign == 3) {
-        		if (isClassroom(info.substring(0, 2))) {
+        		if (isClassroom(info.substring(0, 3))) {
         			string = info.substring(0, index);
         			info = info.substring(index + 1);
 				}
@@ -124,11 +124,18 @@ public class DealHtml {
 	}
 
     private boolean isClassroom(String string) {
-    	string = string.replaceAll("\\u7530\\u5f84", "0");
-    	string = string.replaceAll("\\u4fe1[0-9]", "0");
-		string = string.replaceAll("\\u826f\\u4e61", "0");
-		string = string.replaceAll("\\u81f3\\u5584", "0");
-		string = string.replaceAll("3-", "0");
+    	string = string.replaceAll("\\u7530\\u5f84\\u573a", "0");		//良乡田径场
+    	string = string.replaceAll("\\u4fe1[0-9]+", "0");				//信教
+		string = string.replaceAll("\\u826f\\u4e61[0-9]", "0");		//良乡
+		string = string.replaceAll("\\u81f3\\u5584\\u56ed", "0");		//至善园
+		string = string.replaceAll("\\u4f53\\u80b2\\u9986", "0");		//体育馆
+		string = string.replaceAll("\\u897f\\u5c71\\u8bd5", "0");		//西山试验场
+		string = string.replaceAll("[0-9]-[0-9]", "0");					//3,5,7教
+		string = string.replaceAll("\\u73bb\\u7483\\u5de5", "0");		//玻璃工房
+		string = string.replaceAll("\\u4e2d[0-9][0-9]", "0");			//中教
+		string = string.replaceAll("\\u5b87\\u822a\\u5927", "0");		//宇航大楼
+		string = string.replaceAll("\\u7eb3\\u7c73\\u5149", "0");		//纳米光子学材料与技术实验室
+		string = string.replaceAll("\\u7f51\\u7403\\u573a", "0");		//网球场
     	return string.equals("0");
 	}
 
