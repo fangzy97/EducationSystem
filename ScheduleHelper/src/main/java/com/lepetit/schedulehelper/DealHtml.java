@@ -10,6 +10,10 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DealHtml {
     private String info;
@@ -46,12 +50,58 @@ public class DealHtml {
                     String week = getWeek(weekAndTime);
                     String time = getTime(weekAndTime);
                     String classroom = divideString();
+                    getLastWeek(week);
                     EventBus.getDefault().post(new ScheduleEvent(day, course, teacher, week, time, classroom));
                     System.out.println(day + " " + course + " " + teacher + " " + week + " " + time + " " + classroom);
                 }
             }
         }
     }
+
+    private List<String> getLastWeek(String week) {
+    	List<String> list = new ArrayList<>();
+    	week = week.substring(0, week.indexOf("("));
+    	String temp = week;
+		String regex = "(\\d+)";
+
+		Pattern pattern = Pattern.compile(regex);
+		while (temp.length() > 0) {
+			Matcher matcher = pattern.matcher(temp);
+			if (matcher.find()) {
+				list.add(matcher.group(0));
+				int index = matcher.end();
+				if (index < temp.length()) {
+					temp = temp.substring(index + 1);
+				}
+				else break;
+			}
+		}
+		return addWeekToList(list, week);
+	}
+
+	private List<String> addWeekToList(List<String> list, String week) {
+    	int start = 0, end, index;
+    	List<String> result = new ArrayList<>();
+    	for (String s : list) {
+    		index = week.indexOf(s);
+    		result.add(s);
+    		if (index > 0) {
+    			if (week.charAt(index - 1) == ',') {
+    				start = Integer.valueOf(s);
+				}
+				else if (week.charAt(index - 1) == '-'){
+    				end = Integer.valueOf(s);
+    				for (int i = start + 1; i <= end; i++) {
+    					result.add(String.valueOf(i));
+					}
+				}
+			}
+			else {
+    			start = Integer.valueOf(s);
+			}
+		}
+		return result;
+	}
 
     private String getWeek(String string) {
         return string.substring(0, string.indexOf("["));
