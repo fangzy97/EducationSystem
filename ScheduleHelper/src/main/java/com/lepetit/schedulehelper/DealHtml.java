@@ -50,15 +50,16 @@ public class DealHtml {
                     String week = getWeek(weekAndTime);
                     String time = getTime(weekAndTime);
                     String classroom = divideString();
-                    getLastWeek(week);
-                    EventBus.getDefault().post(new ScheduleEvent(day, course, teacher, week, time, classroom));
-                    System.out.println(day + " " + course + " " + teacher + " " + week + " " + time + " " + classroom);
+                    String lastWeek = getLastWeek(week);
+                    EventBus.getDefault().post(new ScheduleEvent(day, course, teacher, week, time, classroom, lastWeek));
+                    System.out.println(day + " " + course + " "
+							+ teacher + " " + week + " " + time + " " + classroom + " " + lastWeek);
                 }
             }
         }
     }
 
-    private List<String> getLastWeek(String week) {
+    private String getLastWeek(String week) {
     	List<String> list = new ArrayList<>();
     	week = week.substring(0, week.indexOf("("));
     	String temp = week;
@@ -79,25 +80,26 @@ public class DealHtml {
 		return addWeekToList(list, week);
 	}
 
-	private List<String> addWeekToList(List<String> list, String week) {
+	private String addWeekToList(List<String> list, String week) {
     	int start = 0, end, index;
-    	List<String> result = new ArrayList<>();
+    	String result = "";
     	for (String s : list) {
     		index = week.indexOf(s);
-    		result.add(s);
     		if (index > 0) {
     			if (week.charAt(index - 1) == ',') {
     				start = Integer.valueOf(s);
+					result = result.concat(s + ";");
 				}
 				else if (week.charAt(index - 1) == '-'){
     				end = Integer.valueOf(s);
     				for (int i = start + 1; i <= end; i++) {
-    					result.add(String.valueOf(i));
+    					result = result.concat(String.valueOf(i) + ";");
 					}
 				}
 			}
 			else {
     			start = Integer.valueOf(s);
+				result = result.concat(s + ";");
 			}
 		}
 		return result;
@@ -174,18 +176,18 @@ public class DealHtml {
 	}
 
     private boolean isClassroom(String string) {
-    	string = string.replaceAll("\\u7530\\u5f84\\u573a", "0");		//è‰¯ä¹¡ç”°å¾„åœº
-    	string = string.replaceAll("\\u4fe1[0-9]+", "0");				//ä¿¡æ•™
-		string = string.replaceAll("\\u826f\\u4e61[0-9]", "0");		//è‰¯ä¹¡
-		string = string.replaceAll("\\u81f3\\u5584\\u56ed", "0");		//è‡³å–„å›­
-		string = string.replaceAll("\\u4f53\\u80b2\\u9986", "0");		//ä½“è‚²é¦†
-		string = string.replaceAll("\\u897f\\u5c71\\u8bd5", "0");		//è¥¿å±±è¯•éªŒåœº
-		string = string.replaceAll("[0-9]-[0-9]", "0");					//3,5,7æ•™
-		string = string.replaceAll("\\u73bb\\u7483\\u5de5", "0");		//çŽ»ç’ƒå·¥æˆ¿
-		string = string.replaceAll("\\u4e2d[0-9][0-9]", "0");			//ä¸­æ•™
-		string = string.replaceAll("\\u5b87\\u822a\\u5927", "0");		//å®‡èˆªå¤§æ¥¼
-		string = string.replaceAll("\\u7eb3\\u7c73\\u5149", "0");		//çº³ç±³å…‰å­å­¦ææ–™ä¸ŽæŠ€æœ¯å®žéªŒå®¤
-		string = string.replaceAll("\\u7f51\\u7403\\u573a", "0");		//ç½‘çƒåœº
+    	string = string.replaceAll("\\u7530\\u5f84\\u573a", "0");		//Á¼ÏçÌï¾¶³¡
+    	string = string.replaceAll("\\u4fe1[0-9]+", "0");				//ÐÅ½Ì
+		string = string.replaceAll("\\u826f\\u4e61[0-9]", "0");		//Á¼Ïç
+		string = string.replaceAll("\\u81f3\\u5584\\u56ed", "0");		//ÖÁÉÆÔ°
+		string = string.replaceAll("\\u4f53\\u80b2\\u9986", "0");		//ÌåÓý¹Ý
+		string = string.replaceAll("\\u897f\\u5c71\\u8bd5", "0");		//Î÷É½ÊÔÑé³¡
+		string = string.replaceAll("[0-9]-[0-9]", "0");					//3,5,7½Ì
+		string = string.replaceAll("\\u73bb\\u7483\\u5de5", "0");		//²£Á§¹¤·¿
+		string = string.replaceAll("\\u4e2d[0-9][0-9]", "0");			//ÖÐ½Ì
+		string = string.replaceAll("\\u5b87\\u822a\\u5927", "0");		//Óîº½´óÂ¥
+		string = string.replaceAll("\\u7eb3\\u7c73\\u5149", "0");		//ÄÉÃ×¹â×ÓÑ§²ÄÁÏÓë¼¼ÊõÊµÑéÊÒ
+		string = string.replaceAll("\\u7f51\\u7403\\u573a", "0");		//ÍøÇò³¡
     	return string.equals("0");
 	}
 

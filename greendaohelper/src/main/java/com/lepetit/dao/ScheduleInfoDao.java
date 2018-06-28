@@ -31,6 +31,7 @@ public class ScheduleInfoDao extends AbstractDao<ScheduleInfo, Long> {
         public final static Property Week = new Property(4, String.class, "week", false, "Week");
         public final static Property Time = new Property(5, String.class, "time", false, "Time");
         public final static Property Classroom = new Property(6, String.class, "classroom", false, "Classroom");
+        public final static Property LastWeek = new Property(7, String.class, "lastWeek", false, "LastWeek");
     }
 
 
@@ -52,7 +53,8 @@ public class ScheduleInfoDao extends AbstractDao<ScheduleInfo, Long> {
                 "\"Teacher\" TEXT," + // 3: teacher
                 "\"Week\" TEXT," + // 4: week
                 "\"Time\" TEXT," + // 5: time
-                "\"Classroom\" TEXT);"); // 6: classroom
+                "\"Classroom\" TEXT," + // 6: classroom
+                "\"LastWeek\" TEXT);"); // 7: lastWeek
     }
 
     /** Drops the underlying database table. */
@@ -99,6 +101,11 @@ public class ScheduleInfoDao extends AbstractDao<ScheduleInfo, Long> {
         if (classroom != null) {
             stmt.bindString(7, classroom);
         }
+ 
+        String lastWeek = entity.getLastWeek();
+        if (lastWeek != null) {
+            stmt.bindString(8, lastWeek);
+        }
     }
 
     @Override
@@ -139,6 +146,11 @@ public class ScheduleInfoDao extends AbstractDao<ScheduleInfo, Long> {
         if (classroom != null) {
             stmt.bindString(7, classroom);
         }
+ 
+        String lastWeek = entity.getLastWeek();
+        if (lastWeek != null) {
+            stmt.bindString(8, lastWeek);
+        }
     }
 
     @Override
@@ -155,7 +167,8 @@ public class ScheduleInfoDao extends AbstractDao<ScheduleInfo, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // teacher
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // week
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // time
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // classroom
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // classroom
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // lastWeek
         );
         return entity;
     }
@@ -169,6 +182,7 @@ public class ScheduleInfoDao extends AbstractDao<ScheduleInfo, Long> {
         entity.setWeek(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setTime(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setClassroom(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setLastWeek(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
     
     @Override

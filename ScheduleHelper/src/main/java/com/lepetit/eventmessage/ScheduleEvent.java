@@ -7,14 +7,17 @@ public class ScheduleEvent {
     private String week;
     private String time;
     private String classroom;
+    private String lastWeek;
 
-    public ScheduleEvent(String day, String course, String teacher, String week, String time, String classroom) {
+    public ScheduleEvent(String day, String course,
+						 String teacher, String week, String time, String classroom, String lastWeek) {
         this.day = day;
         this.course = course;
         this.teacher = teacher;
         this.week = week;
         this.time = time;
         this.classroom = classroom;
+        this.lastWeek = lastWeek;
     }
 
     public String getDay() {
@@ -40,4 +43,8 @@ public class ScheduleEvent {
     public String getClassroom() {
         return classroom;
     }
+
+	public String getLastWeek() {
+		return lastWeek;
+	}
 }

@@ -21,9 +21,11 @@ public class ScheduleInfo {
     private String time;
     @Property(nameInDb = "Classroom")
     private String classroom;
-    @Generated(hash = 220125685)
+    @Property(nameInDb = "LastWeek")
+    private String lastWeek;
+    @Generated(hash = 1725125276)
     public ScheduleInfo(Long id, String day, String course, String teacher,
-            String week, String time, String classroom) {
+            String week, String time, String classroom, String lastWeek) {
         this.id = id;
         this.day = day;
         this.course = course;
@@ -31,6 +33,7 @@ public class ScheduleInfo {
         this.week = week;
         this.time = time;
         this.classroom = classroom;
+        this.lastWeek = lastWeek;
     }
     @Generated(hash = 57358373)
     public ScheduleInfo() {
@@ -77,5 +80,10 @@ public class ScheduleInfo {
     public void setClassroom(String classroom) {
         this.classroom = classroom;
     }
-
+    public String getLastWeek() {
+        return this.lastWeek;
+    }
+    public void setLastWeek(String lastWeek) {
+        this.lastWeek = lastWeek;
+    }
 }

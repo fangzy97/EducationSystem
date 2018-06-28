@@ -83,8 +83,8 @@ public class GreenDaoUnit {
     }
 
     private void _insertSchedule(
-            String day, String course, String teacher, String week, String time, String classroom) {
-        ScheduleInfo info = new ScheduleInfo(null, day, course, teacher, week, time, classroom);
+            String day, String course, String teacher, String week, String time, String classroom, String lastWeek) {
+        ScheduleInfo info = new ScheduleInfo(null, day, course, teacher, week, time, classroom, lastWeek);
         scheduleInfoDao.insertOrReplace(info);
     }
 
@@ -151,8 +151,8 @@ public class GreenDaoUnit {
     }
 
     public static void insertSchedule(
-            String day, String course, String teacher, String week, String time, String classroom) {
-        getInstance()._insertSchedule(day, course, teacher, week, time, classroom);
+            String day, String course, String teacher, String week, String time, String classroom, String lastWeek) {
+        getInstance()._insertSchedule(day, course, teacher, week, time, classroom, lastWeek);
     }
 
     public static void insertExam(String course, String time, String classroom, String seat) {

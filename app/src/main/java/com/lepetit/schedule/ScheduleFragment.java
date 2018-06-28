@@ -44,6 +44,8 @@ public class ScheduleFragment extends BackHandleFragment {
     GridLayout gridLayout;
     @BindView(R.id.spinner)
     Spinner spinner;
+    @BindView(R.id.week_spinner)
+	Spinner week_spinner;
     @BindView(R.id.schedule_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -54,6 +56,7 @@ public class ScheduleFragment extends BackHandleFragment {
         ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
         setSpinner();
+        setWeekSpinner();
         scheduleInfos = new ArrayList<>();
         GreenDaoUnit.initialize(getContext(), spinner.getSelectedItem().toString());
         setSwipeRefreshLayout();
@@ -90,6 +93,21 @@ public class ScheduleFragment extends BackHandleFragment {
             }
         });
     }
+
+    private void setWeekSpinner() {
+    	week_spinner.setSelection(0);
+		week_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				addSchedule();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+
+			}
+		});
+	}
 
     private void setSwipeRefreshLayout() {
         super.setSwipeRefreshLayout(swipeRefreshLayout);
@@ -155,17 +173,19 @@ public class ScheduleFragment extends BackHandleFragment {
         String week = event.getWeek();
         String time = event.getTime();
         String classroom = event.getClassroom();
+        String lastWeek = event.getLastWeek();
 
 		List<ScheduleInfo> list = GreenDaoUnit.querySchedule(course);
 		for (ScheduleInfo info : list) {
 			flag = day.equals(info.getDay()) && teacher.equals(info.getTeacher()) && week.equals(info.getWeek())
-					&& time.equals(info.getTime()) && classroom.equals(info.getClassroom());
+					&& time.equals(info.getTime()) && classroom.equals(info.getClassroom()) &&
+					lastWeek.equals(info.getLastWeek());
 			if (flag) {
 				break;
 			}
 		}
 		if (!flag) {
-			GreenDaoUnit.insertSchedule(day, course, teacher, week, time, classroom);
+			GreenDaoUnit.insertSchedule(day, course, teacher, week, time, classroom, lastWeek);
 		}
     }
 
@@ -187,8 +207,9 @@ public class ScheduleFragment extends BackHandleFragment {
                     .time(info.getTime())
                     .day(info.getDay())
                     .classroom(info.getClassroom())
+					.lastWeek(info.getLastWeek())
                     .build();
-            setScheduleInfo1.addToScreen();
+            setScheduleInfo1.addToScreen((String) week_spinner.getSelectedItem());
         }
         LoadingDialogHelper.remove((AppCompatActivity) getActivity());
         removeRefreshSign(swipeRefreshLayout);

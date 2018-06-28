@@ -24,7 +24,7 @@ android {
     }
 
     greendao {
-        schemaVersion 1    //数据库版本
+        schemaVersion 2    //数据库版本
         daoPackage 'com.lepetit.dao'  //自动生成文件存放的包名
         targetGenDir 'src/main/java'    //存放位置
     }
@@ -36,6 +36,6 @@ dependencies {
     implementation 'net.zetetic:android-database-sqlcipher:3.5.7'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }

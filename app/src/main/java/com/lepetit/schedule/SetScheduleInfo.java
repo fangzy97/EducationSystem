@@ -19,6 +19,7 @@ public class SetScheduleInfo {
 	private final String time;
 	private final String day;
 	private final String classroom;
+	private final String lastWeek;
 
 	private final int startTime;
 	private final int endTime;
@@ -33,14 +34,15 @@ public class SetScheduleInfo {
 		this.time = builder.mTime;
 		this.day = builder.mDay;
 		this.classroom = builder.mClassroom;
+		this.lastWeek = builder.mLastWeek;
 
 		startTime = Integer.parseInt(time.substring(0, 2));
 		endTime = Integer.parseInt(time.substring(time.length() - 3, time.length() - 1));
 		length = getLength();
 	}
 
-	public void addToScreen() {
-		_addToScreen();
+	public void addToScreen(String curWeek) {
+		_addToScreen(curWeek);
 	}
 
 	private LinearLayout getLinearLayout() {
@@ -87,14 +89,38 @@ public class SetScheduleInfo {
 	}
 
 	//将控件添加到gridLayout中
-	private void _addToScreen() {
-		LinearLayout linearLayout = getLinearLayout();
-		String text = course + "\n" + classroom;
-		TextView textView = setTextView(text);
-		LinearLayout.LayoutParams layoutParams = setLayoutParams(linearLayout.getHeight());
-		activity.runOnUiThread(() -> {
-			linearLayout.addView(textView, layoutParams);
-		});
+	private void _addToScreen(String curWeek) {
+		curWeek = getCurWeek(curWeek);
+		if (curWeek.isEmpty() || isThisWeekHaveThisClass(curWeek)) {
+			LinearLayout linearLayout = getLinearLayout();
+			String text = course + "\n" + classroom;
+			TextView textView = setTextView(text);
+			LinearLayout.LayoutParams layoutParams = setLayoutParams(linearLayout.getHeight());
+			activity.runOnUiThread(() -> {
+				linearLayout.addView(textView, layoutParams);
+			});
+		}
+	}
+
+	private boolean isThisWeekHaveThisClass(String curWeek) {
+		String temp = lastWeek;
+		int index = 0;
+		String number = "";
+		while (temp.length() > 0) {
+			index = temp.indexOf(";");
+			number = temp.substring(0, index);
+			if (number.equals(curWeek)) {
+				return true;
+			}
+			else {
+				temp = temp.substring(index + 1);
+			}
+		}
+		return false;
+	}
+
+	private String getCurWeek(String curWeek) {
+		return curWeek.replaceAll("\\D", "");
 	}
 
 	//设置textView中的内容
@@ -167,6 +193,7 @@ public class SetScheduleInfo {
 		private String mTime;
 		private String mDay;
 		private String mClassroom;
+		private String mLastWeek;
 
 		Builder(Activity activity, GridLayout gridLayout) {
 			this.activity = activity;
@@ -200,6 +227,11 @@ public class SetScheduleInfo {
 
 		public Builder classroom(String value) {
 			this.mClassroom = value;
+			return this;
+		}
+
+		public Builder lastWeek(String value) {
+			this.mLastWeek = value;
 			return this;
 		}
 

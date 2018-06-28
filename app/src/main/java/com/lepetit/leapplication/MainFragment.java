@@ -121,24 +121,26 @@ public class MainFragment extends BackHandleFragment {
     }
 
     private void setList() {
-        if (!GreenDaoUnit.isExamEmpty()) {
+        if (GreenDaoUnit.isExamEmpty()) {
             List<ExamInfo> temp = GreenDaoUnit.getExam();
-            for (ExamInfo info : temp) {
-                String head = "剩余：";
-                String course = info.getCourse();
-                String time = info.getTime();
-                int loc = time.indexOf("日");
-                String dateExam = time.substring(0, loc);
-
-                int pastDay = GetTimeInfo.getPastDay(dateNow, dateExam);
-                if (pastDay > -1) {
-                    head += String.valueOf(pastDay) + "天";
-                    list.add(new MainExamInfo(dateExam, course, head));
-                }
-                if (list.isEmpty()) {
-					list.add(new MainExamInfo("最近没有考试", "", ""));
-				}
+            if (list.isEmpty()) {
+                list.add(new MainExamInfo("最近没有考试", "", ""));
             }
+            else {
+				for (ExamInfo info : temp) {
+					String head = "剩余：";
+					String course = info.getCourse();
+					String time = info.getTime();
+					int loc = time.indexOf("日");
+					String dateExam = time.substring(0, loc);
+
+					int pastDay = GetTimeInfo.getPastDay(dateNow, dateExam);
+					if (pastDay > -1) {
+						head += String.valueOf(pastDay) + "天";
+						list.add(new MainExamInfo(dateExam, course, head));
+					}
+				}
+			}
         }
         else {
         	list.add(new MainExamInfo("最近没有考试", "", ""));
