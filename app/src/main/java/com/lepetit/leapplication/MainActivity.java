@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import com.lepetit.baseactivity.BaseActivity;
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.basefragment.BackHandleInterface;
+import com.lepetit.eventmessage.GetWeekEvent;
 import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.exam.ExamFragment;
 import com.lepetit.gettimehelper.GetTimeInfo;
@@ -24,6 +25,7 @@ import com.lepetit.login.LoginActivity;
 import com.lepetit.loginactivity.LoginPart;
 import com.lepetit.loginactivity.StoreInfo;
 import com.lepetit.schedule.ScheduleFragment;
+import com.lepetit.schedulehelper.GetWeekInfo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -40,7 +42,7 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
 
     private MainFragment mainFragment;
 
-    @BindView(R.id.nav_view)
+	@BindView(R.id.nav_view)
     NavigationView navigationView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
@@ -88,10 +90,18 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
         int state = event.getLoginState();
         if (state == 1) {
             isLogin = true;
+			GetWeekInfo.get();
         }
         else {
             getToast("暂时无法连接到教务处");
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onGetWeekEvent(GetWeekEvent event) {
+		String startWeek = event.getStartWeek();
+		StoreInfo.storeStartWeek(startWeek);
+        System.out.println("startWeek = " + startWeek);
     }
 
     void changeFragment(Fragment fragment, int id) {

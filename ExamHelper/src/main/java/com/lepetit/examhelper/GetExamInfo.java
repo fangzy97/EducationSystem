@@ -28,7 +28,7 @@ public class GetExamInfo {
     }
 
     private void _get() {
-        String time = GetTimeInfo.getSimpleSTime();
+        String time = GetTimeInfo.getSimpleTime();
         Headers headers = setHeaders();
         FormBody body = setFormBody(time);
         OKHttpUnit.postAsync(StringCollection.url, body, headers, new Callback() {

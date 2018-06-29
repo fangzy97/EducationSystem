@@ -48,7 +48,7 @@ public class ExamFragment extends BackHandleFragment {
         EventBus.getDefault().register(this);
         LoadingDialogHelper.add((AppCompatActivity) getActivity());
         examList = new ArrayList<>();
-        GreenDaoUnit.initialize(getContext(), GetTimeInfo.getSimpleSTime());
+        GreenDaoUnit.initialize(getContext(), GetTimeInfo.getSimpleTime());
         getExamInfo();
         setSwipeRefreshLayout();
         return view;

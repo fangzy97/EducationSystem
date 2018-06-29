@@ -28,6 +28,12 @@ public class StoreInfo {
         editor.apply();
     }
 
+    private void _storeStartWeek(String value) {
+    	SharedPreferences.Editor editor = preferences.edit();
+    	editor.putString("StartWeek", value);
+    	editor.apply();
+	}
+
     //获取对应的信息
     private String _getInfo(String key) {
         return preferences.getString(key, "");
@@ -36,7 +42,7 @@ public class StoreInfo {
     private void _clearInfo() {
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
     }
 
     //------------------------------------------------------------------------------
@@ -56,4 +62,8 @@ public class StoreInfo {
     public static void clearInfo() {
         getInstance()._clearInfo();
     }
+
+    public static void storeStartWeek(String value) {
+    	getInstance()._storeStartWeek(value);
+	}
 }

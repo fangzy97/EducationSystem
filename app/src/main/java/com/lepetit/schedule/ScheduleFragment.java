@@ -22,6 +22,7 @@ import com.lepetit.greendaohelper.ScheduleInfo;
 import com.lepetit.leapplication.MainActivity;
 import com.lepetit.leapplication.R;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
+import com.lepetit.loginactivity.StoreInfo;
 import com.lepetit.messagehelper.ConnectEvent;
 import com.lepetit.messagehelper.FinishEvent;
 import com.lepetit.schedulehelper.Schedule;
@@ -31,6 +32,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,7 +42,7 @@ public class ScheduleFragment extends BackHandleFragment {
 
     private List<ScheduleInfo> scheduleInfos;
 
-    @BindView(R.id.grid)
+	@BindView(R.id.grid)
     GridLayout gridLayout;
     @BindView(R.id.spinner)
     Spinner spinner;
@@ -95,7 +97,7 @@ public class ScheduleFragment extends BackHandleFragment {
     }
 
     private void setWeekSpinner() {
-    	week_spinner.setSelection(0);
+    	week_spinner.setSelection(setWeek());
 		week_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -107,6 +109,18 @@ public class ScheduleFragment extends BackHandleFragment {
 
 			}
 		});
+	}
+
+	private int setWeek() {
+		String startWeek = StoreInfo.getInfo("StartWeek");
+    	if (startWeek.isEmpty()) {
+			return 0;
+		}
+    	else {
+    		String dateNow = GetTimeInfo.getDate();
+			int result = GetTimeInfo.getPastWeek(dateNow, startWeek);
+			return (result > 21) ? 21 : result;
+		}
 	}
 
     private void setSwipeRefreshLayout() {

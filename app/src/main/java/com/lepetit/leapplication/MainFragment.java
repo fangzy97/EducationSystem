@@ -19,7 +19,6 @@ import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.web.UrlCollection;
 import com.lepetit.web.WebActivity;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +30,7 @@ public class MainFragment extends BackHandleFragment {
 
     private List<MainExamInfo> list;
     private String dateNow;
+    private String startWeek;
 
     @BindView(R.id.main_list)
     RecyclerView recyclerView;
@@ -44,7 +44,7 @@ public class MainFragment extends BackHandleFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         ButterKnife.bind(this, view);
-        GreenDaoUnit.initialize(getContext(), GetTimeInfo.getSimpleSTime());
+        GreenDaoUnit.initialize(getContext(), GetTimeInfo.getSimpleTime());
         initialize();
         return view;
     }
