@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.eventmessage.GradeEvent;
@@ -29,6 +30,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,13 +40,17 @@ import butterknife.ButterKnife;
 public class GradeFragment extends BackHandleFragment {
 
     private List<GradeInfo> list;
+    private double score;
+    private double credit;
 
-    @BindView(R.id.grade_list_view)
+	@BindView(R.id.grade_list_view)
     RecyclerView recyclerView;
     @BindView(R.id.grade_list)
     Spinner spinner;
     @BindView(R.id.grade_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.avg_score)
+	TextView avg_score_view;
 
     @Nullable
     @Override
@@ -52,9 +58,11 @@ public class GradeFragment extends BackHandleFragment {
         View view = inflater.inflate(R.layout.grade_fragment, container, false);
         ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
+		GreenDaoUnit.initialize(getContext(), "Grade");
         list = new ArrayList<>();
         setSpinner();
         setSwipeRefreshLayout();
+		setAvgView();
         return view;
     }
 
@@ -70,6 +78,11 @@ public class GradeFragment extends BackHandleFragment {
         getGrade(REFRESH);
     }
 
+    private void initialize() {
+    	score = 0;
+    	credit = 0;
+	}
+
     private void setSwipeRefreshLayout() {
         super.setSwipeRefreshLayout(swipeRefreshLayout);
     }
@@ -77,7 +90,7 @@ public class GradeFragment extends BackHandleFragment {
     private void getGrade(int method) {
         this.method = method;
         if (MainActivity.isLogin) {
-            GetGradeInfo.get(year);
+            GetGradeInfo.get();
         }
         else {
             mainActivity.doSomeCheck();
@@ -87,7 +100,7 @@ public class GradeFragment extends BackHandleFragment {
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event) {
         if (event.getLoginState() == 1) {
-            GetGradeInfo.get(year);
+            GetGradeInfo.get();
         }
         else {
             if (method == SELECT) {
@@ -101,8 +114,7 @@ public class GradeFragment extends BackHandleFragment {
     }
 
     private ArrayAdapter<String> setAdapter() {
-        List<String> list = GetTimeInfo.getTimeList();
-        return new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, list);
+        return new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, timeList);
     }
 
     private void setSpinner() {
@@ -112,9 +124,8 @@ public class GradeFragment extends BackHandleFragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                LoadingDialogHelper.add((AppCompatActivity) getActivity());
+                LoadingDialogHelper.add(mainActivity);
                 year = spinner.getSelectedItem().toString();
-                GreenDaoUnit.initialize(getContext(), year);
                 if (GreenDaoUnit.isGradeEmpty()) {
                     getGrade(SELECT);
                 }
@@ -143,19 +154,39 @@ public class GradeFragment extends BackHandleFragment {
 
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onGradeEvent(GradeEvent event) {
-        GreenDaoUnit.insertGrade(event.getCourse(), event.getScore(), event.getCredit());
+        GreenDaoUnit.insertGrade(event.getYear(), event.getCourse(), event.getScore(), event.getCredit());
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onGetGradeFinish(FinishEvent event) {
         setRecyclerView();
+		setAvgView();
     }
 
+    private void setAvgView() {
+		list = GreenDaoUnit.getGrade();
+		getAvgGradeInfoFromDB();
+
+		double avg_score = score / credit;
+		NumberFormat format = NumberFormat.getInstance();
+		format.setMinimumFractionDigits(3);
+		String result = "当前加权平均分：" + format.format(avg_score);
+		avg_score_view.setText(result);
+	}
+
     private void setRecyclerView() {
-        list = GreenDaoUnit.getGrade();
+        list = GreenDaoUnit.queryGrade(year);
         GradeAdapter adapter = new GradeAdapter(list);
         super.setRecyclerView(recyclerView, adapter, swipeRefreshLayout);
     }
+
+    private void getAvgGradeInfoFromDB() {
+    	initialize();
+    	for (GradeInfo info : list) {
+    		score += Double.valueOf(info.getScore()) * Double.valueOf(info.getCredit());
+    		credit += Double.valueOf(info.getCredit());
+		}
+	}
 
     @Override
     public boolean onBackPressed() {

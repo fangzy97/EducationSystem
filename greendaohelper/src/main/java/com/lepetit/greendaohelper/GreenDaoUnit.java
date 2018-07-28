@@ -82,6 +82,12 @@ public class GreenDaoUnit {
         return gradeInfoDao.loadAll();
     }
 
+    private List<GradeInfo> _queryGrade(String year) {
+    	QueryBuilder<GradeInfo> qb = gradeInfoDao.queryBuilder();
+    	qb.where(GradeInfoDao.Properties.Year.eq(year));
+    	return  qb.list();
+	}
+
     private void _insertSchedule(
             String day, String course, String teacher, String week, String time, String classroom, String lastWeek) {
         ScheduleInfo info = new ScheduleInfo(null, day, course, teacher, week, time, classroom, lastWeek);
@@ -93,8 +99,8 @@ public class GreenDaoUnit {
         examInfoDao.insert(info);
     }
 
-    private void _insertGrade(String course, String score, String credit) {
-        GradeInfo info = new GradeInfo(null, course, score, credit);
+    private void _insertGrade(String year, String course, String score, String credit) {
+        GradeInfo info = new GradeInfo(null, year, course, score, credit);
         gradeInfoDao.insert(info);
     }
 
@@ -150,6 +156,10 @@ public class GreenDaoUnit {
         return getInstance()._getGrade();
     }
 
+    public static List<GradeInfo> queryGrade(String year) {
+    	return getInstance()._queryGrade(year);
+	}
+
     public static void insertSchedule(
             String day, String course, String teacher, String week, String time, String classroom, String lastWeek) {
         getInstance()._insertSchedule(day, course, teacher, week, time, classroom, lastWeek);
@@ -159,8 +169,8 @@ public class GreenDaoUnit {
         getInstance()._insertExam(course, time, classroom, seat);
     }
 
-    public static void insertGrade(String course, String score, String credit) {
-        getInstance()._insertGrade(course, score, credit);
+    public static void insertGrade(String year, String course, String score, String credit) {
+        getInstance()._insertGrade(year, course, score, credit);
     }
 
     public static boolean isScheduleEmpty() {

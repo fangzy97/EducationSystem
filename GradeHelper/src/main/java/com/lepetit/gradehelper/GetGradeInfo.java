@@ -26,9 +26,9 @@ public class GetGradeInfo {
         return instance;
     }
 
-    private void _get(String year) {
+    private void _get() {
         Headers headers = setHeaders();
-        FormBody body = setFormBody(year);
+        FormBody body = setFormBody();
         OKHttpUnit.postAsync(StringCollection.url, body, headers, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -52,16 +52,16 @@ public class GetGradeInfo {
                 .build();
     }
 
-    private FormBody setFormBody(String year) {
+    private FormBody setFormBody() {
         return new FormBody.Builder()
-                .add("kksj", year)
+                .add("kksj", "")
                 .add("kcxz", "")
                 .add("kcmc", "")
-                .add("xsfs", "")
+                .add("xsfs", "all")
                 .build();
     }
 
-    public static void get(String year) {
-        getInstance()._get(year);
+    public static void get() {
+        getInstance()._get();
     }
 }

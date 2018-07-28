@@ -25,9 +25,10 @@ public class GradeInfoDao extends AbstractDao<GradeInfo, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Course = new Property(1, String.class, "course", false, "Course");
-        public final static Property Score = new Property(2, String.class, "score", false, "Score");
-        public final static Property Credit = new Property(3, String.class, "credit", false, "Credit");
+        public final static Property Year = new Property(1, String.class, "year", false, "Year");
+        public final static Property Course = new Property(2, String.class, "course", false, "Course");
+        public final static Property Score = new Property(3, String.class, "score", false, "Score");
+        public final static Property Credit = new Property(4, String.class, "credit", false, "Credit");
     }
 
 
@@ -44,9 +45,10 @@ public class GradeInfoDao extends AbstractDao<GradeInfo, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"GRADE_INFO\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"Course\" TEXT," + // 1: course
-                "\"Score\" TEXT," + // 2: score
-                "\"Credit\" TEXT);"); // 3: credit
+                "\"Year\" TEXT," + // 1: year
+                "\"Course\" TEXT," + // 2: course
+                "\"Score\" TEXT," + // 3: score
+                "\"Credit\" TEXT);"); // 4: credit
     }
 
     /** Drops the underlying database table. */
@@ -64,19 +66,24 @@ public class GradeInfoDao extends AbstractDao<GradeInfo, Long> {
             stmt.bindLong(1, id);
         }
  
+        String year = entity.getYear();
+        if (year != null) {
+            stmt.bindString(2, year);
+        }
+ 
         String course = entity.getCourse();
         if (course != null) {
-            stmt.bindString(2, course);
+            stmt.bindString(3, course);
         }
  
         String score = entity.getScore();
         if (score != null) {
-            stmt.bindString(3, score);
+            stmt.bindString(4, score);
         }
  
         String credit = entity.getCredit();
         if (credit != null) {
-            stmt.bindString(4, credit);
+            stmt.bindString(5, credit);
         }
     }
 
@@ -89,19 +96,24 @@ public class GradeInfoDao extends AbstractDao<GradeInfo, Long> {
             stmt.bindLong(1, id);
         }
  
+        String year = entity.getYear();
+        if (year != null) {
+            stmt.bindString(2, year);
+        }
+ 
         String course = entity.getCourse();
         if (course != null) {
-            stmt.bindString(2, course);
+            stmt.bindString(3, course);
         }
  
         String score = entity.getScore();
         if (score != null) {
-            stmt.bindString(3, score);
+            stmt.bindString(4, score);
         }
  
         String credit = entity.getCredit();
         if (credit != null) {
-            stmt.bindString(4, credit);
+            stmt.bindString(5, credit);
         }
     }
 
@@ -114,9 +126,10 @@ public class GradeInfoDao extends AbstractDao<GradeInfo, Long> {
     public GradeInfo readEntity(Cursor cursor, int offset) {
         GradeInfo entity = new GradeInfo( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // course
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // score
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // credit
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // year
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // course
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // score
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // credit
         );
         return entity;
     }
@@ -124,9 +137,10 @@ public class GradeInfoDao extends AbstractDao<GradeInfo, Long> {
     @Override
     public void readEntity(Cursor cursor, GradeInfo entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setCourse(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setScore(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setCredit(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setYear(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setCourse(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setScore(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setCredit(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
      }
     
     @Override

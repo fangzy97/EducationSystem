@@ -19,7 +19,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:spinnerMode="dropdown" />
 
             <Spinner
                 android:id="@+id/week_spinner"
@@ -27,7 +28,8 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/spinner"
                 android:layout_centerVertical="true"
-                android:entries="@array/week" />
+                android:entries="@array/week"
+                android:spinnerMode="dropdown" />
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

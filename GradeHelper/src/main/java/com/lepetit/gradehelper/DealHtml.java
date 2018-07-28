@@ -43,13 +43,16 @@ public class DealHtml {
 
     private void getGradeInfo() {
         while (info.length() > 0) {
-            sub(3);
+            sub(1);
+            String year = divide();
+            sub(1);
             String course = divide();
             String score = divide();
             String credit = divide();
             sub(5);
-            EventBus.getDefault().post(new GradeEvent(course, score, credit));
+            EventBus.getDefault().post(new GradeEvent(year, course, score, credit));
 
+			System.out.println(year);
             System.out.println(course);
             System.out.println(score);
             System.out.println(credit);
@@ -64,12 +67,12 @@ public class DealHtml {
         int loc = info.indexOf(" ");
         String string = info.substring(0, loc);
         info = info.substring(loc + 1);
-        if (sign == 0 && isI(info.charAt(0))) {
+        if (sign == 1 && isI(info.charAt(0))) {
             loc = info.indexOf(" ");
             string += info.substring(0, loc);
             info = info.substring(loc + 1);
         }
-        sign = (sign + 1) % 3;
+        sign = (sign + 1) % 4;
         return string;
     }
 

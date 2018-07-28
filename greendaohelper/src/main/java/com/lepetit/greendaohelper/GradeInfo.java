@@ -9,15 +9,19 @@ import org.greenrobot.greendao.annotation.Generated;
 public class GradeInfo {
     @Id
     private Long id;
+    @Property(nameInDb = "Year")
+	private String year;
     @Property(nameInDb = "Course")
     private String course;
     @Property(nameInDb = "Score")
     private String score;
     @Property(nameInDb = "Credit")
     private String credit;
-    @Generated(hash = 1843978549)
-    public GradeInfo(Long id, String course, String score, String credit) {
+    @Generated(hash = 1732442199)
+    public GradeInfo(Long id, String year, String course, String score,
+            String credit) {
         this.id = id;
+        this.year = year;
         this.course = course;
         this.score = score;
         this.credit = credit;
@@ -30,6 +34,12 @@ public class GradeInfo {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+    public String getYear() {
+        return this.year;
+    }
+    public void setYear(String year) {
+        this.year = year;
     }
     public String getCourse() {
         return this.course;

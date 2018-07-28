@@ -17,10 +17,13 @@ import com.lepetit.loadingdialog.LoadingDialogHelper;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 public abstract class BackHandleFragment extends Fragment {
     protected BackHandleInterface backHandleInterface;
     protected MainActivity mainActivity;
     protected String year;
+    protected List<String> timeList;
     protected int method;
     protected static final int SELECT = 0;
     protected static final int REFRESH = 1;
@@ -33,6 +36,7 @@ public abstract class BackHandleFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainActivity = (MainActivity)getActivity();
+        timeList = GetTimeInfo.getTimeList();
         if (!(getActivity() instanceof BackHandleInterface)) {
             throw new ClassCastException("Hosting Activity must implement BackHandledInterface");
         }

@@ -66,8 +66,7 @@ public class ScheduleFragment extends BackHandleFragment {
     }
 
     private ArrayAdapter<String> setAdapter() {
-        List<String> list = GetTimeInfo.getTimeList();
-        return new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, list);
+        return new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, timeList);
     }
 
     private void setSpinner() {
