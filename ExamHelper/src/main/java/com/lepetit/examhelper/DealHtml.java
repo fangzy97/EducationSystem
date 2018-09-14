@@ -27,6 +27,9 @@ class DealHtml {
 					.replaceAll("~", "¡ª¡ª")
 					.substring(loc);
 		}
+		else {
+        	info = "";
+		}
     }
 
     private void getInfo() {

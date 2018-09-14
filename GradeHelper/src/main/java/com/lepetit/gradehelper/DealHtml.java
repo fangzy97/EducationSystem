@@ -37,7 +37,9 @@ public class DealHtml {
             info = "";
         }
         else {
-            info = info.substring(loc);
+            info = info.substring(loc)
+                    .replaceAll("\\u662f", "")
+					.replaceAll("\\u5426", "");
         }
     }
 
@@ -49,7 +51,9 @@ public class DealHtml {
             String course = divide();
             String score = divide();
             String credit = divide();
-            sub(5);
+            sub(6);
+            sub();
+
             EventBus.getDefault().post(new GradeEvent(year, course, score, credit));
 
 			System.out.println(year);
@@ -75,6 +79,20 @@ public class DealHtml {
         sign = (sign + 1) % 4;
         return string;
     }
+
+    private void sub() {
+    	boolean flag = false;
+    	for (int i = 0; i < info.length(); i++) {
+    		if (info.charAt(i) >= '0' && info.charAt(i) <= '9') {
+    			info = info.substring(i);
+    			flag = true;
+    			break;
+			}
+		}
+		if (!flag) {
+    		info = "";
+		}
+	}
 
     private void sub(int n) {
         for (int i = 0; i < n; i++) {
