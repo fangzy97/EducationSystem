@@ -71,8 +71,8 @@ public class MainFragment extends BackHandleFragment {
     }
 
     private void goToExamFragment() {
-        mainActivity.setExamChecked();
-        mainActivity.changeFragment(new ExamFragment(), R.string.Exam);
+//        mainActivity.setExamChecked();
+//        mainActivity.changeFragment(new ExamFragment(), R.string.Exam);
     }
 
     private void initialize() {
@@ -150,7 +150,6 @@ public class MainFragment extends BackHandleFragment {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		mainActivity.setItemUnchecked(R.id.main_page);
 	}
 
 	@Override
@@ -160,4 +159,14 @@ public class MainFragment extends BackHandleFragment {
 
     @Override
     protected void getData() {}
+
+	@Override
+	protected void loadData() {
+
+	}
+
+	@Override
+	protected void destroyData() {
+
+	}
 }

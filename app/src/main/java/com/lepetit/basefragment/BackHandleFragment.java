@@ -1,12 +1,16 @@
 package com.lepetit.basefragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -30,6 +34,9 @@ public abstract class BackHandleFragment extends Fragment {
     protected static final String LOGIN_ERROR = "暂时无法登录，请检查网络设置";
     protected static final String CONNECT_ERROR = "暂时无法连接到教务处，请检查网络设置";
 
+    private boolean isViewCreated;
+    private boolean isUIVisible;
+
     public abstract boolean onBackPressed();
 
     @Override
@@ -46,7 +53,26 @@ public abstract class BackHandleFragment extends Fragment {
         }
     }
 
-    @Override
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		isViewCreated = true;
+		lazyLoad();
+	}
+
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+		if (isVisibleToUser) {
+			isUIVisible = true;
+			lazyLoad();
+		}
+		else {
+			isUIVisible = false;
+		}
+	}
+
+	@Override
     public void onStart() {
         super.onStart();
         backHandleInterface.setSelectedFragment(this);
@@ -56,6 +82,8 @@ public abstract class BackHandleFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isUIVisible = false;
+        isViewCreated = false;
         EventBus.getDefault().unregister(this);
     }
 
@@ -99,4 +127,19 @@ public abstract class BackHandleFragment extends Fragment {
         }
     }
     protected abstract void getData();
+
+	private void lazyLoad() {
+		if (isViewCreated && isUIVisible) {
+			loadData();
+			isViewCreated = false;
+			isUIVisible = false;
+		}
+		else {
+			destroyData();
+		}
+	}
+
+	protected abstract void loadData();
+
+	protected abstract void destroyData();
 }

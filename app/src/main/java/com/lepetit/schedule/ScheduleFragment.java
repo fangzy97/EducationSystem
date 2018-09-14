@@ -56,12 +56,7 @@ public class ScheduleFragment extends BackHandleFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.schedule_fragment, container, false);
         ButterKnife.bind(this, view);
-        EventBus.getDefault().register(this);
-        setSpinner();
-        setWeekSpinner();
-        scheduleInfos = new ArrayList<>();
-        GreenDaoUnit.initialize(getContext(), spinner.getSelectedItem().toString());
-        setSwipeRefreshLayout();
+		scheduleInfos = new ArrayList<>();
         return view;
     }
 
@@ -138,7 +133,21 @@ public class ScheduleFragment extends BackHandleFragment {
         getSchedule(REFRESH);
     }
 
-    private void getSchedule(int method) {
+	@Override
+	protected void loadData() {
+		EventBus.getDefault().register(this);
+		setSpinner();
+		setWeekSpinner();
+		setSwipeRefreshLayout();
+		GreenDaoUnit.initialize(getContext(), spinner.getSelectedItem().toString());
+	}
+
+	@Override
+	protected void destroyData() {
+		EventBus.getDefault().unregister(this);
+	}
+
+	private void getSchedule(int method) {
         this.method = method;
         if (MainActivity.isLogin) {
             Schedule.getChosenSchedule(year);
@@ -243,6 +252,5 @@ public class ScheduleFragment extends BackHandleFragment {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		mainActivity.setItemUnchecked(R.id.schedule);
 	}
 }

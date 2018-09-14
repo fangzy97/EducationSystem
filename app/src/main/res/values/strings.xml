@@ -39,4 +39,8 @@
     <string name="edu_check">教务查询</string>
     <string name="application">应用</string>
     <string name="Place_wait">请稍候...</string>
+    <string name="main_page">首页</string>
+    <string name="schedule">课程表</string>
+    <string name="exam">考试</string>
+    <string name="grade">成绩</string>
 </resources>

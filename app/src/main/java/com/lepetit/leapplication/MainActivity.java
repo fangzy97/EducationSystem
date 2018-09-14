@@ -2,8 +2,10 @@ package com.lepetit.leapplication;
 
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,14 +45,10 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
 
     private MainFragment mainFragment;
 
-	@BindView(R.id.nav_view)
-    NavigationView navigationView;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawerLayout;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.linear_view)
-    LinearLayout linearLayout;
+	@BindView(R.id.tab_layout)
+	public TabLayout tabLayout;
+	@BindView(R.id.view_page)
+	public ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +56,7 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         //初始化toolBar
-        setActionBat();
-        setNavigationView();
-        initMainFragment();
+		setViewPager();
         isLogin = false;
         //检查SharedPreference是否为空，若为空则调用登录界面，否则直接用对应的用户名和密码登录
         doSomeCheck();
@@ -68,7 +65,6 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     @Override
     protected void onStop() {
         super.onStop();
-        setItemUnchecked(R.id.logout);
         EventBus.getDefault().unregister(this);
     }
 
@@ -81,7 +77,6 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		setItemChecked(R.id.main_page);
 	}
 
 	@Override
@@ -104,52 +99,16 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
         System.out.println("startWeek = " + startWeek);
     }
 
-    void changeFragment(Fragment fragment, int id) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.linear_view, fragment).commitAllowingStateLoss();
-        toolbar.setTitle(id);
-    }
+    private void setViewPager() {
+    	List<Fragment> list = new ArrayList<>();
+    	list.add(new MainFragment());
+		list.add(new ScheduleFragment());
+    	list.add(new ExamFragment());
+    	list.add(new GradeFragment());
 
-    void setExamChecked() {
-        setItemChecked(R.id.exam);
-        setItemUnchecked(R.id.main_page);
-    }
-
-    private void initMainFragment() {
-        MenuItem mItem =  navigationView.getMenu().findItem(R.id.main_page);
-        mItem.setChecked(true);
-        mainFragment = new MainFragment();
-        changeFragment(mainFragment, R.string.MainPage);
-    }
-
-    private void setNavigationView() {
-        navigationView.setNavigationItemSelectedListener((item) -> {
-            if (!item.isChecked()) {
-                switch (item.getItemId()) {
-                    case R.id.main_page:
-                        changeFragment(mainFragment, R.string.MainPage);
-                        break;
-                    case R.id.schedule:
-                        changeFragment(new ScheduleFragment(), R.string.Schedule);
-                        break;
-                    case R.id.exam:
-                        changeFragment(new ExamFragment(), R.string.Exam);
-                        break;
-                    case R.id.grade:
-                        changeFragment(new GradeFragment(), R.string.Grade);
-                        break;
-                    case R.id.logout:
-                        clearDatabase();
-                        StoreInfo.clearInfo();
-                        goToLoginActivity();
-                        break;
-                    default:
-                }
-                setItemChecked(item.getItemId());
-            }
-            drawerLayout.closeDrawers();
-            return true;
-        });
-    }
+    	viewPager.setAdapter(new MyPageAdapter(getSupportFragmentManager(), list));
+    	tabLayout.setupWithViewPager(viewPager);
+	}
 
     private void clearDatabase() {
 		List<String> list = GetTimeInfo.getTimeList();
@@ -160,27 +119,6 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
 			}
 		}
 	}
-
-    private void setActionBat() {
-        toolbar.setTitle(R.string.MainPage);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                break;
-            default:
-        }
-        return true;
-    }
 
     public void doSomeCheck() {
         userName = getUserName();
@@ -199,19 +137,10 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
         startActivityForResult(intent, LOGIN_REQUEST);
     }
 
-    private void setItemChecked(int id) {
-    	navigationView.getMenu().findItem(id).setChecked(true);
-	}
-
-    public void setItemUnchecked(int id) {
-    	navigationView.getMenu().findItem(id).setChecked(false);
-	}
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             isLogin = true;
-            initMainFragment();
         }
         else {
             finish();
@@ -221,23 +150,5 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     @Override
     public void setSelectedFragment(BackHandleFragment selectedFragment) {
         this.backHandleFragment = selectedFragment;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(Gravity.START)) {
-            drawerLayout.closeDrawers();
-        }
-        else {
-            if (backHandleFragment == null || !backHandleFragment.onBackPressed()) {
-                if (getFragmentManager().getBackStackEntryCount() == 0) {
-                    super.onBackPressed();
-                }
-            }
-            else {
-                changeFragment(mainFragment, R.string.MainPage);
-                navigationView.getMenu().findItem(R.id.main_page).setChecked(true);
-            }
-        }
     }
 }

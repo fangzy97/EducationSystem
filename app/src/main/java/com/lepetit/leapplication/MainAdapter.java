@@ -33,8 +33,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         View view = LayoutInflater.from(context).inflate(R.layout.main_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
         holder.examView.setOnClickListener((v) -> {
-            activity.changeFragment(new ExamFragment(), R.string.Exam);
-            activity.setExamChecked();
+//            activity.changeFragment(new ExamFragment(), R.string.Exam);
+//            activity.setExamChecked();
         });
         return holder;
     }

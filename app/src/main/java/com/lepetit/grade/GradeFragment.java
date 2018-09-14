@@ -57,12 +57,10 @@ public class GradeFragment extends BackHandleFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.grade_fragment, container, false);
         ButterKnife.bind(this, view);
-        EventBus.getDefault().register(this);
+
 		GreenDaoUnit.initialize(getContext(), "Grade");
         list = new ArrayList<>();
-        setSpinner();
-        setSwipeRefreshLayout();
-		setAvgView();
+
         return view;
     }
 
@@ -76,6 +74,19 @@ public class GradeFragment extends BackHandleFragment {
     protected void getData() {
         year = spinner.getSelectedItem().toString();
         getGrade(REFRESH);
+    }
+
+    @Override
+    protected void loadData() {
+        EventBus.getDefault().register(this);
+        setSpinner();
+        setSwipeRefreshLayout();
+        setAvgView();
+    }
+
+    @Override
+    protected void destroyData() {
+		EventBus.getDefault().unregister(this);
     }
 
     private void initialize() {
@@ -196,6 +207,5 @@ public class GradeFragment extends BackHandleFragment {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		mainActivity.setItemUnchecked(R.id.grade);
 	}
 }

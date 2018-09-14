@@ -45,12 +45,7 @@ public class ExamFragment extends BackHandleFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.exam_fragment, container, false);
         ButterKnife.bind(this, view);
-        EventBus.getDefault().register(this);
-        LoadingDialogHelper.add((AppCompatActivity) getActivity());
-        examList = new ArrayList<>();
-        GreenDaoUnit.initialize(getContext(), GetTimeInfo.getSimpleTime());
-        getExamInfo();
-        setSwipeRefreshLayout();
+		examList = new ArrayList<>();
         return view;
     }
 
@@ -63,6 +58,20 @@ public class ExamFragment extends BackHandleFragment {
     @Override
     protected void getData() {
         getExam(REFRESH);
+    }
+
+    @Override
+    protected void loadData() {
+		LoadingDialogHelper.add((AppCompatActivity) getActivity());
+        EventBus.getDefault().register(this);
+		getExamInfo();
+		GreenDaoUnit.initialize(getContext(), GetTimeInfo.getSimpleTime());
+		setSwipeRefreshLayout();
+    }
+
+    @Override
+    protected void destroyData() {
+		EventBus.getDefault().unregister(this);
     }
 
     private void setSwipeRefreshLayout() {
@@ -139,6 +148,5 @@ public class ExamFragment extends BackHandleFragment {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		mainActivity.setItemUnchecked(R.id.exam);
 	}
 }
