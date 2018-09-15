@@ -57,7 +57,6 @@ public class GradeFragment extends BackHandleFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.grade_fragment, container, false);
         ButterKnife.bind(this, view);
-		list = new ArrayList<>();
 
 		ArrayAdapter<String> spinnerAdapter = setAdapter();
 		spinner.setAdapter(spinnerAdapter);
@@ -71,7 +70,19 @@ public class GradeFragment extends BackHandleFragment {
         EventBus.getDefault().unregister(this);
     }
 
-    @Override
+
+
+	private void init() {
+		list = new ArrayList<>();
+		GreenDaoUnit.initialize(getContext(), "Grade");
+		setSpinner();
+		setSwipeRefreshLayout();
+		if (!GreenDaoUnit.isGradeEmpty()) {
+			setAvgView();
+		}
+	}
+
+	@Override
     protected void getData() {
         year = spinner.getSelectedItem().toString();
         getGrade(REFRESH);
@@ -79,11 +90,9 @@ public class GradeFragment extends BackHandleFragment {
 
     @Override
     protected void loadData() {
+		System.out.println("Grade Load Data");
         EventBus.getDefault().register(this);
-		GreenDaoUnit.initialize(getContext(), "Grade");
-		setSpinner();
-		setSwipeRefreshLayout();
-		setAvgView();
+		init();
     }
 
     @Override
@@ -135,14 +144,7 @@ public class GradeFragment extends BackHandleFragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                LoadingDialogHelper.add(mainActivity);
-                year = spinner.getSelectedItem().toString();
-                if (GreenDaoUnit.isGradeEmpty()) {
-                    getGrade(SELECT);
-                }
-                else {
-                    setRecyclerView();
-                }
+                spinnerSelected();
             }
 
             @Override
@@ -151,6 +153,17 @@ public class GradeFragment extends BackHandleFragment {
             }
         });
     }
+
+    private void spinnerSelected() {
+		LoadingDialogHelper.add(mainActivity);
+		year = spinner.getSelectedItem().toString();
+		if (GreenDaoUnit.isGradeEmpty()) {
+			getGrade(SELECT);
+		}
+		else {
+			setRecyclerView();
+		}
+	}
 
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onConnectEvent(ConnectEvent event) {

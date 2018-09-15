@@ -63,15 +63,15 @@ public class DealHtml {
         }
     }
 
-    private boolean isI(char ch) {
-        return ch == 'I';
+    private boolean isWord(char ch) {
+        return ch >= 'A' && ch <= 'Z';
     }
 
     private String divide() {
         int loc = info.indexOf(" ");
         String string = info.substring(0, loc);
         info = info.substring(loc + 1);
-        if (sign == 1 && isI(info.charAt(0))) {
+        if (sign == 1 && isWord(info.charAt(0))) {
             loc = info.indexOf(" ");
             string += info.substring(0, loc);
             info = info.substring(loc + 1);

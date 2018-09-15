@@ -22,6 +22,7 @@ import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.exam.ExamFragment;
 import com.lepetit.gettimehelper.GetTimeInfo;
 import com.lepetit.grade.GradeFragment;
+import com.lepetit.greendaohelper.GradeInfo;
 import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.login.LoginActivity;
 import com.lepetit.loginactivity.LoginPart;
@@ -42,8 +43,6 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity implements BackHandleInterface {
     private BackHandleFragment backHandleFragment;
     public static boolean isLogin;
-
-    private MainFragment mainFragment;
 
 	@BindView(R.id.tab_layout)
 	public TabLayout tabLayout;
@@ -107,7 +106,7 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     	list.add(new GradeFragment());
 
     	viewPager.setAdapter(new MyPageAdapter(getSupportFragmentManager(), list));
-    	viewPager.setOffscreenPageLimit(0);
+    	viewPager.setOffscreenPageLimit(3);
     	tabLayout.setupWithViewPager(viewPager);
 	}
 
@@ -118,6 +117,10 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
 			if (GreenDaoUnit.isInitialize()) {
 				GreenDaoUnit.clearAll();
 			}
+		}
+		GreenDaoUnit.initialize(getApplicationContext(), "Grade");
+		if (GreenDaoUnit.isInitialize()) {
+			GreenDaoUnit.clearAll();
 		}
 	}
 

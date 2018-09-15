@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 import com.lepetit.baseactivity.BaseActivity;
+import com.lepetit.eventmessage.GetWeekEvent;
 import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.leapplication.R;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
 import com.lepetit.loginactivity.LoginPart;
 import com.lepetit.loginactivity.StoreInfo;
+import com.lepetit.schedulehelper.GetWeekInfo;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -60,7 +62,7 @@ public class LoginActivity extends BaseActivity {
         int state = event.getLoginState();
         if (state == 1) {
             storeInfo();
-            finish();
+			GetWeekInfo.get();
         }
         else if (state == 0){
             getToast("用户名或密码错误");
@@ -71,8 +73,16 @@ public class LoginActivity extends BaseActivity {
         LoadingDialogHelper.remove(this);
     }
 
+	@Subscribe(threadMode = ThreadMode.POSTING)
+	public void onGetWeekEvent(GetWeekEvent event) {
+		String startWeek = event.getStartWeek();
+		StoreInfo.storeStartWeek(startWeek);
+		System.out.println("startWeek = " + startWeek);
+		setResult(RESULT_OK);
+		finish();
+	}
+
     private void storeInfo() {
         StoreInfo.storeInfo(userName, password);
-        setResult(RESULT_OK);
     }
 }

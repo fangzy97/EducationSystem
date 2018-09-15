@@ -16,6 +16,7 @@ import com.lepetit.exam.ExamFragment;
 import com.lepetit.gettimehelper.GetTimeInfo;
 import com.lepetit.greendaohelper.ExamInfo;
 import com.lepetit.greendaohelper.GreenDaoUnit;
+import com.lepetit.loginactivity.StoreInfo;
 import com.lepetit.web.UrlCollection;
 import com.lepetit.web.WebActivity;
 
@@ -61,6 +62,7 @@ public class MainFragment extends BackHandleFragment {
 
     @OnClick(R.id.logout)
 	void onLogoutClick() {
+		StoreInfo.clearInfo();
 		mainActivity.clearDatabase();
     	mainActivity.goToLoginActivity();
 	}
