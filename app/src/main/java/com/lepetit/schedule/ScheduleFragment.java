@@ -57,6 +57,8 @@ public class ScheduleFragment extends BackHandleFragment {
         View view = inflater.inflate(R.layout.schedule_fragment, container, false);
         ButterKnife.bind(this, view);
 		scheduleInfos = new ArrayList<>();
+		ArrayAdapter<String> spinnerAdapter = setAdapter();
+		spinner.setAdapter(spinnerAdapter);
         return view;
     }
 
@@ -65,8 +67,6 @@ public class ScheduleFragment extends BackHandleFragment {
     }
 
     private void setSpinner() {
-        ArrayAdapter<String> spinnerAdapter = setAdapter();
-        spinner.setAdapter(spinnerAdapter);
         spinner.setSelection(getSelectYear(spinner));
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
