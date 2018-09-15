@@ -35,7 +35,7 @@ public abstract class BackHandleFragment extends Fragment {
     protected static final String CONNECT_ERROR = "暂时无法连接到教务处，请检查网络设置";
 
     private boolean isViewCreated;
-    private boolean isUIVisible;
+    private boolean isLoad;
 
     public abstract boolean onBackPressed();
 
@@ -63,13 +63,7 @@ public abstract class BackHandleFragment extends Fragment {
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
-		if (isVisibleToUser) {
-			isUIVisible = true;
-			lazyLoad();
-		}
-		else {
-			isUIVisible = false;
-		}
+		lazyLoad();
 	}
 
 	@Override
@@ -82,12 +76,17 @@ public abstract class BackHandleFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        isUIVisible = false;
-        isViewCreated = false;
         EventBus.getDefault().unregister(this);
     }
 
-    protected void setToast(String message) {
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		isLoad = false;
+		isViewCreated = false;
+	}
+
+	protected void setToast(String message) {
         getActivity().runOnUiThread(() -> {
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         });
@@ -129,13 +128,16 @@ public abstract class BackHandleFragment extends Fragment {
     protected abstract void getData();
 
 	private void lazyLoad() {
-		if (isViewCreated && isUIVisible) {
-			loadData();
-			isViewCreated = false;
-			isUIVisible = false;
-		}
-		else {
-			destroyData();
+		if (isViewCreated) {
+			if (getUserVisibleHint()) {
+				loadData();
+				isLoad = true;
+			}
+			else {
+				if (isLoad) {
+					destroyData();
+				}
+			}
 		}
 	}
 

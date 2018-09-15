@@ -3,7 +3,6 @@
     <string name="userName">学号</string>
     <string name="password">密码</string>
     <string name="loginButton">登录</string>
-    <string name="logout">注销</string>
     <string name="getSchedule">课程表</string>
     <string name="Monday">周一</string>
     <string name="Tuesday">周二</string>
@@ -43,4 +42,5 @@
     <string name="schedule">课程表</string>
     <string name="exam">考试</string>
     <string name="grade">成绩</string>
+    <string name="logout">注销</string>
 </resources>

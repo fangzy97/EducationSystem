@@ -18,6 +18,7 @@ import com.lepetit.greendaohelper.ExamInfo;
 import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.leapplication.MainActivity;
 import com.lepetit.leapplication.R;
+import com.lepetit.loadingdialog.LoadingDialog;
 import com.lepetit.loadingdialog.LoadingDialogHelper;
 import com.lepetit.messagehelper.ConnectEvent;
 import com.lepetit.messagehelper.FinishEvent;
@@ -62,11 +63,10 @@ public class ExamFragment extends BackHandleFragment {
 
     @Override
     protected void loadData() {
-		LoadingDialogHelper.add((AppCompatActivity) getActivity());
         EventBus.getDefault().register(this);
-		getExamInfo();
 		GreenDaoUnit.initialize(getContext(), GetTimeInfo.getSimpleTime());
 		setSwipeRefreshLayout();
+		getExamInfo();
     }
 
     @Override

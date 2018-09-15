@@ -107,10 +107,11 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     	list.add(new GradeFragment());
 
     	viewPager.setAdapter(new MyPageAdapter(getSupportFragmentManager(), list));
+    	viewPager.setOffscreenPageLimit(0);
     	tabLayout.setupWithViewPager(viewPager);
 	}
 
-    private void clearDatabase() {
+    public void clearDatabase() {
 		List<String> list = GetTimeInfo.getTimeList();
 		for (String time : list) {
 			GreenDaoUnit.initialize(getApplicationContext(), time);
@@ -131,7 +132,7 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
         }
     }
 
-    private void goToLoginActivity() {
+    public void goToLoginActivity() {
         int LOGIN_REQUEST = 0;
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivityForResult(intent, LOGIN_REQUEST);
@@ -141,6 +142,7 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             isLogin = true;
+            setViewPager();
         }
         else {
             finish();

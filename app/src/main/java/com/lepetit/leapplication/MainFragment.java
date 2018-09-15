@@ -49,11 +49,6 @@ public class MainFragment extends BackHandleFragment {
         return view;
     }
 
-    @OnClick(R.id.exam_card)
-    void onCardViewClick() {
-        goToExamFragment();
-    }
-
     @OnClick(R.id.edu_web)
     void onEduWebClick() {
         goToWebActivity(UrlCollection.JWC);
@@ -64,15 +59,16 @@ public class MainFragment extends BackHandleFragment {
         goToWebActivity(UrlCollection.BIT_ONLINE);
     }
 
+    @OnClick(R.id.logout)
+	void onLogoutClick() {
+		mainActivity.clearDatabase();
+    	mainActivity.goToLoginActivity();
+	}
+
     private void goToWebActivity(String url) {
         Intent intent = new Intent(getActivity(), WebActivity.class);
         intent.putExtra("url", url);
         startActivity(intent);
-    }
-
-    private void goToExamFragment() {
-//        mainActivity.setExamChecked();
-//        mainActivity.changeFragment(new ExamFragment(), R.string.Exam);
     }
 
     private void initialize() {
