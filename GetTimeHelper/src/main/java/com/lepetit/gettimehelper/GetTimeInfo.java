@@ -90,8 +90,9 @@ public class GetTimeInfo {
 			e.printStackTrace();
 		}
 		long temp = mDateNow.getTime() - mStartWeek.getTime();
-		return (int) ((temp % (1000 * 3600 * 24 * 7) == 0) ?
-				temp / (1000 * 3600 * 24 * 7) : temp / (1000 * 3600 * 24 * 7) + 1);
+		return (int)(temp / (1000 * 3600 * 24 * 7) + 1);
+		//return (int) ((temp % (1000 * 3600 * 24 * 7) == 0) ?
+		//		temp / (1000 * 3600 * 24 * 7) : temp / (1000 * 3600 * 24 * 7) + 1);
 	}
 
     public static List<String> getTimeList() {
