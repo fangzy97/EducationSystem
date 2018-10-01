@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 ;
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.eventmessage.LoginEvent;
@@ -41,6 +42,7 @@ import butterknife.ButterKnife;
 public class ScheduleFragment extends BackHandleFragment {
 
     private List<ScheduleInfo> scheduleInfos;
+    public static List<TextView> textViewList;
 
 	@BindView(R.id.grid)
     GridLayout gridLayout;
@@ -57,6 +59,7 @@ public class ScheduleFragment extends BackHandleFragment {
         View view = inflater.inflate(R.layout.schedule_fragment, container, false);
         ButterKnife.bind(this, view);
 		scheduleInfos = new ArrayList<>();
+		textViewList = new ArrayList<>();
 		ArrayAdapter<String> spinnerAdapter = setAdapter();
 		spinner.setAdapter(spinnerAdapter);
         return view;
@@ -112,7 +115,7 @@ public class ScheduleFragment extends BackHandleFragment {
 		}
     	else {
     		String dateNow = GetTimeInfo.getDate();
-			int result = GetTimeInfo.getPastWeek(dateNow, startWeek);
+			int result = GetTimeInfo.getPastWeek(dateNow, startWeek) - 1;
 			return (result > 21) ? 21 : result;
 		}
 	}
@@ -238,10 +241,10 @@ public class ScheduleFragment extends BackHandleFragment {
     }
 
     private void initialize() {
-        for (int i = 21; i < gridLayout.getChildCount(); i++) {
-            LinearLayout linearLayout = (LinearLayout) gridLayout.getChildAt(i);
-            mainActivity.runOnUiThread(linearLayout::removeAllViews);
-        }
+    	for (View view : textViewList) {
+			mainActivity.runOnUiThread(() -> gridLayout.removeView(view));
+		}
+		textViewList.clear();
     }
 
     @Override

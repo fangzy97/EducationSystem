@@ -92,20 +92,19 @@ public class SetScheduleInfo {
 	private void _addToScreen(String curWeek) {
 		curWeek = getCurWeek(curWeek);
 		if (curWeek.isEmpty() || isThisWeekHaveThisClass(curWeek)) {
-			LinearLayout linearLayout = getLinearLayout();
 			String text = course + "\n" + classroom;
 			TextView textView = setTextView(text);
-			LinearLayout.LayoutParams layoutParams = setLayoutParams(linearLayout.getHeight());
+			GridLayout.LayoutParams layoutParams = setLayoutParams();
 			activity.runOnUiThread(() -> {
-				linearLayout.addView(textView, layoutParams);
+				gridLayout.addView(textView, layoutParams);
 			});
 		}
 	}
 
 	private boolean isThisWeekHaveThisClass(String curWeek) {
 		String temp = lastWeek;
-		int index = 0;
-		String number = "";
+		int index;
+		String number;
 		while (temp.length() > 0) {
 			index = temp.indexOf(";");
 			number = temp.substring(0, index);
@@ -138,6 +137,7 @@ public class SetScheduleInfo {
 			fragment.setArguments(bundle);
 			activity.getFragmentManager().beginTransaction().add(fragment, "1").commit();
 		});
+		ScheduleFragment.textViewList.add(textView);
 		return textView;
 	}
 
@@ -151,36 +151,18 @@ public class SetScheduleInfo {
 	}
 
 	//设置控件在linearLayout中的参数
-	private LinearLayout.LayoutParams setLayoutParams(int height) {
-		int mHeight = getHeight(height);
-
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.WRAP_CONTENT, mHeight);
-		layoutParams.weight = 1;
+	private GridLayout.LayoutParams setLayoutParams() {
+		GridLayout.Spec rowSpec = GridLayout.spec(startTime, length, 2f);
+		GridLayout.Spec columnSpec = GridLayout.spec(Integer.parseInt(day), 1, 1f);
+		GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(rowSpec, columnSpec);
+		layoutParams.width = 0;
+		layoutParams.height = 0;
 		layoutParams.setMargins(2, 2, 2, 2);
 		return layoutParams;
 	}
 
-	private int getHeight(int height) {
-		if (isFirstOrSixth()) {
-			return height;
-		}
-		else {
-			if (length == 2) {
-				return height / 3 * 2;
-			}
-			else {
-				return height;
-			}
-		}
-	}
-
 	private int getLength() {
 		return endTime - startTime + 1;
-	}
-
-	private boolean isFirstOrSixth() {
-		return startTime == 1 || startTime == 6;
 	}
 
 	public static class Builder {

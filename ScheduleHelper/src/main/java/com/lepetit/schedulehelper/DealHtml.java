@@ -60,7 +60,12 @@ public class DealHtml {
 						string = "";
 					}
 					else{
-						course.append(string.substring(0, index));
+        				if (isDivideSign(string.charAt(0))) {
+        					string = string.substring(index + 1);
+        					continue;
+						}
+
+						course.append(string, 0, index);
 						string = string.substring(index + 1);
         				if (isDivideSign(string.charAt(0))) {
 							int temp = string.indexOf(" ");
