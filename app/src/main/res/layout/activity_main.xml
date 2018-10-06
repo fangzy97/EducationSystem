@@ -4,12 +4,18 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <View
+        android:id="@+id/statusBar"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignParentTop="true"/>
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        app:tabIndicatorColor="@color/colorPrimary">
+        android:layout_below="@+id/statusBar"
+        app:tabIndicatorColor="@color/tab_color">
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"

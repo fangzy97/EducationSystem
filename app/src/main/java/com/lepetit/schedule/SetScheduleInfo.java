@@ -2,6 +2,7 @@ package com.lepetit.schedule;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
 import android.view.Gravity;
@@ -10,7 +11,10 @@ import android.widget.TextView;
 
 import com.lepetit.leapplication.R;
 
-public class SetScheduleInfo {
+import java.util.ArrayList;
+import java.util.List;
+
+class SetScheduleInfo {
 	private final Activity activity;
 	private final GridLayout gridLayout;
 	private final String course;
@@ -41,7 +45,7 @@ public class SetScheduleInfo {
 		length = getLength();
 	}
 
-	public void addToScreen(String curWeek) {
+	void addToScreen(String curWeek) {
 		_addToScreen(curWeek);
 	}
 
@@ -92,8 +96,7 @@ public class SetScheduleInfo {
 	private void _addToScreen(String curWeek) {
 		curWeek = getCurWeek(curWeek);
 		if (curWeek.isEmpty() || isThisWeekHaveThisClass(curWeek)) {
-			String text = course + "\n" + classroom;
-			TextView textView = setTextView(text);
+			TextView textView = setTextView(course, classroom);
 			GridLayout.LayoutParams layoutParams = setLayoutParams();
 			activity.runOnUiThread(() -> {
 				gridLayout.addView(textView, layoutParams);
@@ -123,12 +126,34 @@ public class SetScheduleInfo {
 	}
 
 	//设置textView中的内容
-	private TextView setTextView(String text) {
+	private TextView setTextView(String course, String classroom) {
+	    String text = course + "\n" + classroom;
 		TextView textView = new TextView(activity);
 		textView.setText(text);
 		textView.setGravity(Gravity.CENTER_HORIZONTAL);
-		textView.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
-		textView.setTextColor(Color.WHITE);
+		textView.setBackgroundResource(R.drawable.corner_view);
+
+        // 设置textView圆角以及背景
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setCornerRadius(20f);
+
+        String[] colors = activity.getResources().getStringArray(R.array.colors);
+        if (isCourseExist(course)) {
+        	activity.getResources().getStringArray(R.array.colors);
+
+            int course_loc = ScheduleFragment.courses.indexOf(course) % colors.length;
+            drawable.setColor(Color.parseColor(colors[course_loc]));
+
+        }
+        else {
+            drawable.setColor(Color.parseColor(colors[ScheduleFragment.index]));
+            ScheduleFragment.index = (ScheduleFragment.index + 1) % colors.length;
+            ScheduleFragment.courses.add(course);
+        }
+
+        textView.setBackground(drawable);
+
+        textView.setTextColor(Color.WHITE);
 		textView.setPadding(5, 5, 5, 5);
 		textView.setTextSize(12);
 		textView.setOnClickListener((v) -> {
@@ -140,6 +165,10 @@ public class SetScheduleInfo {
 		ScheduleFragment.textViewList.add(textView);
 		return textView;
 	}
+
+	private boolean isCourseExist(String course) {
+	    return ScheduleFragment.courses.contains(course);
+    }
 
 	private Bundle setBundle() {
 		Bundle bundle = new Bundle();

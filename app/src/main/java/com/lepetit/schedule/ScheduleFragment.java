@@ -10,10 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-;
+
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.eventmessage.ScheduleEvent;
@@ -33,16 +32,20 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+
+
 public class ScheduleFragment extends BackHandleFragment {
 
     private List<ScheduleInfo> scheduleInfos;
     public static List<TextView> textViewList;
+
+    static int index = 0;
+    static List<String> courses;
 
 	@BindView(R.id.grid)
     GridLayout gridLayout;
@@ -58,11 +61,18 @@ public class ScheduleFragment extends BackHandleFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.schedule_fragment, container, false);
         ButterKnife.bind(this, view);
-		scheduleInfos = new ArrayList<>();
-		textViewList = new ArrayList<>();
+
+        init();
 		ArrayAdapter<String> spinnerAdapter = setAdapter();
 		spinner.setAdapter(spinnerAdapter);
         return view;
+    }
+
+    private void init() {
+        scheduleInfos = new ArrayList<>();
+        textViewList = new ArrayList<>();
+        courses = new ArrayList<>();
+        index = 0;
     }
 
     private ArrayAdapter<String> setAdapter() {
@@ -75,6 +85,8 @@ public class ScheduleFragment extends BackHandleFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 LoadingDialogHelper.add((AppCompatActivity) getActivity());
+                index = 0;
+                courses.clear();
                 year = spinner.getSelectedItem().toString();
                 GreenDaoUnit.initialize(getContext(), year);
                 if (GreenDaoUnit.isScheduleEmpty()) {
@@ -98,6 +110,8 @@ public class ScheduleFragment extends BackHandleFragment {
 		week_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                index = 0;
+                courses.clear();
 				addSchedule();
 			}
 
@@ -121,6 +135,8 @@ public class ScheduleFragment extends BackHandleFragment {
 	}
 
     private void setSwipeRefreshLayout() {
+        index = 0;
+        courses.clear();
         super.setSwipeRefreshLayout(swipeRefreshLayout);
     }
 

@@ -23,4 +23,13 @@
         <item>第20周</item>
         <item>第21周</item>
     </string-array>
+
+    <string-array name="colors">
+        <item>#4e8ca8</item>
+        <item>#decebd</item>
+        <item>#bd948e</item>
+        <item>#c9c79d</item>
+        <item>#76afaf</item>
+        <item>#ecc76e</item>
+    </string-array>
 </resources>

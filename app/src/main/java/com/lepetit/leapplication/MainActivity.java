@@ -12,7 +12,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.lepetit.baseactivity.BaseActivity;
 import com.lepetit.basefragment.BackHandleFragment;
@@ -48,6 +54,8 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
 	public TabLayout tabLayout;
 	@BindView(R.id.view_page)
 	public ViewPager viewPager;
+	@BindView(R.id.statusBar)
+    public View statusBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +66,24 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
 		setViewPager();
         isLogin = false;
         //检查SharedPreference是否为空，若为空则调用登录界面，否则直接用对应的用户名和密码登录
+        setStatusBar();
         doSomeCheck();
+    }
+
+    private void setStatusBar() {
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        int statusBarHeight = getStatusHeight();
+        statusBar.setMinimumHeight(statusBarHeight);
+    }
+
+    private int getStatusHeight() {
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            return getResources().getDimensionPixelOffset(resourceId);
+        }
+        return -1;
     }
 
     @Override

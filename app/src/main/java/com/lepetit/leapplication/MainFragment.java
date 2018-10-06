@@ -1,5 +1,6 @@
 package com.lepetit.leapplication;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -62,10 +63,25 @@ public class MainFragment extends BackHandleFragment {
 
     @OnClick(R.id.logout)
 	void onLogoutClick() {
-		StoreInfo.clearInfo();
-		mainActivity.clearDatabase();
-    	mainActivity.goToLoginActivity();
+        openAlertDialog();
 	}
+
+	private void openAlertDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                .setTitle("注销")
+                .setMessage("确定要注销吗？")
+                .setNegativeButton("取消", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .setPositiveButton("确定", (dialog, which) -> {
+                    StoreInfo.clearInfo();
+                    mainActivity.clearDatabase();
+                    mainActivity.goToLoginActivity();
+                    dialog.dismiss();
+                })
+                .create();
+        alertDialog.show();
+    }
 
     private void goToWebActivity(String url) {
         Intent intent = new Intent(getActivity(), WebActivity.class);

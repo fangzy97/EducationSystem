@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorBar">#0086fc</color>
     <color name="divide_color">#ececec</color>
+    <color name="tab_color">#b4bfc8</color>
 </resources>
