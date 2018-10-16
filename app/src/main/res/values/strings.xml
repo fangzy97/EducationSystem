@@ -43,4 +43,5 @@
     <string name="exam">考试</string>
     <string name="grade">成绩</string>
     <string name="logout">注销</string>
+    <string name="check_update">检查更新</string>
 </resources>

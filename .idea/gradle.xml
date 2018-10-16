@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/ScheduleHelper" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/greendaohelper" />
+            <option value="$PROJECT_DIR$/updatemodule" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

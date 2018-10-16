@@ -1,1 +1,1 @@
-include ':app', ':OKHttpHelper', ':LoginHelper', ':greendaohelper', ':ScheduleHelper', ':ExamHelper', ':GetTimeHelper', ':GradeHelper', ':MessageHelper'
+include ':app', ':OKHttpHelper', ':LoginHelper', ':greendaohelper', ':ScheduleHelper', ':ExamHelper', ':GetTimeHelper', ':GradeHelper', ':MessageHelper', ':updatemodule'

@@ -83,7 +83,7 @@
             android:layout_height="wrap_content"
             android:text="@string/Edu_web"
             android:textSize="15sp"
-            android:padding="10dp"/>
+            android:padding="10dp" />
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
@@ -99,6 +99,22 @@
             android:text="@string/Bit_only"
             android:textSize="15sp"
             android:padding="10dp"/>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/check_update"
+            android:textSize="15sp"
+            android:padding="10dp" />
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView

@@ -1,8 +1,15 @@
 package com.lepetit.leapplication;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -19,7 +26,10 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.example.updatemodule.API;
+import com.example.updatemodule.Tools;
 import com.lepetit.baseactivity.BaseActivity;
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.basefragment.BackHandleInterface;
@@ -40,6 +50,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +59,10 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements BackHandleInterface {
     private BackHandleFragment backHandleFragment;
+
+    public static boolean isHaveUpdate;
+    public static String downloadUrl;
+
     public static boolean isLogin;
 
 	@BindView(R.id.tab_layout)
@@ -62,6 +77,8 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        checkPermission();
+        Tools.getLatestVersion();
         //初始化toolBar
 		setViewPager();
         isLogin = false;
@@ -180,5 +197,46 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     @Override
     public void setSelectedFragment(BackHandleFragment selectedFragment) {
         this.backHandleFragment = selectedFragment;
+    }
+
+    private void checkPermission() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                        File file = new File(Environment.getExternalStorageDirectory() + getPackageName());
+                        if (!file.exists()) {
+                            System.out.println(file.mkdir());
+                        }
+                    }
+                }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onGetVersionEvent(API event) {
+        String localVersion = Tools.getLocalVersion(this);
+        if (event.getVersion().equals(localVersion)) {
+            this.runOnUiThread(() -> {
+                Toast.makeText(this, "Application is latest", Toast.LENGTH_SHORT).show();
+                isHaveUpdate = false;
+            });
+        }
+        else {
+            this.runOnUiThread(() -> {
+                Toast.makeText(this, "New version is ready", Toast.LENGTH_SHORT).show();
+                downloadUrl = event.getApk();
+                isHaveUpdate = true;
+            });
+        }
     }
 }

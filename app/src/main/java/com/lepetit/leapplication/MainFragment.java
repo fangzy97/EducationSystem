@@ -2,6 +2,7 @@ package com.lepetit.leapplication;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.updatemodule.Tools;
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.exam.ExamFragment;
 import com.lepetit.gettimehelper.GetTimeInfo;
@@ -28,6 +30,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lepetit.leapplication.MainActivity.downloadUrl;
+
 public class MainFragment extends BackHandleFragment {
 
     private List<MainExamInfo> list;
@@ -40,6 +44,8 @@ public class MainFragment extends BackHandleFragment {
     TextView monthAndDay;
     @BindView(R.id.main_week)
     TextView weekText;
+    @BindView(R.id.update)
+    TextView update;
 
     @Nullable
     @Override
@@ -48,6 +54,7 @@ public class MainFragment extends BackHandleFragment {
         ButterKnife.bind(this, view);
         GreenDaoUnit.initialize(getContext(), GetTimeInfo.getSimpleTime());
         initialize();
+        setUpdate();
         return view;
     }
 
@@ -159,6 +166,19 @@ public class MainFragment extends BackHandleFragment {
         else {
         	list.add(new MainExamInfo("最近没有考试", "", ""));
 		}
+    }
+
+    private void setUpdate() {
+        update.setOnClickListener((e) -> {
+            Tools.getLatestVersion();
+            if (MainActivity.isHaveUpdate) {
+                Toast.makeText(getActivity(), "发现新版本，开始下载", Toast.LENGTH_SHORT).show();
+                Tools.downloadAPK(mainActivity, downloadUrl);
+            }
+            else {
+                Toast.makeText(mainActivity, "已经是最新版本！", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 	@Override
