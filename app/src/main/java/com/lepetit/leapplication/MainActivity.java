@@ -77,7 +77,6 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        checkPermission();
         Tools.getLatestVersion();
         //初始化toolBar
 		setViewPager();
@@ -104,15 +103,15 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        EventBus.getDefault().register(this);
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
 	@Override
@@ -199,41 +198,17 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
         this.backHandleFragment = selectedFragment;
     }
 
-    private void checkPermission() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                        File file = new File(Environment.getExternalStorageDirectory() + getPackageName());
-                        if (!file.exists()) {
-                            System.out.println(file.mkdir());
-                        }
-                    }
-                }
-        }
-    }
-
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onGetVersionEvent(API event) {
         String localVersion = Tools.getLocalVersion(this);
         if (event.getVersion().equals(localVersion)) {
             this.runOnUiThread(() -> {
-                Toast.makeText(this, "Application is latest", Toast.LENGTH_SHORT).show();
                 isHaveUpdate = false;
             });
         }
         else {
             this.runOnUiThread(() -> {
-                Toast.makeText(this, "New version is ready", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "当前版本" + localVersion + "，最新版本" + event.getVersion(), Toast.LENGTH_SHORT).show();
                 downloadUrl = event.getApk();
                 isHaveUpdate = true;
             });
