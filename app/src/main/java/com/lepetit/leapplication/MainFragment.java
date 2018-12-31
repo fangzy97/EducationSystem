@@ -142,9 +142,9 @@ public class MainFragment extends BackHandleFragment {
     }
 
     private void setList() {
-        if (GreenDaoUnit.isExamEmpty()) {
+        if (!GreenDaoUnit.isExamEmpty()) {
             List<ExamInfo> temp = GreenDaoUnit.getExam();
-            if (list.isEmpty()) {
+            if (temp.isEmpty()) {
                 list.add(new MainExamInfo("最近没有考试", "", ""));
             }
             else {
@@ -153,6 +153,9 @@ public class MainFragment extends BackHandleFragment {
 					String course = info.getCourse();
 					String time = info.getTime();
 					int loc = time.indexOf("日");
+					if (loc == -1) {
+					    loc = time.indexOf(" ");
+                    }
 					String dateExam = time.substring(0, loc);
 
 					int pastDay = GetTimeInfo.getPastDay(dateNow, dateExam);

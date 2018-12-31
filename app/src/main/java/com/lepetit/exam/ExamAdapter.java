@@ -37,9 +37,23 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ExamInfo exam = examList.get(position);
         holder.course.setText(exam.getCourse());
-        holder.time.setText(exam.getTime());
-        String classroomAndSeat = exam.getClassroom() + "-" + exam.getSeat();
+        holder.time.setText(setTime(exam.getTime()));
+        String classroomAndSeat = setClassroomAndSeat(exam.getClassroom(), exam.getSeat());
         holder.classroom.setText(classroomAndSeat);
+    }
+
+    private String setTime(String time) {
+        if (!time.contains("日")) {
+            return time.replaceFirst(" ", "日");
+        }
+        return time;
+    }
+
+    private String setClassroomAndSeat(String classroom, String seat) {
+        if (seat.isEmpty()) {
+            return classroom;
+        }
+        return classroom + "-" + seat;
     }
 
     @Override
