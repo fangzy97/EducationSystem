@@ -11,6 +11,7 @@ import org.jsoup.select.Elements;
 class DealHtml {
 
     private void _analyze(String html) {
+        System.out.println(html);
         Document document = Jsoup.parse(html);
         Element element = document.getElementById("dataList");
         Elements trs = element.select("tr");

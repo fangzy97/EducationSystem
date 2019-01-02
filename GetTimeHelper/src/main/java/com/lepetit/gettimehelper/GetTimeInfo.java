@@ -49,6 +49,9 @@ public class GetTimeInfo {
         if (month > 7) {
             return String.valueOf(year) + "-" + String.valueOf(year + 1) + "-1";
         }
+        else if (month < 2) {
+            return String.valueOf(year - 1) + "-" + String.valueOf(year) + "-1";
+        }
         else {
             return String.valueOf(year - 1) + "-" + String.valueOf(year) + "-2";
         }
