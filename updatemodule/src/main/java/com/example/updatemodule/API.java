@@ -5,12 +5,14 @@ public class API {
     private String time;
     private String apk;
     private String version;
+    private String updateContent;
 
-    public API(String id, String time, String apk, String version) {
+    public API(String id, String time, String apk, String version, String updateContent) {
         this.id = id;
         this.time = time;
         this.apk = apk;
         this.version = version;
+        this.updateContent = updateContent;
     }
 
     public String getVersion() {
@@ -21,9 +23,13 @@ public class API {
         return apk;
     }
 
+    public String getUpdateContent() {
+        return updateContent;
+    }
+
     @Override
     public String toString() {
-        return id + " " + time + " " + apk + " " + version;
+        return id + " " + time + " " + apk + " " + version + " " + updateContent;
     }
 }
 

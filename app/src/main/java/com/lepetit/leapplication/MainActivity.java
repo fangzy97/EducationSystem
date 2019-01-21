@@ -1,6 +1,7 @@
 package com.lepetit.leapplication;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -62,6 +63,7 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
 
     public static boolean isHaveUpdate;
     public static String downloadUrl;
+    public static String updateContent;
 
     public static boolean isLogin;
 
@@ -208,10 +210,27 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
         }
         else {
             this.runOnUiThread(() -> {
-                Toast.makeText(this, "当前版本" + localVersion + "，最新版本" + event.getVersion(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(this, "当前版本" + localVersion + "，最新版本" + event.getVersion(), Toast.LENGTH_SHORT).show();
                 downloadUrl = event.getApk();
+                updateContent = event.getUpdateContent();
+                openUpdateDialog();
                 isHaveUpdate = true;
             });
         }
+    }
+
+    public void openUpdateDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("更新信息")
+                .setMessage(updateContent)
+                .setNegativeButton("取消", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .setPositiveButton("立即更新", (dialog, which) -> {
+                    Tools.downloadAPK(this, downloadUrl);
+                    dialog.dismiss();
+                })
+                .create();
+        alertDialog.show();
     }
 }

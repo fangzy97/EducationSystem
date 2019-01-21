@@ -143,6 +143,7 @@ public class MainFragment extends BackHandleFragment {
 
     private void setList() {
         if (!GreenDaoUnit.isExamEmpty()) {
+            int examCount = 0;
             List<ExamInfo> temp = GreenDaoUnit.getExam();
             if (temp.isEmpty()) {
                 list.add(new MainExamInfo("最近没有考试", "", ""));
@@ -162,8 +163,12 @@ public class MainFragment extends BackHandleFragment {
 					if (pastDay > -1) {
 						head += String.valueOf(pastDay) + "天";
 						list.add(new MainExamInfo(dateExam, course, head));
+						examCount++;
 					}
 				}
+				if (examCount == 0) {
+                    list.add(new MainExamInfo("最近没有考试", "", ""));
+                }
 			}
         }
         else {
@@ -175,8 +180,8 @@ public class MainFragment extends BackHandleFragment {
         update.setOnClickListener((e) -> {
             Tools.getLatestVersion();
             if (MainActivity.isHaveUpdate) {
-                Toast.makeText(getActivity(), "发现新版本，开始下载", Toast.LENGTH_SHORT).show();
-                Tools.downloadAPK(mainActivity, downloadUrl);
+                // Toast.makeText(getActivity(), "发现新版本，开始下载", Toast.LENGTH_SHORT).show();
+                mainActivity.openUpdateDialog();
             }
             else {
                 Toast.makeText(mainActivity, "已经是最新版本！", Toast.LENGTH_SHORT).show();

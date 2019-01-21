@@ -42,6 +42,7 @@ import butterknife.ButterKnife;
 public class ScheduleFragment extends BackHandleFragment {
 
     private List<ScheduleInfo> scheduleInfos;
+    private String currentYear;
     public static List<TextView> textViewList;
 
     static int index = 0;
@@ -81,6 +82,7 @@ public class ScheduleFragment extends BackHandleFragment {
 
     private void setSpinner() {
         spinner.setSelection(getSelectYear(spinner));
+        currentYear = spinner.getSelectedItem().toString();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -88,6 +90,12 @@ public class ScheduleFragment extends BackHandleFragment {
                 index = 0;
                 courses.clear();
                 year = spinner.getSelectedItem().toString();
+                if (!year.equals(currentYear)) {
+                    week_spinner.setSelection(0);
+                }
+                else {
+                    week_spinner.setSelection(setWeek());
+                }
                 GreenDaoUnit.initialize(getContext(), year);
                 if (GreenDaoUnit.isScheduleEmpty()) {
                     getSchedule(SELECT);
@@ -130,7 +138,7 @@ public class ScheduleFragment extends BackHandleFragment {
     	else {
     		String dateNow = GetTimeInfo.getDate();
 			int result = GetTimeInfo.getPastWeek(dateNow, startWeek) - 1;
-			return (result > 21) ? 21 : result;
+			return (result > 20) ? 20 : result;
 		}
 	}
 

@@ -43,26 +43,26 @@ public class DealHtml {
 		}
     }
 
-    // ä»ç½‘é¡µä¸­è·å–æˆç»©
+    // ´ÓÍøÒ³ÖĞ»ñÈ¡³É¼¨
     private String getScore(String score) {
-        // åŒ¹é…æ•°å­—çš„æ­£åˆ™è¡¨è¾¾å¼
+        // Æ¥ÅäÊı×ÖµÄÕıÔò±í´ïÊ½
         String pattern = "[0-9]+";
-        // æŸ¥è¯¢æ•°å­—ä¸­æ˜¯å¦æœ‰æ•°å­—
+        // ²éÑ¯Êı×ÖÖĞÊÇ·ñÓĞÊı×Ö
         boolean isHaveNumber = Pattern.matches(pattern, score);
 
         if (isHaveNumber) {
             return score;
         }
         else {
-            // å°†ä¸­æ–‡çš„æˆç»©è½¬æ¢ä¸ºæ•°å­—
+            // ½«ÖĞÎÄµÄ³É¼¨×ª»»ÎªÊı×Ö
             switch (score) {
-                case "ä¼˜ç§€": return "95";
-                case "è‰¯å¥½": return "85";
-                case "ä¸­ç­‰": return "75";
-                case "åŠæ ¼":
-                case "åˆæ ¼": return "65";
-                case "ä¸åŠæ ¼":
-                case "ä¸åˆæ ¼": return "0";
+                case "ÓÅĞã": return "95";
+                case "Á¼ºÃ": return "85";
+                case "ÖĞµÈ": return "75";
+                case "¼°¸ñ":
+                case "ºÏ¸ñ": return "65";
+                case "²»¼°¸ñ":
+                case "²»ºÏ¸ñ": return "0";
             }
         }
         return "0";
