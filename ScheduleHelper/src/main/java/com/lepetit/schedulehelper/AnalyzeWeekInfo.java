@@ -7,6 +7,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.util.List;
+
 class AnalyzeWeekInfo {
 	private static AnalyzeWeekInfo instance;
 
@@ -15,9 +17,13 @@ class AnalyzeWeekInfo {
 	private void _analyze(String html) {
 		Document document = Jsoup.parse(html);
 		Elements elements = document.getElementsByTag("td");
-		String startWeek = elements.attr("title");
+		List<String> allTime = elements.eachAttr("title");
+		String startWeek = allTime.get(0);
+		String endWeek = allTime.get(allTime.size() - 1);
+		// 替换“年”“月”为“-”
 		startWeek = startWeek.replaceAll("\\u5e74", "-").replaceAll("\\u6708", "-");
-		EventBus.getDefault().post(new GetWeekEvent(startWeek));
+		endWeek = endWeek.replaceAll("\\u5e74", "-").replaceAll("\\u6708", "-");
+		EventBus.getDefault().post(new GetWeekEvent(startWeek, endWeek));
 	}
 
 	private static AnalyzeWeekInfo getInstance() {
