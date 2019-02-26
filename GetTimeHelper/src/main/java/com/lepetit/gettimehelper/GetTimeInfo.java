@@ -82,23 +82,24 @@ public class GetTimeInfo {
         }
     }
 
-    private int _getPastWeek(String dateNow, String startWeek) {
+    private int _getPastWeek(String dateNow, String startWeek, String endWeek) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
 		Date mDateNow = new Date();
 		Date mStartWeek = new Date();
+		Date mEndWeek = new Date();
 		try {
 			mDateNow = format.parse(dateNow);
 			mStartWeek = format.parse(startWeek);
+			mEndWeek = format.parse(endWeek);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		long temp = mDateNow.getTime() - mStartWeek.getTime();
-		if (temp < 0) {
+		long isLaterThanEndWeek = mDateNow.getTime() - mEndWeek.getTime();
+		if (temp < 0 || isLaterThanEndWeek > 0) {
 		    temp = 0;
         }
 		return (int)(temp / (1000 * 3600 * 24 * 7) + 1);
-		//return (int) ((temp % (1000 * 3600 * 24 * 7) == 0) ?
-		//		temp / (1000 * 3600 * 24 * 7) : temp / (1000 * 3600 * 24 * 7) + 1);
 	}
 
     public static List<String> getTimeList() {
@@ -125,7 +126,7 @@ public class GetTimeInfo {
     	return getInstance().month;
 	}
 
-	public static int getPastWeek(String dateNow, String startWeek) {
-    	return getInstance()._getPastWeek(dateNow, startWeek);
+	public static int getPastWeek(String dateNow, String startWeek, String endWeek) {
+    	return getInstance()._getPastWeek(dateNow, startWeek, endWeek);
 	}
 }

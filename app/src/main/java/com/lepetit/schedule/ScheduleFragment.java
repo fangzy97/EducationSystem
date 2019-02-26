@@ -132,12 +132,13 @@ public class ScheduleFragment extends BackHandleFragment {
 
 	private int setWeek() {
 		String startWeek = StoreInfo.getInfo("StartWeek");
-    	if (startWeek.isEmpty()) {
+		String endWeek = StoreInfo.getInfo("EndWeek");
+    	if (startWeek.isEmpty() || endWeek.isEmpty()) {
 			return 0;
 		}
     	else {
     		String dateNow = GetTimeInfo.getDate();
-			int result = GetTimeInfo.getPastWeek(dateNow, startWeek) - 1;
+			int result = GetTimeInfo.getPastWeek(dateNow, startWeek, endWeek) - 1;
 			return (result > 20) ? 20 : result;
 		}
 	}

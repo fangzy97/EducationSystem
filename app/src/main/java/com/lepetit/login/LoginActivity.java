@@ -89,8 +89,10 @@ public class LoginActivity extends BaseActivity {
 	@Subscribe(threadMode = ThreadMode.POSTING)
 	public void onGetWeekEvent(GetWeekEvent event) {
 		String startWeek = event.getStartWeek();
-		StoreInfo.storeStartWeek(startWeek);
+		String endWeek = event.getEndWeek();
+		StoreInfo.storeStartAndEndTime(startWeek, endWeek);
 		System.out.println("startWeek = " + startWeek);
+        System.out.println("endWeek = " + endWeek);
 		setResult(RESULT_OK);
 		finish();
 	}

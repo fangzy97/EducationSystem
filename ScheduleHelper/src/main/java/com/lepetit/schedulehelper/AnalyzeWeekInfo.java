@@ -20,7 +20,7 @@ class AnalyzeWeekInfo {
 		List<String> allTime = elements.eachAttr("title");
 		String startWeek = allTime.get(0);
 		String endWeek = allTime.get(allTime.size() - 1);
-		// æ›¿æ¢â€œå¹´â€â€œæœˆâ€ä¸ºâ€œ-â€
+		// Ìæ»»¡°Äê¡±¡°ÔÂ¡±Îª¡°-¡±
 		startWeek = startWeek.replaceAll("\\u5e74", "-").replaceAll("\\u6708", "-");
 		endWeek = endWeek.replaceAll("\\u5e74", "-").replaceAll("\\u6708", "-");
 		EventBus.getDefault().post(new GetWeekEvent(startWeek, endWeek));
