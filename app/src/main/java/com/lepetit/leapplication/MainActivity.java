@@ -1,33 +1,14 @@
 package com.lepetit.leapplication;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.os.Build;
-import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.example.updatemodule.API;
 import com.example.updatemodule.Tools;
@@ -39,7 +20,6 @@ import com.lepetit.eventmessage.LoginEvent;
 import com.lepetit.exam.ExamFragment;
 import com.lepetit.gettimehelper.GetTimeInfo;
 import com.lepetit.grade.GradeFragment;
-import com.lepetit.greendaohelper.GradeInfo;
 import com.lepetit.greendaohelper.GreenDaoUnit;
 import com.lepetit.login.LoginActivity;
 import com.lepetit.loginactivity.LoginPart;
@@ -51,7 +31,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,7 +116,9 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onGetWeekEvent(GetWeekEvent event) {
 		String startWeek = event.getStartWeek();
-		StoreInfo.storeStartWeek(startWeek);
+		String endWeek = event.getEndWeek();
+		StoreInfo.storeStartAndEndTime(startWeek, endWeek);
+
         System.out.println("startWeek = " + startWeek);
     }
 

@@ -28,9 +28,10 @@ public class StoreInfo {
         editor.apply();
     }
 
-    private void _storeStartWeek(String value) {
+    private void _storeStartAndEndTime(String startWeek, String endWeek) {
     	SharedPreferences.Editor editor = preferences.edit();
-    	editor.putString("StartWeek", value);
+    	editor.putString("StartWeek", startWeek);
+    	editor.putString("EndWeek", endWeek);
     	editor.apply();
 	}
 
@@ -63,7 +64,7 @@ public class StoreInfo {
         getInstance()._clearInfo();
     }
 
-    public static void storeStartWeek(String value) {
-    	getInstance()._storeStartWeek(value);
+    public static void storeStartAndEndTime(String startWeek, String endWeek) {
+    	getInstance()._storeStartAndEndTime(startWeek, endWeek);
 	}
 }
