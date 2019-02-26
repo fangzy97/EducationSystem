@@ -138,8 +138,7 @@ public class ScheduleFragment extends BackHandleFragment {
 		}
     	else {
     		String dateNow = GetTimeInfo.getDate();
-			int result = GetTimeInfo.getPastWeek(dateNow, startWeek, endWeek) - 1;
-			return (result > 20) ? 20 : result;
+            return GetTimeInfo.getPastWeek(dateNow, startWeek, endWeek) - 1;
 		}
 	}
 
