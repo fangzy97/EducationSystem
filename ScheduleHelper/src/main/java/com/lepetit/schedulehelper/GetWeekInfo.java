@@ -14,7 +14,7 @@ public class GetWeekInfo {
 	private GetWeekInfo() {}
 
 	private void _get() {
-		OKHttpUnit.getAsync(StringCollection.weekkUrl, new Callback() {
+		OKHttpUnit.getAsync(StringCollection.weekUrl, new Callback() {
 			@Override
 			public void onFailure(Call call, IOException e) {
 				e.printStackTrace();
