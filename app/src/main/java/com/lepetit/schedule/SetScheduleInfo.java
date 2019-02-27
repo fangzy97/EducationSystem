@@ -111,7 +111,8 @@ class SetScheduleInfo {
 		while (temp.length() > 0) {
 			index = temp.indexOf(";");
 			number = temp.substring(0, index);
-			if (number.equals(curWeek)) {
+
+			if (isWeekEqual(curWeek, number)) {
 				return true;
 			}
 			else {
@@ -120,6 +121,12 @@ class SetScheduleInfo {
 		}
 		return false;
 	}
+
+	private boolean isWeekEqual(String curWeek, String tarWeek) {
+	    int cur = Integer.parseInt(curWeek);
+	    int tar = Integer.parseInt(tarWeek);
+	    return cur == tar;
+    }
 
 	private String getCurWeek(String curWeek) {
 		return curWeek.replaceAll("\\D", "");

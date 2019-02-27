@@ -28,8 +28,12 @@ public class DealHtml {
         return instance;
     }
 
-    public static void analyze(String html) throws IOException {
+    static void analyze(String html) throws IOException {
         getInstance()._analyze(html);
+    }
+
+    static String _getLastWeek(String week) {
+        return getInstance().getLastWeek(week);
     }
 
     private void _analyze(String html) throws IOException {
