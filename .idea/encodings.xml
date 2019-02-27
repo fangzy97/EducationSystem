@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/ExamHelper/src/main/java/com/lepetit/examhelper/DealHtml.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/GradeHelper/src/main/java/com/lepetit/gradehelper/DealHtml.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/GradeHelper/src/test/java/com/lepetit/gradehelper/DealHtmlTest.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/ScheduleHelper/src/main/java/com/lepetit/schedulehelper/AnalyzeWeekInfo.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/ScheduleHelper/src/main/java/com/lepetit/schedulehelper/DealHtml.java" charset="GBK" />
   </component>

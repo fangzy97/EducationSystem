@@ -46,7 +46,7 @@ public class DealHtml {
     // 从网页中获取成绩
     private String getScore(String score) {
         // 匹配数字的正则表达式
-        String pattern = "[0-9]+";
+        String pattern = "([1-9]\\d*\\.?\\d*)|(0\\.\\d*[1-9])";
         // 查询数字中是否有数字
         boolean isHaveNumber = Pattern.matches(pattern, score);
 
@@ -68,7 +68,11 @@ public class DealHtml {
         return "0";
     }
 
-    public static void analyze(String html) {
+    static void analyze(String html) {
         getInstance()._analyze(html);
+    }
+
+    static String _getScore(String score) {
+        return getInstance().getScore(score);
     }
 }
