@@ -31,6 +31,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -184,7 +185,7 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onGetVersionEvent(API event) {
         String localVersion = Tools.getLocalVersion(this);
-        if (event.getVersion().equals(localVersion)) {
+        if (!checkVersion(event.getVersion(), localVersion)) {
             this.runOnUiThread(() -> {
                 isHaveUpdate = false;
             });
@@ -198,6 +199,13 @@ public class MainActivity extends BaseActivity implements BackHandleInterface {
                 isHaveUpdate = true;
             });
         }
+    }
+
+    // 判断是否存在更新，若存在更新则返回true
+    private boolean checkVersion(String serverVersion, String localVersion) {
+        double serVersion = Double.valueOf(serverVersion);
+        double locVersion = Double.valueOf(localVersion);
+        return serVersion > locVersion;
     }
 
     public void openUpdateDialog() {
