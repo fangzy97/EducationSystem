@@ -29,6 +29,7 @@ public class GradeInfoDao extends AbstractDao<GradeInfo, Long> {
         public final static Property Course = new Property(2, String.class, "course", false, "Course");
         public final static Property Score = new Property(3, String.class, "score", false, "Score");
         public final static Property Credit = new Property(4, String.class, "credit", false, "Credit");
+        public final static Property Analyze = new Property(5, String.class, "analyze", false, "Analyze");
     }
 
 
@@ -48,7 +49,8 @@ public class GradeInfoDao extends AbstractDao<GradeInfo, Long> {
                 "\"Year\" TEXT," + // 1: year
                 "\"Course\" TEXT," + // 2: course
                 "\"Score\" TEXT," + // 3: score
-                "\"Credit\" TEXT);"); // 4: credit
+                "\"Credit\" TEXT," + // 4: credit
+                "\"Analyze\" TEXT);"); // 5: analyze
     }
 
     /** Drops the underlying database table. */
@@ -85,6 +87,11 @@ public class GradeInfoDao extends AbstractDao<GradeInfo, Long> {
         if (credit != null) {
             stmt.bindString(5, credit);
         }
+ 
+        String analyze = entity.getAnalyze();
+        if (analyze != null) {
+            stmt.bindString(6, analyze);
+        }
     }
 
     @Override
@@ -115,6 +122,11 @@ public class GradeInfoDao extends AbstractDao<GradeInfo, Long> {
         if (credit != null) {
             stmt.bindString(5, credit);
         }
+ 
+        String analyze = entity.getAnalyze();
+        if (analyze != null) {
+            stmt.bindString(6, analyze);
+        }
     }
 
     @Override
@@ -129,7 +141,8 @@ public class GradeInfoDao extends AbstractDao<GradeInfo, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // year
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // course
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // score
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // credit
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // credit
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // analyze
         );
         return entity;
     }
@@ -141,6 +154,7 @@ public class GradeInfoDao extends AbstractDao<GradeInfo, Long> {
         entity.setCourse(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setScore(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setCredit(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setAnalyze(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
      }
     
     @Override

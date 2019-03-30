@@ -99,8 +99,8 @@ public class GreenDaoUnit {
         examInfoDao.insert(info);
     }
 
-    private void _insertGrade(String year, String course, String score, String credit) {
-        GradeInfo info = new GradeInfo(null, year, course, score, credit);
+    private void _insertGrade(String year, String course, String score, String credit, String analyze) {
+        GradeInfo info = new GradeInfo(null, year, course, score, credit, analyze);
         gradeInfoDao.insert(info);
     }
 
@@ -169,8 +169,8 @@ public class GreenDaoUnit {
         getInstance()._insertExam(course, time, classroom, seat);
     }
 
-    public static void insertGrade(String year, String course, String score, String credit) {
-        getInstance()._insertGrade(year, course, score, credit);
+    public static void insertGrade(String year, String course, String score, String credit, String analyze) {
+        getInstance()._insertGrade(year, course, score, credit, analyze);
     }
 
     public static boolean isScheduleEmpty() {

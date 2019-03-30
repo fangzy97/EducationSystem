@@ -17,14 +17,17 @@ public class GradeInfo {
     private String score;
     @Property(nameInDb = "Credit")
     private String credit;
-    @Generated(hash = 1732442199)
+    @Property(nameInDb = "Analyze")
+    private String analyze;
+    @Generated(hash = 525464143)
     public GradeInfo(Long id, String year, String course, String score,
-            String credit) {
+            String credit, String analyze) {
         this.id = id;
         this.year = year;
         this.course = course;
         this.score = score;
         this.credit = credit;
+        this.analyze = analyze;
     }
     @Generated(hash = 1597538490)
     public GradeInfo() {
@@ -58,5 +61,11 @@ public class GradeInfo {
     }
     public void setCredit(String credit) {
         this.credit = credit;
+    }
+    public String getAnalyze() {
+        return this.analyze;
+    }
+    public void setAnalyze(String analyze) {
+        this.analyze = analyze;
     }
 }

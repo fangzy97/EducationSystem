@@ -178,7 +178,7 @@ public class GradeFragment extends BackHandleFragment {
 
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onGradeEvent(GradeEvent event) {
-        GreenDaoUnit.insertGrade(event.getYear(), event.getCourse(), event.getScore(), event.getCredit());
+        GreenDaoUnit.insertGrade(event.getYear(), event.getCourse(), event.getScore(), event.getCredit(), event.getAnalyze());
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)

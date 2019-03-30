@@ -34,7 +34,9 @@ public class DealHtml {
 			String course = tds.get(3).ownText();
 			String score = getScore(tds.get(4).select("a").text());
 			String credit = tds.get(5).ownText();
-			EventBus.getDefault().post(new GradeEvent(year, course, score, credit));
+			String analyze = tds.get(15).select("a").attr("onclick");
+			analyze = getGradeAnalyzeAddress(analyze);
+			EventBus.getDefault().post(new GradeEvent(year, course, score, credit, analyze));
 
 			System.out.println(year);
 			System.out.println(course);
@@ -66,6 +68,14 @@ public class DealHtml {
             }
         }
         return "0";
+    }
+
+    // 成绩分析功能原本是一个js的函数调用，其地址包含在函数参数中
+    // 该函数将地址从参数中取出
+    private String getGradeAnalyzeAddress(String analyzeAddress) {
+        int start = analyzeAddress.indexOf("'");
+        int end = analyzeAddress.lastIndexOf("'");
+        return StringCollection.baseUrl + analyzeAddress.substring(start + 1, end);
     }
 
     static void analyze(String html) {
