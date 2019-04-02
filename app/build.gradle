@@ -45,4 +45,5 @@ dependencies {
     implementation project(':GradeHelper')
     implementation project(':MessageHelper')
     implementation project(':updatemodule')
+    implementation 'com.android.support:appcompat-v7:27.1.1'
 }

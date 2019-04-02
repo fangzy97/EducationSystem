@@ -7,4 +7,5 @@
     <color name="divide_color">#ececec</color>
     <color name="tab_color">#b4bfc8</color>
     <color name="red">#ff0000</color>
+    <color name="analyze_bg">#F5F5F5</color>
 </resources>
