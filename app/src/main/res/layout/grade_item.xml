@@ -38,12 +38,85 @@
         android:textSize="14sp"
         android:padding="5dp"/>
 
-    <TextView
-        android:id="@+id/grade_analyze"
+    <LinearLayout
+        android:id="@+id/grade_analyze_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:padding="5dp"
-        android:text="成绩分析" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/class_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:background="@drawable/textview_border"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"/>
+
+        <TextView
+            android:id="@+id/subject_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:background="@drawable/textview_border"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"/>
+
+        <TextView
+            android:id="@+id/learn_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:background="@drawable/textview_border"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"/>
+
+        <TextView
+            android:id="@+id/ave_grade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:background="@drawable/textview_border"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"/>
+
+        <TextView
+            android:id="@+id/max_grade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:background="@drawable/textview_border"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"/>
+
+        <TextView
+            android:id="@+id/class_percent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:background="@drawable/textview_border"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"/>
+
+        <TextView
+            android:id="@+id/subject_percent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:background="@drawable/textview_border"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"/>
+
+        <TextView
+            android:id="@+id/learn_percent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:background="@drawable/textview_border"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"/>
+
+    </LinearLayout>
+
 
 </LinearLayout>

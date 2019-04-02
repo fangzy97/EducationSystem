@@ -1,6 +1,7 @@
 package com.lepetit.grade;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -54,7 +55,7 @@ public class GradeFragment extends BackHandleFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.grade_fragment, container, false);
         ButterKnife.bind(this, view);
 
@@ -69,8 +70,6 @@ public class GradeFragment extends BackHandleFragment {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-
-
 
 	private void init() {
 		list = new ArrayList<>();
@@ -200,7 +199,7 @@ public class GradeFragment extends BackHandleFragment {
 
     private void setRecyclerView() {
         list = GreenDaoUnit.queryGrade(year);
-        GradeAdapter adapter = new GradeAdapter(list);
+        GradeAdapter adapter = new GradeAdapter(list, mainActivity);
         super.setRecyclerView(recyclerView, adapter, swipeRefreshLayout);
     }
 

@@ -1,5 +1,6 @@
 package com.lepetit.grade;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,19 +10,23 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.lepetit.gradehelper.GetGradeAnalyzeInfo;
 import com.lepetit.greendaohelper.GradeInfo;
 import com.lepetit.leapplication.R;
 
 import java.util.List;
+import java.util.Map;
 
 public class GradeAdapter extends RecyclerView.Adapter<GradeAdapter.ViewHolder> {
 
     private List<GradeInfo> gradeList;
     private Context context;
+    private Activity activity;
     private int opened = -1;
 
-    GradeAdapter(List<GradeInfo> gradeList) {
+    GradeAdapter(List<GradeInfo> gradeList, Activity activity) {
         this.gradeList = gradeList;
+        this.activity = activity;
         notifyDataSetChanged();
     }
 
@@ -44,11 +49,29 @@ public class GradeAdapter extends RecyclerView.Adapter<GradeAdapter.ViewHolder> 
         String credit = "学分：" + info.getCredit();
         holder.credit.setText(credit);
 
+        new Thread(() -> {
+            String analyze = info.getAnalyze();
+            Map<String, String> infos = GetGradeAnalyzeInfo.get(analyze);
+
+            if (infos.size() > 0) {
+                activity.runOnUiThread(() -> {
+                    holder.class_number.setText(infos.get("class_number"));
+                    holder.subject_number.setText(infos.get("subject_number"));
+                    holder.learn_number.setText(infos.get("learn_number"));
+                    holder.ave_grade.setText(infos.get("ave_grade"));
+                    holder.max_grade.setText(infos.get("max_grade"));
+                    holder.class_percent.setText(infos.get("class_percent"));
+                    holder.subject_percent.setText(infos.get("subject_percent"));
+                    holder.learn_percent.setText(infos.get("learn_percent"));
+                });
+            }
+        }).start();
+
         if (position == opened) {
-            holder.gradeAnalyze.setVisibility(View.VISIBLE);
+            holder.gradeAnalyzeLayout.setVisibility(View.VISIBLE);
         }
         else {
-            holder.gradeAnalyze.setVisibility(View.GONE);
+            holder.gradeAnalyzeLayout.setVisibility(View.GONE);
         }
     }
 
@@ -61,15 +84,31 @@ public class GradeAdapter extends RecyclerView.Adapter<GradeAdapter.ViewHolder> 
         private TextView course;
         private TextView score;
         private TextView credit;
-        private TextView gradeAnalyze;
+        private TextView class_number;
+        private TextView subject_number;
+        private TextView learn_number;
+        private TextView ave_grade;
+        private TextView max_grade;
+        private TextView class_percent;
+        private TextView subject_percent;
+        private TextView learn_percent;
         private LinearLayout gradeMainLayout;
+        private LinearLayout gradeAnalyzeLayout;
 
         ViewHolder(View itemView) {
             super(itemView);
             course = itemView.findViewById(R.id.grade_course);
             score = itemView.findViewById(R.id.grade_score);
             credit = itemView.findViewById(R.id.grade_credit);
-            gradeAnalyze = itemView.findViewById(R.id.grade_analyze);
+            class_number = itemView.findViewById(R.id.class_number);
+            subject_number = itemView.findViewById(R.id.subject_number);
+            learn_number = itemView.findViewById(R.id.learn_number);
+            ave_grade = itemView.findViewById(R.id.ave_grade);
+            max_grade = itemView.findViewById(R.id.max_grade);
+            class_percent = itemView.findViewById(R.id.class_percent);
+            subject_percent = itemView.findViewById(R.id.subject_percent);
+            learn_percent = itemView.findViewById(R.id.learn_percent);
+            gradeAnalyzeLayout = itemView.findViewById(R.id.grade_analyze_layout);
             gradeMainLayout = itemView.findViewById(R.id.grade_main_layout);
             gradeMainLayout.setOnClickListener(this::onClick);
         }

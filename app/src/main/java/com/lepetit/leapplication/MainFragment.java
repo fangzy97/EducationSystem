@@ -2,8 +2,8 @@ package com.lepetit.leapplication;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.updatemodule.Tools;
 import com.lepetit.basefragment.BackHandleFragment;
-import com.lepetit.exam.ExamFragment;
 import com.lepetit.gettimehelper.GetTimeInfo;
 import com.lepetit.greendaohelper.ExamInfo;
 import com.lepetit.greendaohelper.GreenDaoUnit;
@@ -30,13 +29,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.lepetit.leapplication.MainActivity.downloadUrl;
-
 public class MainFragment extends BackHandleFragment {
 
     private List<MainExamInfo> list;
     private String dateNow;
-    private String startWeek;
 
     @BindView(R.id.main_list)
     RecyclerView recyclerView;
@@ -49,7 +45,7 @@ public class MainFragment extends BackHandleFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         ButterKnife.bind(this, view);
         GreenDaoUnit.initialize(getContext(), GetTimeInfo.getSimpleTime());
@@ -77,9 +73,7 @@ public class MainFragment extends BackHandleFragment {
         AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                 .setTitle("注销")
                 .setMessage("确定要注销吗？")
-                .setNegativeButton("取消", (dialog, which) -> {
-                    dialog.dismiss();
-                })
+                .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
                 .setPositiveButton("确定", (dialog, which) -> {
                     StoreInfo.clearInfo();
                     mainActivity.clearDatabase();
