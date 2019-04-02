@@ -63,7 +63,7 @@ public class GetTimeInfo {
         return String.valueOf(year) + "-" + mMonth + "-" + mDay;
     }
 
-    private int _getPastDay(String dateNow, String dateExam) {
+    private long _getPastDay(String dateNow, String dateExam) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         Date mDateNow = new Date();
         Date mDateExam = new Date();
@@ -74,7 +74,7 @@ public class GetTimeInfo {
             e.printStackTrace();
         }
         if (mDateExam.after(mDateNow) || mDateExam.equals(mDateNow)) {
-            int temp = (int)(mDateExam.getTime() - mDateNow.getTime());
+            long temp = mDateExam.getTime() - mDateNow.getTime();
             return temp / (1000 * 3600 * 24);
         }
         else {
@@ -114,7 +114,7 @@ public class GetTimeInfo {
         return getInstance()._getDate();
     }
 
-    public static int getPastDay(String dateNow, String dateExam) {
+    public static long getPastDay(String dateNow, String dateExam) {
         return getInstance()._getPastDay(dateNow, dateExam);
     }
 

@@ -153,7 +153,7 @@ public class MainFragment extends BackHandleFragment {
                     }
 					String dateExam = time.substring(0, loc);
 
-					int pastDay = GetTimeInfo.getPastDay(dateNow, dateExam);
+					long pastDay = GetTimeInfo.getPastDay(dateNow, dateExam);
 					if (pastDay > -1) {
 						head += String.valueOf(pastDay) + "天";
 						list.add(new MainExamInfo(dateExam, course, head));
