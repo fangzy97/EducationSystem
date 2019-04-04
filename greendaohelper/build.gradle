@@ -22,7 +22,7 @@ android {
     }
 
     greendao {
-        schemaVersion 2    //数据库版本
+        schemaVersion 4    //数据库版本
         daoPackage 'com.lepetit.dao'  //自动生成文件存放的包名
         targetGenDir 'src/main/java'    //存放位置
     }
