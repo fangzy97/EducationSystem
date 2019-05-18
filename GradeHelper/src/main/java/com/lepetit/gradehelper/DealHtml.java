@@ -8,9 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -38,7 +36,7 @@ class DealHtml {
 			String year = tds.get(1).ownText();
 			String course = tds.get(3).ownText();
 			String score = getScore(tds.get(4).select("a").text());
-            String credit = tds.get(5).ownText();
+            String credit = tds.get(6).ownText();
 			String analyze = tds.get(15).select("a").attr("onclick");
 			analyze = getGradeAnalyzeAddress(analyze);
 			EventBus.getDefault().post(new GradeEvent(year, course, score, credit, analyze));

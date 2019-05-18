@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import com.lepetit.basefragment.BackHandleFragment;
 import com.lepetit.eventmessage.GradeEvent;
 import com.lepetit.eventmessage.LoginEvent;
-import com.lepetit.gettimehelper.GetTimeInfo;
 import com.lepetit.gradehelper.GetGradeInfo;
 import com.lepetit.greendaohelper.GradeInfo;
 import com.lepetit.greendaohelper.GreenDaoUnit;
@@ -180,7 +178,7 @@ public class GradeFragment extends BackHandleFragment {
         GreenDaoUnit.insertGrade(event.getYear(), event.getCourse(), event.getScore(), event.getCredit(), event.getAnalyze());
     }
 
-    @Subscribe(threadMode = ThreadMode.POSTING)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetGradeFinish(FinishEvent event) {
         setRecyclerView();
 		setAvgView();
